@@ -23,15 +23,6 @@ import static com.terheyden.require.RequireUtils.throwUnchecked;
  */
 public final class Require {
 
-    private static final String STRING_IS_NULL = "String is null";
-    private static final String STRING_IS_EMPTY = "String is empty";
-    private static final String FILE_IS_NULL = "File is null";
-    private static final String DATE_TIME_FORMATTER_IS_NULL = "DateTimeFormatter is null";
-    private static final String DATE_TIME_STRING_IS_NULL = "Date time string is null";
-    private static final String PATH_IS_NULL = "Path is null";
-    private static final String PATH_ALREADY_EXISTS = "Path already exists";
-    private static final String PATH_DOES_NOT_EXIST = "Path does not exist";
-
     private Require() {
         // Private constructor since this shouldn't be instantiated.
     }
@@ -76,11 +67,11 @@ public final class Require {
         @Nullable String errorMessage) {
 
         if (str == null) {
-            throw new NullPointerException(errorMessage == null ? STRING_IS_NULL : errorMessage);
+            throw new NullPointerException(errorMessage == null ? "String is null" : errorMessage);
         }
 
         if (str.length() == 0) {
-            throw new IllegalArgumentException(errorMessage == null ? STRING_IS_EMPTY : errorMessage);
+            throw new IllegalArgumentException(errorMessage == null ? "String is empty" : errorMessage);
         }
 
         return str;
@@ -150,11 +141,11 @@ public final class Require {
         @Nullable String errorMessage) {
 
         if (str == null) {
-            throw new NullPointerException(errorMessage == null ? STRING_IS_NULL : errorMessage);
+            throw new NullPointerException(errorMessage == null ? "String is null" : errorMessage);
         }
 
         if (str.length() == 0) {
-            throw new IllegalArgumentException(errorMessage == null ? STRING_IS_EMPTY : errorMessage);
+            throw new IllegalArgumentException(errorMessage == null ? "String is empty" : errorMessage);
         }
 
         if (str.toString().trim().length() == 0) {
@@ -175,7 +166,7 @@ public final class Require {
         @Nullable String errorMessage) {
 
         if (str == null) {
-            throw new NullPointerException(errorMessage == null ? STRING_IS_NULL : errorMessage);
+            throw new NullPointerException(errorMessage == null ? "String is null" : errorMessage);
         }
 
         if (str.length() < minLength) {
@@ -300,7 +291,7 @@ public final class Require {
         return requireSize(array, minSize, Integer.MAX_VALUE, null);
     }
 
-    public static int requireMinValue(int value, int minValue, @Nullable String errorMessage) {
+    public static int requireMin(int value, int minValue, @Nullable String errorMessage) {
 
         if (value < minValue) {
             throw new IllegalArgumentException(errorMessage == null ? "Value is less than " + minValue : errorMessage);
@@ -309,11 +300,11 @@ public final class Require {
         return value;
     }
 
-    public static int requireMinValue(int value, int minValue) {
-        return requireMinValue(value, minValue, null);
+    public static int requireMin(int value, int minValue) {
+        return requireMin(value, minValue, null);
     }
 
-    public static int requireLessThan(int value, int maxValue, @Nullable String errorMessage) {
+    public static int requireMax(int value, int maxValue, @Nullable String errorMessage) {
 
         if (value > maxValue) {
             throw new IllegalArgumentException(errorMessage == null ? "Value is greater than " + maxValue : errorMessage);
@@ -322,14 +313,22 @@ public final class Require {
         return value;
     }
 
-    public static int requireLessThan(int value, int maxValue) {
-        return requireLessThan(value, maxValue, null);
+    public static int requireMax(int value, int maxValue) {
+        return requireMax(value, maxValue, null);
+    }
+
+    public static int requireMinMax(int value, int minValue, int maxValue, @Nullable String errorMessage) {
+        return requireMin(requireMax(value, maxValue, errorMessage), minValue, errorMessage);
+    }
+
+    public static int requireMinMax(int value, int minValue, int maxValue) {
+        return requireMinMax(value, minValue, maxValue, null);
     }
 
     public static File requireRegularFile(@Nullable File file, @Nullable String errorMessage) {
 
         if (file == null) {
-            throw new NullPointerException(errorMessage == null ? FILE_IS_NULL : errorMessage);
+            throw new NullPointerException(errorMessage == null ? "File is null" : errorMessage);
         }
 
         if (!file.exists()) {
@@ -346,7 +345,7 @@ public final class Require {
     public static Path requireRegularFile(@Nullable Path file, @Nullable String errorMessage) {
 
         if (file == null) {
-            throw new NullPointerException(errorMessage == null ? FILE_IS_NULL : errorMessage);
+            throw new NullPointerException(errorMessage == null ? "File is null" : errorMessage);
         }
 
         if (!Files.isRegularFile(file)) {
@@ -423,11 +422,11 @@ public final class Require {
     public static Path requireExists(@Nullable Path path, @Nullable String errorMessage) {
 
         if (path == null) {
-            throw new NullPointerException(errorMessage == null ? PATH_IS_NULL : errorMessage);
+            throw new NullPointerException(errorMessage == null ? "Path is null" : errorMessage);
         }
 
         if (Files.notExists(path)) {
-            throw new IllegalArgumentException(errorMessage == null ? PATH_DOES_NOT_EXIST : errorMessage);
+            throw new IllegalArgumentException(errorMessage == null ? "Path does not exist" : errorMessage);
         }
 
         return path;
@@ -440,11 +439,11 @@ public final class Require {
     public static File requireExists(@Nullable File file, @Nullable String errorMessage) {
 
         if (file == null) {
-            throw new NullPointerException(errorMessage == null ? FILE_IS_NULL : errorMessage);
+            throw new NullPointerException(errorMessage == null ? "File is null" : errorMessage);
         }
 
         if (!file.exists()) {
-            throw new IllegalArgumentException(errorMessage == null ? PATH_DOES_NOT_EXIST : errorMessage);
+            throw new IllegalArgumentException(errorMessage == null ? "Path does not exist" : errorMessage);
         }
 
         return file;
@@ -457,7 +456,7 @@ public final class Require {
     public static Path requireExists(@Nullable String path, @Nullable String errorMessage) {
 
         if (path == null) {
-            throw new NullPointerException(errorMessage == null ? PATH_IS_NULL : errorMessage);
+            throw new NullPointerException(errorMessage == null ? "Path is null" : errorMessage);
         }
 
         return requireExists(Paths.get(path), errorMessage);
@@ -470,11 +469,11 @@ public final class Require {
     public static File requireNotExists(@Nullable File path, @Nullable String errorMessage) {
 
         if (path == null) {
-            throw new NullPointerException(errorMessage == null ? PATH_IS_NULL : errorMessage);
+            throw new NullPointerException(errorMessage == null ? "Path is null" : errorMessage);
         }
 
         if (path.exists()) {
-            throw new IllegalArgumentException(errorMessage == null ? PATH_ALREADY_EXISTS : errorMessage);
+            throw new IllegalArgumentException(errorMessage == null ? "Path already exists" : errorMessage);
         }
 
         return path;
@@ -487,12 +486,12 @@ public final class Require {
     public static Path requireNotExists(@Nullable Path path, @Nullable String errorMessage) {
 
         if (path == null) {
-            throw new NullPointerException(errorMessage == null ? PATH_IS_NULL : errorMessage);
+            throw new NullPointerException(errorMessage == null ? "Path is null" : errorMessage);
         }
 
         // Note that Files.exists() and Files.notExists() are not the same thing.
         if (!Files.notExists(path)) {
-            throw new IllegalArgumentException(errorMessage == null ? PATH_ALREADY_EXISTS : errorMessage);
+            throw new IllegalArgumentException(errorMessage == null ? "Path already exists" : errorMessage);
         }
 
         return path;
@@ -505,7 +504,7 @@ public final class Require {
     public static Path requireNotExists(@Nullable String path, @Nullable String errorMessage) {
 
         if (path == null) {
-            throw new NullPointerException(errorMessage == null ? PATH_IS_NULL : errorMessage);
+            throw new NullPointerException(errorMessage == null ? "Path is null" : errorMessage);
         }
 
         return requireNotExists(Paths.get(path), errorMessage);
@@ -521,11 +520,11 @@ public final class Require {
         @Nullable String errorMessage) {
 
         if (formatter == null) {
-            throw new NullPointerException(errorMessage == null ? DATE_TIME_FORMATTER_IS_NULL : errorMessage);
+            throw new NullPointerException(errorMessage == null ? "DateTimeFormatter is null" : errorMessage);
         }
 
         if (zonedDateTime == null) {
-            throw new NullPointerException(errorMessage == null ? DATE_TIME_STRING_IS_NULL : errorMessage);
+            throw new NullPointerException(errorMessage == null ? "Date time string is null" : errorMessage);
         }
 
         try {
@@ -548,11 +547,11 @@ public final class Require {
         @Nullable String errorMessage) {
 
         if (formatter == null) {
-            throw new NullPointerException(errorMessage == null ? DATE_TIME_FORMATTER_IS_NULL : errorMessage);
+            throw new NullPointerException(errorMessage == null ? "DateTimeFormatter is null" : errorMessage);
         }
 
         if (offsetDateTime == null) {
-            throw new NullPointerException(errorMessage == null ? DATE_TIME_STRING_IS_NULL : errorMessage);
+            throw new NullPointerException(errorMessage == null ? "Date time string is null" : errorMessage);
         }
 
         try {
@@ -575,11 +574,11 @@ public final class Require {
         @Nullable String errorMessage) {
 
         if (formatter == null) {
-            throw new NullPointerException(errorMessage == null ? DATE_TIME_FORMATTER_IS_NULL : errorMessage);
+            throw new NullPointerException(errorMessage == null ? "DateTimeFormatter is null" : errorMessage);
         }
 
         if (localDateTime == null) {
-            throw new NullPointerException(errorMessage == null ? DATE_TIME_STRING_IS_NULL : errorMessage);
+            throw new NullPointerException(errorMessage == null ? "Date time string is null" : errorMessage);
         }
 
         try {
@@ -602,11 +601,11 @@ public final class Require {
         @Nullable String errorMessage) {
 
         if (formatter == null) {
-            throw new NullPointerException(errorMessage == null ? DATE_TIME_FORMATTER_IS_NULL : errorMessage);
+            throw new NullPointerException(errorMessage == null ? "DateTimeFormatter is null" : errorMessage);
         }
 
         if (localDate == null) {
-            throw new NullPointerException(errorMessage == null ? DATE_TIME_STRING_IS_NULL : errorMessage);
+            throw new NullPointerException(errorMessage == null ? "Date time string is null" : errorMessage);
         }
 
         try {
@@ -629,11 +628,11 @@ public final class Require {
         @Nullable String errorMessage) {
 
         if (formatter == null) {
-            throw new NullPointerException(errorMessage == null ? DATE_TIME_FORMATTER_IS_NULL : errorMessage);
+            throw new NullPointerException(errorMessage == null ? "DateTimeFormatter is null" : errorMessage);
         }
 
         if (localTime == null) {
-            throw new NullPointerException(errorMessage == null ? DATE_TIME_STRING_IS_NULL : errorMessage);
+            throw new NullPointerException(errorMessage == null ? "Date time string is null" : errorMessage);
         }
 
         try {

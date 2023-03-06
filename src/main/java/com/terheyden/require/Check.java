@@ -219,7 +219,7 @@ public final class Check {
         return checkSize(array, minSize, Integer.MAX_VALUE);
     }
 
-    public static Optional<Integer> checkMinValue(int value, int minValue) {
+    public static Optional<Integer> checkMin(int value, int minValue) {
 
         if (value < minValue) {
             return Optional.empty();
@@ -228,13 +228,17 @@ public final class Check {
         return Optional.of(value);
     }
 
-    public static Optional<Integer> checkLessThan(int value, int maxValue) {
+    public static Optional<Integer> checkMax(int value, int maxValue) {
 
         if (value > maxValue) {
             return Optional.empty();
         }
 
         return Optional.of(value);
+    }
+
+    public static Optional<Integer> checkMinMax(int value, int minValue, int maxValue) {
+        return checkMin(value, minValue).flatMap(v -> checkMax(v, maxValue));
     }
 
     public static Optional<File> checkRegularFile(@Nullable File file) {

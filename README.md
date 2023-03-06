@@ -1,14 +1,33 @@
-# Requirements Lib
+# JRequisites Library
 
 _Java parameter checking and validation._
 
-- tiny, much smaller than Commons or Guava
-- no dependencies
-- no reflection
+## What Is It?
+
+```java
+// JRequisites is ultra-fast, ultra-lightweight parameter validation.
+// There are two ways to use it — parameter validation:
+String name = "Cora";
+int age = 19;
+
+return new User(
+    requireNotBlank(name, "Name"),
+    requireMinimum(age, 21, "Age"));   // Throws: "Age must be at least 21"
+
+// The second way is parameter checking —
+// getting back an Optional<> instead of throwing:
+
+
+```
+
+
+- tiny — much smaller than Commons or Guava
 - extremely fast
-- no object allocation
-- no varargs
-- no String formatting
+  - no object allocation
+  - no varargs
+  - no String formatting
+  - no reflection
+- no dependencies
 
 ## `CheckIf`
 
@@ -75,7 +94,7 @@ requireMaxLength(password, 32, "Password must be at most 32 characters");
 ```
 
 ```java
-// Without Requirements:
+// Without JRequisites:
 private static Map<String, Object> getSettingsMap(Path settingsFile) {
 
     if (settingsFile == null) {
