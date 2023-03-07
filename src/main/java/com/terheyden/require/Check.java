@@ -4,7 +4,6 @@ import javax.annotation.Nullable;
 import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -20,6 +19,7 @@ import java.util.Optional;
 /**
  * For performing parameter checks and returning {@link Optional}s.
  */
+@SuppressWarnings("SizeReplaceableByIsEmpty")
 public final class Check {
 
     private Check() {
@@ -53,77 +53,35 @@ public final class Check {
         return Optional.of(obj);
     }
 
-    public static <T extends CharSequence> Optional<T> checkNotEmpty(
-        @Nullable T str) {
+    public static <T extends CharSequence> Optional<T> checkNotEmpty(@Nullable T str) {
 
-        if (str == null) {
-            return Optional.empty();
-        }
-
-        if (str.length() == 0) {
-            return Optional.empty();
-        }
-
-        return Optional.of(str);
+        return checkNotNull(str)
+            .filter(s -> s.length() > 0);
     }
 
-    public static <T extends Collection<?>> Optional<T> checkNotEmpty(
-        @Nullable T collection) {
+    public static <T extends Collection<?>> Optional<T> checkNotEmpty(@Nullable T collection) {
 
-        if (collection == null) {
-            return Optional.empty();
-        }
-
-        if (collection.isEmpty()) {
-            return Optional.empty();
-        }
-
-        return Optional.of(collection);
+        return checkNotNull(collection)
+            .filter(c -> !c.isEmpty());
     }
 
-    public static <T extends Map<?, ?>> Optional<T> checkNotEmpty(
-        @Nullable T map) {
+    public static <T extends Map<?, ?>> Optional<T> checkNotEmpty(@Nullable T map) {
 
-        if (map == null) {
-            return Optional.empty();
-        }
-
-        if (map.isEmpty()) {
-            return Optional.empty();
-        }
-
-        return Optional.of(map);
+        return checkNotNull(map)
+            .filter(m -> !m.isEmpty());
     }
 
     public static <T> Optional<T[]> checkNotEmpty(@Nullable T[] array) {
 
-        if (array == null) {
-            return Optional.empty();
-        }
-
-        if (array.length == 0) {
-            return Optional.empty();
-        }
-
-        return Optional.of(array);
+        return checkNotNull(array)
+            .filter(a -> a.length > 0);
     }
 
-    public static <T extends CharSequence> Optional<T> checkNotBlank(
-        @Nullable T str) {
+    public static <T extends CharSequence> Optional<T> checkNotBlank(@Nullable T str) {
 
-        if (str == null) {
-            return Optional.empty();
-        }
-
-        if (str.length() == 0) {
-            return Optional.empty();
-        }
-
-        if (str.toString().trim().length() == 0) {
-            return Optional.empty();
-        }
-
-        return Optional.of(str);
+        return checkNotNull(str)
+            .flatMap(Check::checkNotEmpty)
+            .filter(s -> s.toString().trim().length() > 0);
     }
 
     public static <T extends CharSequence> Optional<T> checkLength(
@@ -131,19 +89,9 @@ public final class Check {
         int minLength,
         int maxLength) {
 
-        if (str == null) {
-            return Optional.empty();
-        }
-
-        if (str.length() < minLength) {
-            return Optional.empty();
-        }
-
-        if (str.length() > maxLength) {
-            return Optional.empty();
-        }
-
-        return Optional.of(str);
+        return checkNotNull(str)
+            .filter(s -> s.length() >= minLength)
+            .filter(s -> s.length() <= maxLength);
     }
 
     public static <T extends CharSequence> Optional<T> checkLength(@Nullable T str, int minLength) {
@@ -155,19 +103,9 @@ public final class Check {
         int minSize,
         int maxSize) {
 
-        if (collection == null) {
-            return Optional.empty();
-        }
-
-        if (collection.size() < minSize) {
-            return Optional.empty();
-        }
-
-        if (collection.size() > maxSize) {
-            return Optional.empty();
-        }
-
-        return Optional.of(collection);
+        return checkNotNull(collection)
+            .filter(c -> c.size() >= minSize)
+            .filter(c -> c.size() <= maxSize);
     }
 
     public static <T extends Collection<?>> Optional<T> checkSize(@Nullable T collection, int minSize) {
@@ -179,19 +117,9 @@ public final class Check {
         int minSize,
         int maxSize) {
 
-        if (map == null) {
-            return Optional.empty();
-        }
-
-        if (map.size() < minSize) {
-            return Optional.empty();
-        }
-
-        if (map.size() > maxSize) {
-            return Optional.empty();
-        }
-
-        return Optional.of(map);
+        return checkNotNull(map)
+            .filter(m -> m.size() >= minSize)
+            .filter(m -> m.size() <= maxSize);
     }
 
     public static <T extends Map<?, ?>> Optional<T> checkSize(@Nullable T map, int minSize) {
@@ -200,19 +128,9 @@ public final class Check {
 
     public static <T> Optional<T[]> checkSize(@Nullable T[] array, int minSize, int maxSize) {
 
-        if (array == null) {
-            return Optional.empty();
-        }
-
-        if (array.length < minSize) {
-            return Optional.empty();
-        }
-
-        if (array.length > maxSize) {
-            return Optional.empty();
-        }
-
-        return Optional.of(array);
+        return checkNotNull(array)
+            .filter(a -> a.length >= minSize)
+            .filter(a -> a.length <= maxSize);
     }
 
     public static <T> Optional<T[]> checkSize(@Nullable T[] array, int minSize) {
@@ -281,37 +199,21 @@ public final class Check {
 
     public static Optional<Path> checkExists(@Nullable Path path) {
 
-        if (path == null) {
-            return Optional.empty();
-        }
-
-        if (Files.notExists(path)) {
-            return Optional.empty();
-        }
-
-        return Optional.of(path);
+        return checkNotNull(path)
+            .filter(Files::exists);
     }
 
     public static Optional<File> checkExists(@Nullable File file) {
 
-        if (file == null) {
-            return Optional.empty();
-        }
-
-        if (!file.exists()) {
-            return Optional.empty();
-        }
-
-        return Optional.of(file);
+        return checkNotNull(file)
+            .filter(File::exists);
     }
 
     public static Optional<Path> checkExists(@Nullable String path) {
 
-        if (path == null) {
-            return Optional.empty();
-        }
-
-        return checkExists(Paths.get(path));
+        return checkNotNull(path)
+            .flatMap(RequireUtils::safeGetPath)
+            .flatMap(Check::checkExists);
     }
 
     public static Optional<File> checkNotExists(@Nullable File path) {

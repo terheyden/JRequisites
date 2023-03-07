@@ -18,25 +18,20 @@
     </properties>
 
     <dependencies>
-        <!-- https://mvnrepository.com/artifact/io.vavr/vavr -->
-        <dependency>
-            <groupId>io.vavr</groupId>
-            <artifactId>vavr</artifactId>
-            <version>0.10.4</version> <!-- io/vavr/vavr -->
-        </dependency>
         <!-- @ParametersAreNonnullByDefault, @Nonnull, -->
         <!-- https://mvnrepository.com/artifact/com.github.spotbugs/spotbugs-annotations -->
         <dependency>
             <groupId>com.github.spotbugs</groupId>
             <artifactId>spotbugs-annotations</artifactId>
             <version>4.7.3</version> <!-- com/github/spotbugs/spotbugs-annotations -->
+            <scope>provided</scope>
         </dependency>
-        <!-- SLF4J via Logback -->
-        <!-- https://mvnrepository.com/artifact/ch.qos.logback/logback-classic -->
+        <!-- For correcting null-related @Contracts in IntelliJ -->
         <dependency>
-            <groupId>ch.qos.logback</groupId>
-            <artifactId>logback-classic</artifactId>
-            <version>1.4.5</version> <!-- ch/qos/logback/logback-classic -->
+            <groupId>org.jetbrains</groupId>
+            <artifactId>annotations</artifactId>
+            <version>23.0.0</version>
+            <scope>provided</scope>
         </dependency>
 
         <!-- Test dependencies -->

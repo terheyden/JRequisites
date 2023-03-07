@@ -5,22 +5,24 @@ import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.OffsetDateTime;
 import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
 import java.util.Collection;
 import java.util.Map;
 
-import static com.terheyden.require.RequireUtils.throwUnchecked;
+import org.jetbrains.annotations.Contract;
 
 /**
  * Require class.
  */
+@SuppressWarnings({
+    "DuplicateStringLiteralInspection", // The strings are really short and make more sense in-line
+    "java:S1192",                       // String literals should not be duplicated, same as above
+    "SizeReplaceableByIsEmpty"          // BUG — isEmpty() isn't available in JDK 8 (only JDK 15+)
+})
 public final class Require {
 
     private Require() {
@@ -49,29 +51,29 @@ public final class Require {
         requireState(condition, null);
     }
 
-    public static <T> T requireNotNull(@Nullable T obj, @Nullable String errorMessage) {
+    @Contract(value = "null, _ -> fail; !null, _ -> param1", pure = true)
+    public static <T> T requireNotNull(@Nullable T obj, @Nullable String label) {
 
         if (obj == null) {
-            throw new NullPointerException(errorMessage == null ? "Object is null" : errorMessage);
+            throwNPE(label);
         }
 
         return obj;
     }
 
+    @Contract(value = "null -> fail; !null -> param1", pure = true)
     public static <T> T requireNotNull(@Nullable T obj) {
         return requireNotNull(obj, null);
     }
 
     public static <T extends CharSequence> T requireNotEmpty(
         @Nullable T str,
-        @Nullable String errorMessage) {
+        @Nullable String label) {
 
-        if (str == null) {
-            throw new NullPointerException(errorMessage == null ? "String is null" : errorMessage);
-        }
+        requireNotNull(str, getLabel(label, "String"));
 
         if (str.length() == 0) {
-            throw new IllegalArgumentException(errorMessage == null ? "String is empty" : errorMessage);
+            throwIAE(label, "String", " is empty");
         }
 
         return str;
@@ -83,14 +85,12 @@ public final class Require {
 
     public static <T extends Collection<?>> T requireNotEmpty(
         @Nullable T collection,
-        @Nullable String errorMessage) {
+        @Nullable String label) {
 
-        if (collection == null) {
-            throw new NullPointerException(errorMessage == null ? "Collection is null" : errorMessage);
-        }
+        requireNotNull(collection, getLabel(label, "Collection"));
 
         if (collection.isEmpty()) {
-            throw new IllegalArgumentException(errorMessage == null ? "Collection is empty" : errorMessage);
+            throwIAE(label, "Collection", " is empty");
         }
 
         return collection;
@@ -102,14 +102,12 @@ public final class Require {
 
     public static <T extends Map<?, ?>> T requireNotEmpty(
         @Nullable T map,
-        @Nullable String errorMessage) {
+        @Nullable String label) {
 
-        if (map == null) {
-            throw new NullPointerException(errorMessage == null ? "Map is null" : errorMessage);
-        }
+        requireNotNull(map, getLabel(label, "Map"));
 
         if (map.isEmpty()) {
-            throw new IllegalArgumentException(errorMessage == null ? "Map is empty" : errorMessage);
+            throwIAE(label, "Map", " is empty");
         }
 
         return map;
@@ -119,14 +117,12 @@ public final class Require {
         return requireNotEmpty(map, null);
     }
 
-    public static <T> T[] requireNotEmpty(@Nullable T[] array, @Nullable String errorMessage) {
+    public static <T> T[] requireNotEmpty(@Nullable T[] array, @Nullable String label) {
 
-        if (array == null) {
-            throw new NullPointerException(errorMessage == null ? "Array is null" : errorMessage);
-        }
+        requireNotNull(array, getLabel(label, "Array"));
 
         if (array.length == 0) {
-            throw new IllegalArgumentException(errorMessage == null ? "Array is empty" : errorMessage);
+            throwIAE(label, "Array", " is empty");
         }
 
         return array;
@@ -138,18 +134,12 @@ public final class Require {
 
     public static <T extends CharSequence> T requireNotBlank(
         @Nullable T str,
-        @Nullable String errorMessage) {
+        @Nullable String label) {
 
-        if (str == null) {
-            throw new NullPointerException(errorMessage == null ? "String is null" : errorMessage);
-        }
-
-        if (str.length() == 0) {
-            throw new IllegalArgumentException(errorMessage == null ? "String is empty" : errorMessage);
-        }
+        requireNotEmpty(str, label);
 
         if (str.toString().trim().length() == 0) {
-            throw new IllegalArgumentException(errorMessage == null ? "String is blank" : errorMessage);
+            throwIAE(label, "String", " is blank");
         }
 
         return str;
@@ -163,20 +153,10 @@ public final class Require {
         @Nullable T str,
         int minLength,
         int maxLength,
-        @Nullable String errorMessage) {
+        @Nullable String label) {
 
-        if (str == null) {
-            throw new NullPointerException(errorMessage == null ? "String is null" : errorMessage);
-        }
-
-        if (str.length() < minLength) {
-            throw new IllegalArgumentException(errorMessage == null ? "String length is less than " + minLength : errorMessage);
-        }
-
-        if (str.length() > maxLength) {
-            throw new IllegalArgumentException(errorMessage == null ? "String length is greater than " + maxLength : errorMessage);
-        }
-
+        requireNotNull(str, getLabel(label, "String"));
+        requireMinMaxContainers(str.length(), minLength, maxLength, getLabel(label, "String length"), str);
         return str;
     }
 
@@ -187,9 +167,9 @@ public final class Require {
     public static <T extends CharSequence> T requireLength(
         @Nullable T str,
         int minLength,
-        @Nullable String errorMessage) {
+        @Nullable String label) {
 
-        return requireLength(str, minLength, Integer.MAX_VALUE, errorMessage);
+        return requireLength(str, minLength, Integer.MAX_VALUE, label);
     }
 
     public static <T extends CharSequence> T requireLength(@Nullable T str, int minLength) {
@@ -200,20 +180,10 @@ public final class Require {
         @Nullable T collection,
         int minSize,
         int maxSize,
-        @Nullable String errorMessage) {
+        @Nullable String label) {
 
-        if (collection == null) {
-            throw new NullPointerException(errorMessage == null ? "Collection is null" : errorMessage);
-        }
-
-        if (collection.size() < minSize) {
-            throw new IllegalArgumentException(errorMessage == null ? "Collection size is less than " + minSize : errorMessage);
-        }
-
-        if (collection.size() > maxSize) {
-            throw new IllegalArgumentException(errorMessage == null ? "Collection size is greater than " + maxSize : errorMessage);
-        }
-
+        requireNotNull(collection, getLabel(label, "Collection"));
+        requireMinMaxContainers(collection.size(), minSize, maxSize, getLabel(label, "Collection size"), collection);
         return collection;
     }
 
@@ -221,8 +191,8 @@ public final class Require {
         return requireSize(collection, minSize, maxSize, null);
     }
 
-    public static <T extends Collection<?>> T requireSize(@Nullable T collection, int minSize, String errorMessage) {
-        return requireSize(collection, minSize, Integer.MAX_VALUE, errorMessage);
+    public static <T extends Collection<?>> T requireSize(@Nullable T collection, int minSize, String label) {
+        return requireSize(collection, minSize, Integer.MAX_VALUE, label);
     }
 
     public static <T extends Collection<?>> T requireSize(@Nullable T collection, int minSize) {
@@ -233,20 +203,10 @@ public final class Require {
         @Nullable T map,
         int minSize,
         int maxSize,
-        @Nullable String errorMessage) {
+        @Nullable String label) {
 
-        if (map == null) {
-            throw new NullPointerException(errorMessage == null ? "Map is null" : errorMessage);
-        }
-
-        if (map.size() < minSize) {
-            throw new IllegalArgumentException(errorMessage == null ? "Map size is less than " + minSize : errorMessage);
-        }
-
-        if (map.size() > maxSize) {
-            throw new IllegalArgumentException(errorMessage == null ? "Map size is greater than " + maxSize : errorMessage);
-        }
-
+        requireNotNull(map, getLabel(label, "Map"));
+        requireMinMaxContainers(map.size(), minSize, maxSize, getLabel(label, "Map size"), map);
         return map;
     }
 
@@ -254,47 +214,37 @@ public final class Require {
         return requireSize(map, minSize, maxSize, null);
     }
 
-    public static <T extends Map<?, ?>> T requireSize(@Nullable T map, int minSize, String errorMessage) {
-        return requireSize(map, minSize, Integer.MAX_VALUE, errorMessage);
+    public static <T extends Map<?, ?>> T requireSize(@Nullable T map, int minSize, String label) {
+        return requireSize(map, minSize, Integer.MAX_VALUE, label);
     }
 
     public static <T extends Map<?, ?>> T requireSize(@Nullable T map, int minSize) {
         return requireSize(map, minSize, Integer.MAX_VALUE, null);
     }
 
-    public static <T> T[] requireSize(@Nullable T[] array, int minSize, int maxSize, @Nullable String errorMessage) {
+    public static <T> T[] requireLength(@Nullable T[] array, int minLength, int maxLength, @Nullable String label) {
 
-        if (array == null) {
-            throw new NullPointerException(errorMessage == null ? "Array is null" : errorMessage);
-        }
-
-        if (array.length < minSize) {
-            throw new IllegalArgumentException(errorMessage == null ? "Array size is less than " + minSize : errorMessage);
-        }
-
-        if (array.length > maxSize) {
-            throw new IllegalArgumentException(errorMessage == null ? "Array size is greater than " + maxSize : errorMessage);
-        }
-
+        requireNotNull(array, getLabel(label, "Array"));
+        requireMinMaxContainers(array.length, minLength, maxLength, getLabel(label, "Array length"), array);
         return array;
     }
 
-    public static <T> T[] requireSize(@Nullable T[] array, int minSize, int maxSize) {
-        return requireSize(array, minSize, maxSize, null);
+    public static <T> T[] requireLength(@Nullable T[] array, int minSize, int maxSize) {
+        return requireLength(array, minSize, maxSize, null);
     }
 
-    public static <T> T[] requireSize(@Nullable T[] array, int minSize, String errorMessage) {
-        return requireSize(array, minSize, Integer.MAX_VALUE, errorMessage);
+    public static <T> T[] requireLength(@Nullable T[] array, int minSize, String label) {
+        return requireLength(array, minSize, Integer.MAX_VALUE, label);
     }
 
-    public static <T> T[] requireSize(@Nullable T[] array, int minSize) {
-        return requireSize(array, minSize, Integer.MAX_VALUE, null);
+    public static <T> T[] requireLength(@Nullable T[] array, int minSize) {
+        return requireLength(array, minSize, Integer.MAX_VALUE, null);
     }
 
-    public static int requireMin(int value, int minValue, @Nullable String errorMessage) {
+    public static int requireMin(int value, int minValue, @Nullable String label) {
 
         if (value < minValue) {
-            throw new IllegalArgumentException(errorMessage == null ? "Value is less than " + minValue : errorMessage);
+            throwIAE(label, "Value", " (" + value + ") is less than minimum: " + minValue);
         }
 
         return value;
@@ -304,10 +254,10 @@ public final class Require {
         return requireMin(value, minValue, null);
     }
 
-    public static int requireMax(int value, int maxValue, @Nullable String errorMessage) {
+    public static int requireMax(int value, int maxValue, @Nullable String label) {
 
         if (value > maxValue) {
-            throw new IllegalArgumentException(errorMessage == null ? "Value is greater than " + maxValue : errorMessage);
+            throwIAE(label, "Value", " (" + value + ") is greater than maximum: " + maxValue);
         }
 
         return value;
@@ -317,133 +267,37 @@ public final class Require {
         return requireMax(value, maxValue, null);
     }
 
-    public static int requireMinMax(int value, int minValue, int maxValue, @Nullable String errorMessage) {
-        return requireMin(requireMax(value, maxValue, errorMessage), minValue, errorMessage);
+    public static int requireMinMax(int value, int minValue, int maxValue, @Nullable String label) {
+        return requireMin(requireMax(value, maxValue, label), minValue, label);
     }
 
     public static int requireMinMax(int value, int minValue, int maxValue) {
         return requireMinMax(value, minValue, maxValue, null);
     }
 
-    public static File requireRegularFile(@Nullable File file, @Nullable String errorMessage) {
+    @Contract(value = "null, _ -> fail; !null, _ -> param1", pure = true)
+    public static Path requireExists(@Nullable Path path, @Nullable String label) {
 
-        if (file == null) {
-            throw new NullPointerException(errorMessage == null ? "File is null" : errorMessage);
-        }
-
-        if (!file.exists()) {
-            throw new IllegalArgumentException(errorMessage == null ? "File does not exist" : errorMessage);
-        }
-
-        return file;
-    }
-
-    public static File requireRegularFile(@Nullable File file) {
-        return requireRegularFile(file, null);
-    }
-
-    public static Path requireRegularFile(@Nullable Path file, @Nullable String errorMessage) {
-
-        if (file == null) {
-            throw new NullPointerException(errorMessage == null ? "File is null" : errorMessage);
-        }
-
-        if (!Files.isRegularFile(file)) {
-            throw new IllegalArgumentException(errorMessage == null ? "File does not exist" : errorMessage);
-        }
-
-        return file;
-    }
-
-    public static Path requireRegularFile(@Nullable Path file) {
-        return requireRegularFile(file, null);
-    }
-
-    public static Path requireRegularFile(@Nullable String filePath, @Nullable String errorMessage) {
-
-        if (filePath == null) {
-            throw new NullPointerException(errorMessage == null ? "File path is null" : errorMessage);
-        }
-
-        return requireRegularFile(Paths.get(filePath), errorMessage);
-    }
-
-    public static Path requireRegularFile(@Nullable String filePath) {
-        return requireRegularFile(filePath, null);
-    }
-
-    public static File requireDirectory(@Nullable File directory, @Nullable String errorMessage) {
-
-        if (directory == null) {
-            throw new NullPointerException(errorMessage == null ? "Directory is null" : errorMessage);
-        }
-
-        if (!directory.isDirectory()) {
-            throw new IllegalArgumentException(errorMessage == null ? "Directory does not exist" : errorMessage);
-        }
-
-        return directory;
-    }
-
-    public static File requireDirectory(@Nullable File directory) {
-        return requireDirectory(directory, null);
-    }
-
-    public static Path requireDirectory(@Nullable Path directory, @Nullable String errorMessage) {
-
-        if (directory == null) {
-            throw new NullPointerException(errorMessage == null ? "Directory is null" : errorMessage);
-        }
-
-        if (!Files.isDirectory(directory)) {
-            throw new IllegalArgumentException(errorMessage == null ? "Directory does not exist" : errorMessage);
-        }
-
-        return directory;
-    }
-
-    public static Path requireDirectory(@Nullable Path directory) {
-        return requireDirectory(directory, null);
-    }
-
-    public static Path requireDirectory(@Nullable String directoryPath, @Nullable String errorMessage) {
-
-        if (directoryPath == null) {
-            throw new NullPointerException(errorMessage == null ? "Directory path is null" : errorMessage);
-        }
-
-        return requireDirectory(Paths.get(directoryPath), errorMessage);
-    }
-
-    public static Path requireDirectory(@Nullable String directoryPath) {
-        return requireDirectory(directoryPath, null);
-    }
-
-    public static Path requireExists(@Nullable Path path, @Nullable String errorMessage) {
-
-        if (path == null) {
-            throw new NullPointerException(errorMessage == null ? "Path is null" : errorMessage);
-        }
+        requireNotNull(path, getLabel(label, "Path"));
 
         if (Files.notExists(path)) {
-            throw new IllegalArgumentException(errorMessage == null ? "Path does not exist" : errorMessage);
+            throwIAE(label, "Path", " does not exist: " + path.toAbsolutePath());
         }
 
         return path;
     }
 
+    @Contract(value = "null -> fail; !null -> param1", pure = true)
     public static Path requireExists(@Nullable Path path) {
         return requireExists(path, null);
     }
 
-    public static File requireExists(@Nullable File file, @Nullable String errorMessage) {
+    public static File requireExists(@Nullable File file, @Nullable String label) {
 
-        if (file == null) {
-            throw new NullPointerException(errorMessage == null ? "File is null" : errorMessage);
-        }
+        requireNotNull(file, getLabel(label, "File"));
 
         if (!file.exists()) {
-            throw new IllegalArgumentException(errorMessage == null ? "Path does not exist" : errorMessage);
+            throwIAE(label, "Path", " does not exist: " + file.getAbsolutePath());
         }
 
         return file;
@@ -453,27 +307,23 @@ public final class Require {
         return requireExists(file, null);
     }
 
-    public static Path requireExists(@Nullable String path, @Nullable String errorMessage) {
+    public static Path requireExists(@Nullable String path, @Nullable String label) {
 
-        if (path == null) {
-            throw new NullPointerException(errorMessage == null ? "Path is null" : errorMessage);
-        }
+        requireNotNull(path, getLabel(label, "Path"));
 
-        return requireExists(Paths.get(path), errorMessage);
+        return requireExists(Paths.get(path), label);
     }
 
     public static Path requireExists(@Nullable String path) {
         return requireExists(path, null);
     }
 
-    public static File requireNotExists(@Nullable File path, @Nullable String errorMessage) {
+    public static File requireNotExists(@Nullable File path, @Nullable String label) {
 
-        if (path == null) {
-            throw new NullPointerException(errorMessage == null ? "Path is null" : errorMessage);
-        }
+        requireNotNull(path, getLabel(label, "Path"));
 
         if (path.exists()) {
-            throw new IllegalArgumentException(errorMessage == null ? "Path already exists" : errorMessage);
+            throwIAE(label, "Path", " exists: " + path.getAbsolutePath());
         }
 
         return path;
@@ -483,15 +333,14 @@ public final class Require {
         return requireNotExists(file, null);
     }
 
-    public static Path requireNotExists(@Nullable Path path, @Nullable String errorMessage) {
+    @Contract(value = "null, _ -> fail; !null, _ -> param1", pure = true)
+    public static Path requireNotExists(@Nullable Path path, @Nullable String label) {
 
-        if (path == null) {
-            throw new NullPointerException(errorMessage == null ? "Path is null" : errorMessage);
-        }
+        requireNotNull(path, getLabel(label, "Path"));
 
         // Note that Files.exists() and Files.notExists() are not the same thing.
         if (!Files.notExists(path)) {
-            throw new IllegalArgumentException(errorMessage == null ? "Path already exists" : errorMessage);
+            throwIAE(label, "Path", " exists: " + path.toAbsolutePath());
         }
 
         return path;
@@ -501,170 +350,295 @@ public final class Require {
         return requireNotExists(path, null);
     }
 
-    public static Path requireNotExists(@Nullable String path, @Nullable String errorMessage) {
+    public static Path requireNotExists(@Nullable String path, @Nullable String label) {
 
-        if (path == null) {
-            throw new NullPointerException(errorMessage == null ? "Path is null" : errorMessage);
-        }
+        requireNotNull(path, getLabel(label, "Path"));
 
-        return requireNotExists(Paths.get(path), errorMessage);
+        return requireNotExists(Paths.get(path), label);
     }
 
     public static Path requireNotExists(@Nullable String filePath) {
         return requireNotExists(filePath, null);
     }
 
-    public static ZonedDateTime requireZonedDateTime(
-        @Nullable DateTimeFormatter formatter,
-        @Nullable String zonedDateTime,
-        @Nullable String errorMessage) {
+    public static File requireRegularFile(@Nullable File file, @Nullable String label) {
 
-        if (formatter == null) {
-            throw new NullPointerException(errorMessage == null ? "DateTimeFormatter is null" : errorMessage);
+        requireNotNull(file, getLabel(label, "File"));
+        requireExists(file, getLabel(label, "File"));
+
+        if (!file.isFile()) {
+            throwIAE(label, "File", " is not a regular file: " + file.getAbsolutePath());
         }
 
-        if (zonedDateTime == null) {
-            throw new NullPointerException(errorMessage == null ? "Date time string is null" : errorMessage);
-        }
-
-        try {
-            return ZonedDateTime.parse(zonedDateTime, formatter);
-        } catch (DateTimeParseException e) {
-            return throwUnchecked(e);
-        }
+        return file;
     }
 
-    public static ZonedDateTime requireZonedDateTime(
-        @Nullable DateTimeFormatter formatter,
-        @Nullable String zonedDateTime) {
-
-        return requireZonedDateTime(formatter, zonedDateTime, null);
+    public static File requireRegularFile(@Nullable File file) {
+        return requireRegularFile(file, null);
     }
 
-    public static OffsetDateTime requireOffsetDateTime(
-        @Nullable DateTimeFormatter formatter,
-        @Nullable String offsetDateTime,
-        @Nullable String errorMessage) {
+    @Contract(value = "null, _ -> fail; !null, _ -> param1", pure = true)
+    public static Path requireRegularFile(@Nullable Path file, @Nullable String label) {
 
-        if (formatter == null) {
-            throw new NullPointerException(errorMessage == null ? "DateTimeFormatter is null" : errorMessage);
+        requireNotNull(file, getLabel(label, "File"));
+        requireExists(file, getLabel(label, "File"));
+
+        if (!Files.isRegularFile(file)) {
+            throwIAE(label, "File", " is not a regular file: " + file.toAbsolutePath());
         }
 
-        if (offsetDateTime == null) {
-            throw new NullPointerException(errorMessage == null ? "Date time string is null" : errorMessage);
-        }
-
-        try {
-            return OffsetDateTime.parse(offsetDateTime, formatter);
-        } catch (DateTimeParseException e) {
-            return throwUnchecked(e);
-        }
+        return file;
     }
 
-    public static OffsetDateTime requireOffsetDateTime(
-        @Nullable DateTimeFormatter formatter,
-        @Nullable String offsetDateTime) {
-
-        return requireOffsetDateTime(formatter, offsetDateTime, null);
+    public static Path requireRegularFile(@Nullable Path file) {
+        return requireRegularFile(file, null);
     }
 
-    public static LocalDateTime requireLocalDateTime(
-        @Nullable DateTimeFormatter formatter,
-        @Nullable String localDateTime,
-        @Nullable String errorMessage) {
+    public static Path requireRegularFile(@Nullable String filePath, @Nullable String label) {
 
-        if (formatter == null) {
-            throw new NullPointerException(errorMessage == null ? "DateTimeFormatter is null" : errorMessage);
-        }
-
-        if (localDateTime == null) {
-            throw new NullPointerException(errorMessage == null ? "Date time string is null" : errorMessage);
-        }
-
-        try {
-            return LocalDateTime.parse(localDateTime, formatter);
-        } catch (DateTimeParseException e) {
-            return throwUnchecked(e);
-        }
+        requireNotNull(filePath, getLabel(label, "File path"));
+        return requireRegularFile(Paths.get(filePath), label);
     }
 
-    public static LocalDateTime requireLocalDateTime(
-        @Nullable DateTimeFormatter formatter,
-        @Nullable String localDateTime) {
-
-        return requireLocalDateTime(formatter, localDateTime, null);
+    public static Path requireRegularFile(@Nullable String filePath) {
+        return requireRegularFile(filePath, null);
     }
 
-    public static LocalDate requireLocalDate(
-        @Nullable DateTimeFormatter formatter,
-        @Nullable String localDate,
-        @Nullable String errorMessage) {
+    public static File requireDirectory(@Nullable File directory, @Nullable String label) {
 
-        if (formatter == null) {
-            throw new NullPointerException(errorMessage == null ? "DateTimeFormatter is null" : errorMessage);
+        requireNotNull(directory, getLabel(label, "Directory"));
+        requireExists(directory, getLabel(label, "Directory"));
+
+        if (!directory.isDirectory()) {
+            throwIAE(label, "Directory", " is not a directory: " + directory.getAbsolutePath());
         }
 
-        if (localDate == null) {
-            throw new NullPointerException(errorMessage == null ? "Date time string is null" : errorMessage);
-        }
-
-        try {
-            return LocalDate.parse(localDate, formatter);
-        } catch (DateTimeParseException e) {
-            return throwUnchecked(e);
-        }
+        return directory;
     }
 
-    public static LocalDate requireLocalDate(
-        @Nullable DateTimeFormatter formatter,
-        @Nullable String localDate) {
-
-        return requireLocalDate(formatter, localDate, null);
+    public static File requireDirectory(@Nullable File directory) {
+        return requireDirectory(directory, null);
     }
 
-    public static LocalTime requireLocalTime(
-        @Nullable DateTimeFormatter formatter,
-        @Nullable String localTime,
-        @Nullable String errorMessage) {
+    @Contract(value = "null, _ -> fail; !null, _ -> param1", pure = true)
+    public static Path requireDirectory(@Nullable Path directory, @Nullable String label) {
 
-        if (formatter == null) {
-            throw new NullPointerException(errorMessage == null ? "DateTimeFormatter is null" : errorMessage);
+        requireNotNull(directory, getLabel(label, "Directory"));
+        requireExists(directory, getLabel(label, "Directory"));
+
+        if (!Files.isDirectory(directory)) {
+            throwIAE(label, "Directory", " is not a directory: " + directory.toAbsolutePath());
         }
 
-        if (localTime == null) {
-            throw new NullPointerException(errorMessage == null ? "Date time string is null" : errorMessage);
-        }
-
-        try {
-            return LocalTime.parse(localTime, formatter);
-        } catch (DateTimeParseException e) {
-            return throwUnchecked(e);
-        }
+        return directory;
     }
 
-    public static LocalTime requireLocalTime(
-        @Nullable DateTimeFormatter formatter,
-        @Nullable String localTime) {
-
-        return requireLocalTime(formatter, localTime, null);
+    public static Path requireDirectory(@Nullable Path directory) {
+        return requireDirectory(directory, null);
     }
 
-    public static Instant requireInstant(
-        @Nullable String instant,
-        @Nullable String errorMessage) {
+    public static Path requireDirectory(@Nullable String directoryPath, @Nullable String label) {
 
-        if (instant == null) {
-            throw new NullPointerException(errorMessage == null ? "Instant string is null" : errorMessage);
-        }
-
-        try {
-            return Instant.parse(instant);
-        } catch (DateTimeParseException e) {
-            return throwUnchecked(e);
-        }
+        requireNotNull(directoryPath, getLabel(label, "Directory path"));
+        return requireDirectory(Paths.get(directoryPath), label);
     }
 
-    public static Instant requireInstant(@Nullable String instant) {
-        return requireInstant(instant, null);
+    public static Path requireDirectory(@Nullable String directoryPath) {
+        return requireDirectory(directoryPath, null);
+    }
+
+    public static ZonedDateTime requireFuture(@Nullable ZonedDateTime dateTime, @Nullable String label) {
+
+        requireNotNull(dateTime, getLabel(label, "Date Time"));
+
+        if (dateTime.isBefore(ZonedDateTime.now())) {
+            throwIAE(label, "Date Time", " is not in the future: " + dateTime + " vs " + ZonedDateTime.now());
+        }
+
+        return dateTime;
+    }
+
+    public static ZonedDateTime requireFuture(@Nullable ZonedDateTime dateTime) {
+        return requireFuture(dateTime, null);
+    }
+
+    public static OffsetDateTime requireFuture(@Nullable OffsetDateTime dateTime, @Nullable String label) {
+
+        requireNotNull(dateTime, getLabel(label, "Date Time"));
+
+        if (dateTime.isBefore(OffsetDateTime.now())) {
+            throwIAE(label, "Date Time", " is not in the future: " + dateTime + " vs " + OffsetDateTime.now());
+        }
+
+        return dateTime;
+    }
+
+    public static OffsetDateTime requireFuture(@Nullable OffsetDateTime dateTime) {
+        return requireFuture(dateTime, null);
+    }
+
+    public static LocalDateTime requireFuture(@Nullable LocalDateTime dateTime, @Nullable String label) {
+
+        requireNotNull(dateTime, getLabel(label, "Date Time"));
+
+        if (dateTime.isBefore(LocalDateTime.now())) {
+            throwIAE(label, "Date Time", " is not in the future: " + dateTime + " vs " + LocalDateTime.now());
+        }
+
+        return dateTime;
+    }
+
+    public static LocalDateTime requireFuture(@Nullable LocalDateTime dateTime) {
+        return requireFuture(dateTime, null);
+    }
+
+    public static LocalDate requireFuture(@Nullable LocalDate date, @Nullable String label) {
+
+        requireNotNull(date, getLabel(label, "Date"));
+
+        if (date.isBefore(LocalDate.now())) {
+            throwIAE(label, "Date", " is not in the future: " + date + " vs " + LocalDate.now());
+        }
+
+        return date;
+    }
+
+    public static LocalDate requireFuture(@Nullable LocalDate date) {
+        return requireFuture(date, null);
+    }
+
+    public static LocalTime requireFuture(@Nullable LocalTime time, @Nullable String label) {
+
+        requireNotNull(time, getLabel(label, "Time"));
+
+        if (time.isBefore(LocalTime.now())) {
+            throwIAE(label, "Time", " is not in the future: " + time + " vs " + LocalTime.now());
+        }
+
+        return time;
+    }
+
+    public static LocalTime requireFuture(@Nullable LocalTime time) {
+        return requireFuture(time, null);
+    }
+
+    public static ZonedDateTime requirePast(@Nullable ZonedDateTime dateTime, @Nullable String label) {
+
+        requireNotNull(dateTime, getLabel(label, "Date Time"));
+
+        if (dateTime.isAfter(ZonedDateTime.now())) {
+            throwIAE(label, "Date Time", " is not in the past: " + dateTime + " vs " + ZonedDateTime.now());
+        }
+
+        return dateTime;
+    }
+
+    public static ZonedDateTime requirePast(@Nullable ZonedDateTime dateTime) {
+        return requirePast(dateTime, null);
+    }
+
+    public static OffsetDateTime requirePast(@Nullable OffsetDateTime dateTime, @Nullable String label) {
+
+        requireNotNull(dateTime, getLabel(label, "Date Time"));
+
+        if (dateTime.isAfter(OffsetDateTime.now())) {
+            throwIAE(label, "Date Time", " is not in the past: " + dateTime + " vs " + OffsetDateTime.now());
+        }
+
+        return dateTime;
+    }
+
+    public static OffsetDateTime requirePast(@Nullable OffsetDateTime dateTime) {
+        return requirePast(dateTime, null);
+    }
+
+    public static LocalDateTime requirePast(@Nullable LocalDateTime dateTime, @Nullable String label) {
+
+        requireNotNull(dateTime, getLabel(label, "Date Time"));
+
+        if (dateTime.isAfter(LocalDateTime.now())) {
+            throwIAE(label, "Date Time", " is not in the past: " + dateTime + " vs " + LocalDateTime.now());
+        }
+
+        return dateTime;
+    }
+
+    public static LocalDateTime requirePast(@Nullable LocalDateTime dateTime) {
+        return requirePast(dateTime, null);
+    }
+
+    public static LocalDate requirePast(@Nullable LocalDate date, @Nullable String label) {
+
+        requireNotNull(date, getLabel(label, "Date"));
+
+        if (date.isAfter(LocalDate.now())) {
+            throwIAE(label, "Date", " is not in the past: " + date + " vs " + LocalDate.now());
+        }
+
+        return date;
+    }
+
+    public static LocalDate requirePast(@Nullable LocalDate date) {
+        return requirePast(date, null);
+    }
+
+    public static LocalTime requirePast(@Nullable LocalTime time, @Nullable String label) {
+
+        requireNotNull(time, getLabel(label, "Time"));
+
+        if (time.isAfter(LocalTime.now())) {
+            throwIAE(label, "Time", " is not in the past: " + time + " vs " + LocalTime.now());
+        }
+
+        return time;
+    }
+
+    public static LocalTime requirePast(@Nullable LocalTime time) {
+        return requirePast(time, null);
+    }
+
+    private static int requireMinContainers(int value, int minValue, @Nullable String label, Object container) {
+
+        if (value < minValue) {
+            throwIAE(label, "Value",
+                " (" + value + ") is less than minimum: " + minValue + " — contents: " + container);
+        }
+
+        return value;
+    }
+
+
+    private static int requireMaxContainers(int value, int maxValue, @Nullable String label, Object container) {
+
+        if (value > maxValue) {
+            throwIAE(label, "Value",
+                " (" + value + ") is greater than maximum: " + maxValue + " — contents: " + container);
+        }
+
+        return value;
+    }
+
+    private static int requireMinMaxContainers(int value, int minValue, int maxValue, @Nullable String label, Object container) {
+        return requireMinContainers(requireMaxContainers(value, maxValue, label, container), minValue, label, container);
+    }
+
+    /**
+     * <pre>
+     * {@code
+     * setupName("The settings", "File") -> "The settings"
+     * setupName(null, "File") -> "File"
+     * }
+     * </pre>
+     */
+    private static String getLabel(@Nullable String name, String defaultLabel) {
+        return name != null ? name : defaultLabel;
+    }
+
+    private static void throwNPE(@Nullable String label) {
+        throw new NullPointerException(getLabel(label, "Object") + " is null");
+    }
+
+    private static void throwIAE(@Nullable String label, String defaultLabel, String appendMessage) {
+        throw new IllegalArgumentException(getLabel(label, defaultLabel) + appendMessage);
     }
 }

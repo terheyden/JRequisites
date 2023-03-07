@@ -2,18 +2,15 @@ package com.terheyden.require;
 
 import java.nio.file.Path;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import org.junit.jupiter.api.Test;
-
 import static com.terheyden.require.Check.checkNotBlank;
 import static com.terheyden.require.Check.checkNotNull;
 import static com.terheyden.require.Require.require;
-import static com.terheyden.require.Require.requireLocalDateTime;
+import static com.terheyden.require.Require.requireFuture;
 import static com.terheyden.require.Require.requireNotBlank;
 import static com.terheyden.require.Require.requireNotEmpty;
 import static com.terheyden.require.Require.requireNotNull;
@@ -28,7 +25,6 @@ import static java.util.Collections.emptyMap;
  */
 class Tutorial {
 
-    @Test
     void tutorial() {
 
         UUID id = null;
@@ -39,11 +35,11 @@ class Tutorial {
 
         // 'Require' checks will throw an IllegalArgumentException if the check fails.
         // You can perform a check and assign the value to a variable in one line.
-        UUID verifiedId = requireNotNull(id, "ID may not be null");
-        String goodName = requireNotBlank(name, "Name is required");
+        UUID verifiedId = requireNotNull(id, "ID");
+        String goodName = requireNotBlank(name, "Name");
 
         // Empty checks work on collections, maps, and strings.
-        requireNotEmpty(data, "You have no data!");
+        requireNotEmpty(data, "Data");
 
         // You can perform custom checks:
         require(age >= 18, "You must be 18 or older to use this app."); // Throws IllegalArgumentException
@@ -74,9 +70,7 @@ class Tutorial {
         Path settingsFile = requireRegularFile("/some/path/settings.txt");
 
         // Also requirements and conversions for java.time types.
-        // Note that this is unchecked, so you can use it in streams:
-        LocalDateTime dateTime = requireLocalDateTime(
-            DateTimeFormatter.ISO_DATE_TIME,
-            "2020-01-01T12:00:00");
+        LocalDateTime appointment = LocalDateTime.now().plusDays(1);
+        requireFuture(appointment);
     }
 }

@@ -17,18 +17,6 @@ final class RequireUtils {
     }
 
     /**
-     * <pre>
-     * {@code
-     * setupName("The settings", "File") -> "The settings"
-     * setupName(null, "File") -> "File"
-     * }
-     * </pre>
-     */
-    static String setupName(String name, String defaultTitleName) {
-        return name != null ? name : defaultTitleName;
-    }
-
-    /**
      * Get the size of a regular file, or the number of files in a directory.
      * @throws IllegalArgumentException If the file is not a regular file or directory
      */
