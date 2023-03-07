@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.OffsetDateTime;
 import java.time.ZonedDateTime;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Map;
 
@@ -225,7 +226,7 @@ public final class Require {
     public static <T> T[] requireLength(@Nullable T[] array, int minLength, int maxLength, @Nullable String label) {
 
         requireNotNull(array, getLabel(label, "Array"));
-        requireMinMaxContainers(array.length, minLength, maxLength, getLabel(label, "Array length"), array);
+        requireMinMaxContainers(array.length, minLength, maxLength, getLabel(label, "Array length"), Arrays.toString(array));
         return array;
     }
 
@@ -294,7 +295,7 @@ public final class Require {
 
     public static File requireExists(@Nullable File file, @Nullable String label) {
 
-        requireNotNull(file, getLabel(label, "File"));
+        requireNotNull(file, getLabel(label, "Path"));
 
         if (!file.exists()) {
             throwIAE(label, "Path", " does not exist: " + file.getAbsolutePath());
