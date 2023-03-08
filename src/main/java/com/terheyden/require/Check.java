@@ -4,14 +4,11 @@ import javax.annotation.Nullable;
 import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.OffsetDateTime;
 import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Optional;
@@ -26,18 +23,18 @@ public final class Check {
         // Private constructor since this shouldn't be instantiated.
     }
 
-    public static <T> Optional<T> check(T obj, boolean expression) {
+    public static <T> Optional<T> check(T obj, boolean condition) {
 
-        if (!expression) {
+        if (!condition) {
             return Optional.empty();
         }
 
         return Optional.of(obj);
     }
 
-    public static <T> Optional<T> checkState(T obj, boolean expression) {
+    public static <T> Optional<T> checkState(T obj, boolean condition) {
 
-        if (!expression) {
+        if (!condition) {
             return Optional.empty();
         }
 
@@ -90,12 +87,24 @@ public final class Check {
         int maxLength) {
 
         return checkNotNull(str)
-            .filter(s -> s.length() >= minLength)
-            .filter(s -> s.length() <= maxLength);
+            .filter(s -> checkMinMax(s.length(), minLength, maxLength).isPresent());
     }
 
-    public static <T extends CharSequence> Optional<T> checkLength(@Nullable T str, int minLength) {
+    public static <T extends CharSequence> Optional<T> checkLength(
+        @Nullable T str,
+        int minLength) {
+
         return checkLength(str, minLength, Integer.MAX_VALUE);
+    }
+
+    public static <T> Optional<T[]> checkLength(@Nullable T[] array, int minLength, int maxLength) {
+
+        return checkNotNull(array)
+            .filter(a -> checkMinMax(a.length, minLength, maxLength).isPresent());
+    }
+
+    public static <T> Optional<T[]> checkLength(@Nullable T[] array, int minSize) {
+        return checkLength(array, minSize, Integer.MAX_VALUE);
     }
 
     public static <T extends Collection<?>> Optional<T> checkSize(
@@ -104,8 +113,7 @@ public final class Check {
         int maxSize) {
 
         return checkNotNull(collection)
-            .filter(c -> c.size() >= minSize)
-            .filter(c -> c.size() <= maxSize);
+            .filter(c -> checkMinMax(c.size(), minSize, maxSize).isPresent());
     }
 
     public static <T extends Collection<?>> Optional<T> checkSize(@Nullable T collection, int minSize) {
@@ -118,23 +126,11 @@ public final class Check {
         int maxSize) {
 
         return checkNotNull(map)
-            .filter(m -> m.size() >= minSize)
-            .filter(m -> m.size() <= maxSize);
+            .filter(m -> checkMinMax(m.size(), minSize, maxSize).isPresent());
     }
 
     public static <T extends Map<?, ?>> Optional<T> checkSize(@Nullable T map, int minSize) {
         return checkSize(map, minSize, Integer.MAX_VALUE);
-    }
-
-    public static <T> Optional<T[]> checkSize(@Nullable T[] array, int minSize, int maxSize) {
-
-        return checkNotNull(array)
-            .filter(a -> a.length >= minSize)
-            .filter(a -> a.length <= maxSize);
-    }
-
-    public static <T> Optional<T[]> checkSize(@Nullable T[] array, int minSize) {
-        return checkSize(array, minSize, Integer.MAX_VALUE);
     }
 
     public static Optional<Integer> checkMin(int value, int minValue) {
@@ -156,45 +152,8 @@ public final class Check {
     }
 
     public static Optional<Integer> checkMinMax(int value, int minValue, int maxValue) {
-        return checkMin(value, minValue).flatMap(v -> checkMax(v, maxValue));
-    }
-
-    public static Optional<File> checkRegularFile(@Nullable File file) {
-        return Optional
-            .ofNullable(file)
-            .filter(File::isFile);
-    }
-
-    public static Optional<Path> checkRegularFile(@Nullable Path file) {
-        return Optional
-            .ofNullable(file)
-            .filter(Files::isRegularFile);
-    }
-
-    public static Optional<Path> checkRegularFile(@Nullable String filePath) {
-        return Optional
-            .ofNullable(filePath)
-            .flatMap(RequireUtils::safeGetPath)
-            .filter(Files::isRegularFile);
-    }
-
-    public static Optional<File> checkDirectory(@Nullable File directory) {
-        return Optional
-            .ofNullable(directory)
-            .filter(File::isDirectory);
-    }
-
-    public static Optional<Path> checkDirectory(@Nullable Path directory) {
-        return Optional
-            .ofNullable(directory)
-            .filter(Files::isDirectory);
-    }
-
-    public static Optional<Path> checkDirectory(@Nullable String directoryPath) {
-        return Optional
-            .ofNullable(directoryPath)
-            .flatMap(RequireUtils::safeGetPath)
-            .filter(Files::isDirectory);
+        return checkMin(value, minValue)
+            .flatMap(v -> checkMax(v, maxValue));
     }
 
     public static Optional<Path> checkExists(@Nullable Path path) {
@@ -217,142 +176,123 @@ public final class Check {
     }
 
     public static Optional<File> checkNotExists(@Nullable File path) {
-        return Optional
-            .ofNullable(path)
-            .filter(file -> !file.exists());
+
+        return checkNotNull(path)
+            .filter(f -> !f.exists());
     }
 
     public static Optional<Path> checkNotExists(@Nullable Path path) {
-        return Optional
-            .ofNullable(path)
+
+        return checkNotNull(path)
             .filter(Files::notExists);
     }
 
     public static Optional<Path> checkNotExists(@Nullable String path) {
-        return Optional
-            .ofNullable(path)
+
+        return checkNotNull(path)
             .flatMap(RequireUtils::safeGetPath)
-            .filter(Files::notExists);
+            .flatMap(Check::checkNotExists);
     }
 
-    public static Optional<ZonedDateTime> checkZonedDateTime(
-        @Nullable DateTimeFormatter formatter,
-        @Nullable String zonedDateTime) {
+    public static Optional<File> checkRegularFile(@Nullable File file) {
 
-        if (formatter == null) {
-            return Optional.empty();
-        }
-
-        if (zonedDateTime == null) {
-            return Optional.empty();
-        }
-
-        try {
-
-            return Optional.of(ZonedDateTime.parse(zonedDateTime, formatter));
-
-        } catch (DateTimeParseException ignore) {
-            return Optional.empty();
-        }
+        return checkNotNull(file)
+            .filter(f -> checkExists(f).isPresent())
+            .filter(File::isFile);
     }
 
-    public static Optional<OffsetDateTime> checkOffsetDateTime(
-        @Nullable DateTimeFormatter formatter,
-        @Nullable String offsetDateTime) {
+    public static Optional<Path> checkRegularFile(@Nullable Path file) {
 
-        if (formatter == null) {
-            return Optional.empty();
-        }
-
-        if (offsetDateTime == null) {
-            return Optional.empty();
-        }
-
-        try {
-
-            return Optional.of(OffsetDateTime.parse(offsetDateTime, formatter));
-
-        } catch (DateTimeParseException ignore) {
-            // TODO: these should be logged
-            return Optional.empty();
-        }
+        return checkNotNull(file)
+            .filter(f -> checkExists(f).isPresent())
+            .filter(Files::isRegularFile);
     }
 
-    public static Optional<LocalDateTime> checkLocalDateTime(
-        @Nullable DateTimeFormatter formatter,
-        @Nullable String localDateTime) {
+    public static Optional<Path> checkRegularFile(@Nullable String filePath) {
 
-        if (formatter == null) {
-            return Optional.empty();
-        }
-
-        if (localDateTime == null) {
-            return Optional.empty();
-        }
-
-        try {
-
-            return Optional.of(LocalDateTime.parse(localDateTime, formatter));
-
-        } catch (DateTimeParseException ignore) {
-            return Optional.empty();
-        }
+        return checkNotNull(filePath)
+            .flatMap(RequireUtils::safeGetPath)
+            .flatMap(Check::checkRegularFile);
     }
 
-    public static Optional<LocalDate> checkLocalDate(
-        @Nullable DateTimeFormatter formatter,
-        @Nullable String localDate) {
+    public static Optional<File> checkDirectory(@Nullable File directory) {
 
-        if (formatter == null) {
-            return Optional.empty();
-        }
-
-        if (localDate == null) {
-            return Optional.empty();
-        }
-
-        try {
-
-            return Optional.of(LocalDate.parse(localDate, formatter));
-
-        } catch (DateTimeParseException ignore) {
-            return Optional.empty();
-        }
+        return checkNotNull(directory)
+            .filter(f -> checkExists(f).isPresent())
+            .filter(File::isDirectory);
     }
 
-    public static Optional<LocalTime> checkLocalTime(
-        @Nullable DateTimeFormatter formatter,
-        @Nullable String localTime) {
+    public static Optional<Path> checkDirectory(@Nullable Path directory) {
 
-        if (formatter == null) {
-            return Optional.empty();
-        }
-
-        if (localTime == null) {
-            return Optional.empty();
-        }
-
-        try {
-
-            return Optional.of(LocalTime.parse(localTime, formatter));
-
-        } catch (DateTimeParseException ignore) {
-            return Optional.empty();
-        }
+        return checkNotNull(directory)
+            .filter(f -> checkExists(f).isPresent())
+            .filter(Files::isDirectory);
     }
 
-    public static Optional<Instant> checkInstant(@Nullable String instant) {
+    public static Optional<Path> checkDirectory(@Nullable String directoryPath) {
 
-        if (instant == null) {
-            return Optional.empty();
-        }
+        return checkNotNull(directoryPath)
+            .flatMap(RequireUtils::safeGetPath)
+            .flatMap(Check::checkDirectory);
+    }
 
-        try {
+    public static Optional<ZonedDateTime> checkFuture(@Nullable ZonedDateTime dateTime) {
 
-            return Optional.of(Instant.parse(instant));
+        return checkNotNull(dateTime)
+            .filter(d -> d.isAfter(ZonedDateTime.now()));
+    }
 
-        } catch (DateTimeParseException ignore) {
-            return Optional.empty();
-        }
+    public static Optional<OffsetDateTime> checkFuture(@Nullable OffsetDateTime dateTime) {
+
+        return checkNotNull(dateTime)
+            .filter(d -> d.isAfter(OffsetDateTime.now()));
+    }
+
+    public static Optional<LocalDateTime> checkFuture(@Nullable LocalDateTime dateTime) {
+
+        return checkNotNull(dateTime)
+            .filter(d -> d.isAfter(LocalDateTime.now()));
+    }
+
+    public static Optional<LocalDate> checkFuture(@Nullable LocalDate date) {
+
+        return checkNotNull(date)
+            .filter(d -> d.isAfter(LocalDate.now()));
+    }
+
+    public static Optional<LocalTime> checkFuture(@Nullable LocalTime time) {
+
+        return checkNotNull(time)
+            .filter(t -> t.isAfter(LocalTime.now()));
+    }
+
+    public static Optional<ZonedDateTime> checkPast(@Nullable ZonedDateTime dateTime) {
+
+        return checkNotNull(dateTime)
+            .filter(d -> d.isBefore(ZonedDateTime.now()));
+    }
+
+    public static Optional<OffsetDateTime> checkPast(@Nullable OffsetDateTime dateTime) {
+
+        return checkNotNull(dateTime)
+            .filter(d -> d.isBefore(OffsetDateTime.now()));
+    }
+
+    public static Optional<LocalDateTime> checkPast(@Nullable LocalDateTime dateTime) {
+
+        return checkNotNull(dateTime)
+            .filter(d -> d.isBefore(LocalDateTime.now()));
+    }
+
+    public static Optional<LocalDate> checkPast(@Nullable LocalDate date) {
+
+        return checkNotNull(date)
+            .filter(d -> d.isBefore(LocalDate.now()));
+    }
+
+    public static Optional<LocalTime> checkPast(@Nullable LocalTime time) {
+
+        return checkNotNull(time)
+            .filter(t -> t.isBefore(LocalTime.now()));
     }
 }

@@ -49,9 +49,9 @@ class RequireTest {
     private final String[] goodArray = new String[] { "a", "b", "c" };
     private final String[] emptyArray = new String[0];
     private final String[] nullArray = null;
-    private final int[] goodIntArray = new int[] { 1, 2, 3 };
-    private final int[] emptyIntArray = new int[0];
-    private final int[] nullIntArray = null;
+    private final int[] goodPrimitiveArray = new int[] { 1, 2, 3 };
+    private final int[] emptyPrimitiveArray = new int[0];
+    private final int[] nullPrimitiveArray = null;
 
     private final Path goodPathDir = Paths.get(GOOD_DIR_STR);
     private final Path goodPathFile = Paths.get(GOOD_FILE_STR);

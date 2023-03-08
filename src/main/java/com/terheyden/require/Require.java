@@ -177,6 +177,25 @@ public final class Require {
         return requireLength(str, minLength, Integer.MAX_VALUE, null);
     }
 
+    public static <T> T[] requireLength(@Nullable T[] array, int minLength, int maxLength, @Nullable String label) {
+
+        requireNotNull(array, getLabel(label, "Array"));
+        requireMinMaxContainers(array.length, minLength, maxLength, getLabel(label, "Array length"), Arrays.toString(array));
+        return array;
+    }
+
+    public static <T> T[] requireLength(@Nullable T[] array, int minLength, int maxLength) {
+        return requireLength(array, minLength, maxLength, null);
+    }
+
+    public static <T> T[] requireLength(@Nullable T[] array, int minLength, @Nullable String label) {
+        return requireLength(array, minLength, Integer.MAX_VALUE, label);
+    }
+
+    public static <T> T[] requireLength(@Nullable T[] array, int minLength) {
+        return requireLength(array, minLength, Integer.MAX_VALUE, null);
+    }
+
     public static <T extends Collection<?>> T requireSize(
         @Nullable T collection,
         int minSize,
@@ -192,7 +211,7 @@ public final class Require {
         return requireSize(collection, minSize, maxSize, null);
     }
 
-    public static <T extends Collection<?>> T requireSize(@Nullable T collection, int minSize, String label) {
+    public static <T extends Collection<?>> T requireSize(@Nullable T collection, int minSize, @Nullable String label) {
         return requireSize(collection, minSize, Integer.MAX_VALUE, label);
     }
 
@@ -215,31 +234,12 @@ public final class Require {
         return requireSize(map, minSize, maxSize, null);
     }
 
-    public static <T extends Map<?, ?>> T requireSize(@Nullable T map, int minSize, String label) {
+    public static <T extends Map<?, ?>> T requireSize(@Nullable T map, int minSize, @Nullable String label) {
         return requireSize(map, minSize, Integer.MAX_VALUE, label);
     }
 
     public static <T extends Map<?, ?>> T requireSize(@Nullable T map, int minSize) {
         return requireSize(map, minSize, Integer.MAX_VALUE, null);
-    }
-
-    public static <T> T[] requireLength(@Nullable T[] array, int minLength, int maxLength, @Nullable String label) {
-
-        requireNotNull(array, getLabel(label, "Array"));
-        requireMinMaxContainers(array.length, minLength, maxLength, getLabel(label, "Array length"), Arrays.toString(array));
-        return array;
-    }
-
-    public static <T> T[] requireLength(@Nullable T[] array, int minSize, int maxSize) {
-        return requireLength(array, minSize, maxSize, null);
-    }
-
-    public static <T> T[] requireLength(@Nullable T[] array, int minSize, String label) {
-        return requireLength(array, minSize, Integer.MAX_VALUE, label);
-    }
-
-    public static <T> T[] requireLength(@Nullable T[] array, int minSize) {
-        return requireLength(array, minSize, Integer.MAX_VALUE, null);
     }
 
     public static int requireMin(int value, int minValue, @Nullable String label) {
