@@ -14,7 +14,7 @@ import java.util.Map;
 import java.util.Optional;
 
 /**
- * For performing parameter checks and returning {@link Optional}s.
+ * For performing argument checks and returning {@link Optional}s.
  */
 @SuppressWarnings("SizeReplaceableByIsEmpty")
 public final class Check {

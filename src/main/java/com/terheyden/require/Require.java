@@ -30,6 +30,19 @@ public final class Require {
         // Private constructor since this shouldn't be instantiated.
     }
 
+    /**
+     * Require that some argument condition is true. For example:
+     * <pre>
+     * {@code
+     *     // Throws if false:
+     *     require(user.isAdmin(), "User is not an admin");
+     * }
+     * </pre>
+     * {@code require()} throws an IAE, and {@code requireState()} throws an ISE.
+     * @param condition the condition to check
+     * @param errorMessage the error message to use if the condition is false
+     * @throws IllegalArgumentException if the condition is false
+     */
     public static void require(boolean condition, @Nullable String errorMessage) {
 
         if (!condition) {
@@ -37,10 +50,35 @@ public final class Require {
         }
     }
 
+    /**
+     * Require that some argument condition is true. For example:
+     * <pre>
+     * {@code
+     *     // If false, throws: "Condition is false"
+     *     require(user.isAdmin());
+     * }
+     * </pre>
+     * {@code require()} throws an IAE, and {@code requireState()} throws an ISE.
+     * @param condition the condition to check
+     * @throws IllegalArgumentException if the condition is false
+     */
     public static void require(boolean condition) {
         require(condition, null);
     }
 
+    /**
+     * Require that some state condition is true. For example:
+     * <pre>
+     * {@code
+     *     // Throws if false:
+     *     requireState(user.isAdmin(), "User is not an admin");
+     * }
+     * </pre>
+     * {@code require()} throws an IAE, and {@code requireState()} throws an ISE.
+     * @param condition the condition to check
+     * @param errorMessage the error message to use if the condition is false
+     * @throws IllegalStateException if the condition is false
+     */
     public static void requireState(boolean condition, @Nullable String errorMessage) {
 
         if (!condition) {
@@ -48,10 +86,38 @@ public final class Require {
         }
     }
 
+    /**
+     * Require that some state condition is true. For example:
+     * <pre>
+     * {@code
+     *     // If false, throws: "Condition is false"
+     *     requireState(user.isAdmin());
+     * }
+     * </pre>
+     * {@code require()} throws an IAE, and {@code requireState()} throws an ISE.
+     * @param condition the condition to check
+     * @throws IllegalStateException if the condition is false
+     */
     public static void requireState(boolean condition) {
         requireState(condition, null);
     }
 
+    /**
+     * Require that some argument is not null. For example:
+     * <pre>
+     * {@code
+     *     // If null, throws: "User is null"
+     *     requireNotNull(user, "User");
+     * }
+     * </pre>
+     * {@code requireNotNull()} throws an NPE, and {@code requireNonNullState()} throws an ISE.
+     * @param obj the object to check
+     * @param label the label to use in the error message if the object is null
+     * @param <T> the type of the object
+     * @return the object, if it's not null, for chaining
+     * @throws NullPointerException if the object is null
+     * @throws IllegalArgumentException if the object is null
+     */
     @Contract(value = "null, _ -> fail; !null, _ -> param1", pure = true)
     public static <T> T requireNotNull(@Nullable T obj, @Nullable String label) {
 
@@ -62,11 +128,40 @@ public final class Require {
         return obj;
     }
 
+    /**
+     * Require that some argument is not null. For example:
+     * <pre>
+     * {@code
+     *     // If null, throws: "Object is null"
+     *     requireNotNull(user);
+     * }
+     * </pre>
+     * {@code requireNotNull()} throws an NPE, and {@code requireNonNullState()} throws an ISE.
+     * @param obj the object to check
+     * @param <T> the type of the object
+     * @return the object, if it's not null, for chaining
+     * @throws NullPointerException if the object is null
+     * @throws IllegalArgumentException if the object is null
+     */
     @Contract(value = "null -> fail; !null -> param1", pure = true)
     public static <T> T requireNotNull(@Nullable T obj) {
         return requireNotNull(obj, null);
     }
 
+    /**
+     * Require that a string argument is not null and not empty (zero length). For example:
+     * <pre>
+     * {@code
+     *     // If null or zero length, throws: "Name is empty"
+     *     requireNotEmpty(name, "Name");
+     * }
+     * </pre>
+     * @param str the string to check
+     * @param label the label to use in the error message if the string is empty
+     * @param <T> the type of the string
+     * @return the string, if it's not null, for chaining
+     * @throws IllegalArgumentException if the string is null or empty
+     */
     public static <T extends CharSequence> T requireNotEmpty(
         @Nullable T str,
         @Nullable String label) {
@@ -80,10 +175,37 @@ public final class Require {
         return str;
     }
 
+    /**
+     * Require that a string argument is not null and not empty (zero length). For example:
+     * <pre>
+     * {@code
+     *     // If null or zero length, throws: "String is empty"
+     *     requireNotEmpty(name);
+     * }
+     * </pre>
+     * @param str the string to check
+     * @param <T> the type of the string
+     * @return the string, if it's not null, for chaining
+     * @throws IllegalArgumentException if the string is null or empty
+     */
     public static <T extends CharSequence> T requireNotEmpty(@Nullable T str) {
         return requireNotEmpty(str, null);
     }
 
+    /**
+     * Require that a collection argument is not null and not empty (zero length). For example:
+     * <pre>
+     * {@code
+     *     // If null or zero length, throws: "List of users is empty"
+     *     requireNotEmpty(users, "List of users");
+     * }
+     * </pre>
+     * @param collection the collection to check
+     * @param label the label to use in the error message if the collection is empty
+     * @param <T> the type of the collection
+     * @return the collection, if it's not null, for chaining
+     * @throws IllegalArgumentException if the collection is null or empty
+     */
     public static <T extends Collection<?>> T requireNotEmpty(
         @Nullable T collection,
         @Nullable String label) {

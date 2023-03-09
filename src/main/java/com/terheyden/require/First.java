@@ -8,7 +8,7 @@ import java.util.Map;
  */
 public final class First {
 
-    private static final String ALL_PARAMETERS_ARE_NULL = "All parameters are null";
+    private static final String ALL_ARGUMENTS_ARE_NULL = "All arguments are null";
     private static final String ALL_STRINGS_ARE_EMPTY = "All strings are empty";
     private static final String ALL_COLLECTIONS_ARE_EMPTY = "All collections are empty";
     private static final String ALL_MAPS_ARE_EMPTY = "All maps are empty";
@@ -21,14 +21,14 @@ public final class First {
     public static <T> T firstNotNull(T first, T second) {
         if (first != null) return first;
         if (second != null) return second;
-        throw new NullPointerException(ALL_PARAMETERS_ARE_NULL);
+        throw new NullPointerException(ALL_ARGUMENTS_ARE_NULL);
     }
 
     public static <T> T firstNotNull(T first, T second, T third) {
         if (first != null) return first;
         if (second != null) return second;
         if (third != null) return third;
-        throw new NullPointerException(ALL_PARAMETERS_ARE_NULL);
+        throw new NullPointerException(ALL_ARGUMENTS_ARE_NULL);
     }
 
     public static <T extends CharSequence> T firstNotEmpty(T firstStr, T secondStr) {

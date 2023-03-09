@@ -1,26 +1,35 @@
 # JRequisites Library
 
-_Java parameter checking and validation._
+_Java argument checking and validation._
 
 ## What Is It?
 
+JRequisites is a fast, tiny library for validating method arguments.
+It offers two classes:
+
+### Require Class
+Brings in `requireXYZ()` methods, which throw `IllegalArgumentException` (mostly):
 ```java
-// JRequisites is ultra-fast, ultra-lightweight parameter validation.
-// There are two ways to use it — parameter validation:
 String name = "Cora";
 int age = 19;
 
 return new User(
     requireNotBlank(name, "Name"),
-    requireMinimum(age, 21, "Age"));   // Throws: "Age must be at least 21"
-
-// The second way is parameter checking —
-// getting back an Optional<> instead of throwing:
-
-
+    requireMinimum(age, 21, "Age")); // Throws: "Age must be at least 21"
 ```
 
+### Check Class
+Brings in `checkXYZ()` methods, which return `Optional<>`:
+```java
+UUID userId; // assume this is valid ...
 
+String userName = checkNotNull(userId, "User ID")
+    .map(UserService::findById)
+    .map(User::getName)
+    .orElse("(no name)");
+```
+
+## Why Use It?
 - tiny — much smaller than Commons or Guava
 - extremely fast
   - no object allocation
@@ -28,6 +37,62 @@ return new User(
   - no String formatting
   - no reflection
 - no dependencies
+
+## Comparison
+
+- [Apache Commons Validation](https://commons.apache.org/proper/commons-lang/javadocs/api-release/index.html)
+- [Google Guava](https://guava.dev/releases/30.1-jre/api/docs/com/google/common/base/Preconditions.html)
+
+| Feature              | JRequisites       | Apache Commons     | Google Guava |
+|----------------------|-------------------|--------------------|--------------|
+| Jar Size             | 16 kb             | 573 kb             | 3 MB       |
+| Supports: Strings   | ✔️                | ✔️                 | ✔️           |
+| Supports: Integers  | ✔️                | ✔️                 | ✔️           |
+| Supports: Longs     | ✔️                | ✔️                 | ✔️           |
+| Supports: Doubles   | ✔️                | ✔️                 | ✔️           |
+| Supports: Booleans  | ✔️                | ✔️                 | ✔️           |
+| Supports: Collections | ✔️                | ✔️                 | ✔️           |
+| Supports: Maps       | ✔️                | ✔️                 | ✔️           |
+| Supports: Arrays     | ✔️                | ✔️                 | ✔️           |
+| Supports: Date/Time  | ✔️                | ✔️                 | ✔️           |
+| Conditional Check    | require()️        | isTrue️()          | ✔️           |
+| State Check          | requireState()️   | validState()️      | ✔️           |
+| Null Check           | requireNotNull()️ | notNull()️         | ✔️           |
+| Empty Check          | requireNotEmpty()️ | notEmpty()️        | ✔️           |
+| Blank Check          | requireNotBlank()️ | notBlank()️        | ✔️           |
+| Length Check         | ✔️                | ❌️                 | ✔️           |
+| Optional Check       | ✔️                | ❌                  | ❌            |
+| No Dependencies      | ✔️                | ❌                  | ❌            |
+| No Reflection        | ✔️                | ❌                  | ❌            |
+| No Varargs           | ✔️                | ❌                  | ❌            |
+| Null Elements        | requireNotNull()️ | noNullElements()   | ❌            |"
+| No String Formatting | ✔️                | ❌                  | ❌            |
+| Exclusive Between   | ❌️                | exclusiveBetween() | ❌            |
+| Inclusive Between   | ❌️                | inclusiveBetween() | ❌            |
+| Minimum              | ✔️                | ❌                  | ❌            |
+| Maximum              | ✔️                | ❌                  | ❌            |
+| Index Check         | ❌                 | validIndex()       | ❌            |
+| Finite / NaN         | ❌️                | finite()           | ❌            |
+| Infinite / NaN       | ❌✔️                | notNaN()           | ❌            |
+| Positive             | ✔️                | ❌                  | ❌            |
+| Negative             | ✔️                | ❌                  | ❌            |
+| Zero                 | ✔️                | ❌                  | ❌            |
+| Non-Zero             | ✔️                | ❌                  | ❌            |
+| Positive Or Zero     | ✔️                | ❌                  | ❌            |
+| Assignable From      | ✔️                | isAssignableFrom() | ❌            |
+| Instance Of          | ✔️                | isInstanceOf()     | ❌            |
+| Matches Regex        | ✔️                | matchesPattern()   | ❌            |
+| Contains             | ✔️                | ❌                  | ❌            |
+| Contains Only        | ✔️                | ❌                  | ❌            |
+| Contains None        | ✔️                | ❌                  | ❌            |
+
+## Why Use It?
+
+JRequisites is a tiny library that does one thing — argument validation.
+It's designed to be used in production code, not just tests.
+
+## How To Use It
+
 
 ## `CheckIf`
 
@@ -39,7 +104,7 @@ CheckIfString.notBlank(name).orElse(default);
 
 Our opinionated philosophy is that _nulls are a code smell_.
 Unlike Jakarta Bean Validation, which treats nulls as valid unless
-annotated with `@NotNull`, we treat null parameters as invalid for all checks.
+annotated with `@NotNull`, we treat null arguments as invalid for all checks.
 
 ## Contents
 
