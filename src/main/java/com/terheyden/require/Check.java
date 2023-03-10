@@ -171,7 +171,7 @@ public final class Check {
     public static Optional<Path> checkExists(@Nullable String path) {
 
         return checkNotNull(path)
-            .flatMap(RequireUtils::safeGetPath)
+            .flatMap(RequireUtils::pathGetOptional)
             .flatMap(Check::checkExists);
     }
 
@@ -190,7 +190,7 @@ public final class Check {
     public static Optional<Path> checkNotExists(@Nullable String path) {
 
         return checkNotNull(path)
-            .flatMap(RequireUtils::safeGetPath)
+            .flatMap(RequireUtils::pathGetOptional)
             .flatMap(Check::checkNotExists);
     }
 
@@ -211,7 +211,7 @@ public final class Check {
     public static Optional<Path> checkRegularFile(@Nullable String filePath) {
 
         return checkNotNull(filePath)
-            .flatMap(RequireUtils::safeGetPath)
+            .flatMap(RequireUtils::pathGetOptional)
             .flatMap(Check::checkRegularFile);
     }
 
@@ -232,7 +232,7 @@ public final class Check {
     public static Optional<Path> checkDirectory(@Nullable String directoryPath) {
 
         return checkNotNull(directoryPath)
-            .flatMap(RequireUtils::safeGetPath)
+            .flatMap(RequireUtils::pathGetOptional)
             .flatMap(Check::checkDirectory);
     }
 

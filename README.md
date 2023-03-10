@@ -7,7 +7,7 @@ _Java argument checking and validation._
 JRequisites is a fast, tiny library for validating method arguments.
 It offers two classes:
 
-### Require Class
+### 'Require' Class
 Brings in `requireXYZ()` methods, which throw `IllegalArgumentException` (mostly):
 ```java
 String name = "Cora";
@@ -18,7 +18,7 @@ return new User(
     requireMinimum(age, 21, "Age")); // Throws: "Age must be at least 21"
 ```
 
-### Check Class
+### 'Check' Class
 Brings in `checkXYZ()` methods, which return `Optional<>`:
 ```java
 UUID userId; // assume this is valid ...
@@ -30,77 +30,68 @@ String userName = checkNotNull(userId, "User ID")
 ```
 
 ## Why Use It?
-- tiny — much smaller than Commons or Guava
-- extremely fast
+
+### Tiny
+Much smaller than Apache Commons or Guava Preconditions:
+- JRequisites: 16 kb
+- Apache Commons: 573 kb
+- Google Guava: 3 MB
+
+### Extremely Fast
   - no object allocation
   - no varargs
   - no String formatting
   - no reflection
-- no dependencies
+  - no external dependencies
 
-## Comparison
-
-- [Apache Commons Validation](https://commons.apache.org/proper/commons-lang/javadocs/api-release/index.html)
-- [Google Guava](https://guava.dev/releases/30.1-jre/api/docs/com/google/common/base/Preconditions.html)
-
-| Feature              | JRequisites       | Apache Commons     | Google Guava |
-|----------------------|-------------------|--------------------|--------------|
-| Jar Size             | 16 kb             | 573 kb             | 3 MB       |
-| Supports: Strings   | ✔️                | ✔️                 | ✔️           |
-| Supports: Integers  | ✔️                | ✔️                 | ✔️           |
-| Supports: Longs     | ✔️                | ✔️                 | ✔️           |
-| Supports: Doubles   | ✔️                | ✔️                 | ✔️           |
-| Supports: Booleans  | ✔️                | ✔️                 | ✔️           |
-| Supports: Collections | ✔️                | ✔️                 | ✔️           |
-| Supports: Maps       | ✔️                | ✔️                 | ✔️           |
-| Supports: Arrays     | ✔️                | ✔️                 | ✔️           |
-| Supports: Date/Time  | ✔️                | ✔️                 | ✔️           |
-| Conditional Check    | require()️        | isTrue️()          | ✔️           |
-| State Check          | requireState()️   | validState()️      | ✔️           |
-| Null Check           | requireNotNull()️ | notNull()️         | ✔️           |
-| Empty Check          | requireNotEmpty()️ | notEmpty()️        | ✔️           |
-| Blank Check          | requireNotBlank()️ | notBlank()️        | ✔️           |
-| Length Check         | ✔️                | ❌️                 | ✔️           |
-| Optional Check       | ✔️                | ❌                  | ❌            |
-| No Dependencies      | ✔️                | ❌                  | ❌            |
-| No Reflection        | ✔️                | ❌                  | ❌            |
-| No Varargs           | ✔️                | ❌                  | ❌            |
-| Null Elements        | requireNotNull()️ | noNullElements()   | ❌            |"
-| No String Formatting | ✔️                | ❌                  | ❌            |
-| Exclusive Between   | ❌️                | exclusiveBetween() | ❌            |
-| Inclusive Between   | ❌️                | inclusiveBetween() | ❌            |
-| Minimum              | ✔️                | ❌                  | ❌            |
-| Maximum              | ✔️                | ❌                  | ❌            |
-| Index Check         | ❌                 | validIndex()       | ❌            |
-| Finite / NaN         | ❌️                | finite()           | ❌            |
-| Infinite / NaN       | ❌✔️                | notNaN()           | ❌            |
-| Positive             | ✔️                | ❌                  | ❌            |
-| Negative             | ✔️                | ❌                  | ❌            |
-| Zero                 | ✔️                | ❌                  | ❌            |
-| Non-Zero             | ✔️                | ❌                  | ❌            |
-| Positive Or Zero     | ✔️                | ❌                  | ❌            |
-| Assignable From      | ✔️                | isAssignableFrom() | ❌            |
-| Instance Of          | ✔️                | isInstanceOf()     | ❌            |
-| Matches Regex        | ✔️                | matchesPattern()   | ❌            |
-| Contains             | ✔️                | ❌                  | ❌            |
-| Contains Only        | ✔️                | ❌                  | ❌            |
-| Contains None        | ✔️                | ❌                  | ❌            |
-
-## Why Use It?
-
-JRequisites is a tiny library that does one thing — argument validation.
-It's designed to be used in production code, not just tests.
-
-## How To Use It
-
-
-## `CheckIf`
-
+### Clear Naming Convention
 ```java
-CheckIfString.notBlank(name).orElse(default);
+// Apache Commons:
+notNull(name); // are you asking me or telling me?
+
+// Guava Preconditions:
+checkNotNull(name); // checking what, exactly?
+
+// JRequisites:
+requireNotNull(name); // Perfectly clear.
 ```
 
-## About Null Checks
+### Awesome Error Messages
+```java
+// Apache Commons:
+notNull(name, "Name is null");
+
+// Guava Preconditions:
+checkNotNull(name, "Name is null");
+
+// JRequisites:
+requireNotNull(name, "Name"); // Outputs: "Name is null"
+```
+
+### Lots of Useful Checks
+
+| JRequisites            | Apache Commons | Guava Preconditions |
+|------------------------|----------------|---------------------|
+| `requireNotNull()`     | `notNull()`    | `checkNotNull()`    |
+| `requireNotEmpty()`    | `notEmpty()`   | --                  |
+| `requireNotBlank()`    | `notBlank()`   | --                  |
+| `requireLength()`      | --             | --                  |
+| `requireRegularFile()` | --             | --                  |
+| `requireDirectory()`   | --             | --                  |
+| `requireFuture()`      | --             | --                  |
+| `requirePast()`        | --             | --                  |
+
+### `Optional<>` Support
+Want something more nuanced than throwing an exception?
+Use the `Check` class:
+```java
+String name = checkNotNull(userId, "User ID")
+    .map(UserService::findById)
+    .map(User::getName)
+    .orElse("(no name)");
+```
+
+## How `null` is Handled
 
 Our opinionated philosophy is that _nulls are a code smell_.
 Unlike Jakarta Bean Validation, which treats nulls as valid unless

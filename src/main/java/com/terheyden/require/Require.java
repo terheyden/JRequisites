@@ -58,6 +58,11 @@ public final class Require {
      *     require(user.isAdmin());
      * }
      * </pre>
+     * Note that:
+     * <ul>
+     *     <li>{@code require()} throws an {@code IllegalArgumentException}
+     *     <li>{@code requireState()} throws an {@code IllegalStateException}
+     * </ul>
      * {@code require()} throws an IAE, and {@code requireState()} throws an ISE.
      * @param condition the condition to check
      * @throws IllegalArgumentException if the condition is false
@@ -74,7 +79,11 @@ public final class Require {
      *     requireState(user.isAdmin(), "User is not an admin");
      * }
      * </pre>
-     * {@code require()} throws an IAE, and {@code requireState()} throws an ISE.
+     * Note that:
+     * <ul>
+     *     <li>{@code require()} throws an {@code IllegalArgumentException}
+     *     <li>{@code requireState()} throws an {@code IllegalStateException}
+     * </ul>
      * @param condition the condition to check
      * @param errorMessage the error message to use if the condition is false
      * @throws IllegalStateException if the condition is false
@@ -87,7 +96,7 @@ public final class Require {
     }
 
     /**
-     * Require that some state condition is true. For example:
+     * Require that some state or logic condition is true. For example:
      * <pre>
      * {@code
      *     // If false, throws: "Condition is false"

@@ -36,7 +36,7 @@ final class RequireUtils {
     /**
      * For {@link Check}, to verify if a string is a valid path.
      */
-    static Optional<Path> safeGetPath(@Nullable String path) {
+    static Optional<Path> pathGetOptional(@Nullable String path) {
 
         if (path == null) {
             return Optional.empty();
