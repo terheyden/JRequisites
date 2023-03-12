@@ -13,6 +13,8 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.Optional;
 
+import static java.util.Objects.isNull;
+
 /**
  * Require class.
  */
@@ -33,28 +35,12 @@ public final class CheckBoolean {
      * {@code check()} throws an IAE, and {@code checkState()} throws an ISE.
      * @param condition the condition to check
      */
-    public static boolean check(boolean condition) {
+    public static boolean isTrue(boolean condition) {
         return condition;
     }
 
-    /**
-     * Require that some state condition is true. For example:
-     * <pre>
-     * {@code
-     *     // Throws if false:
-     *     checkState(user.isAdmin(), "User is not an admin");
-     * }
-     * </pre>
-     * Note that:
-     * <ul>
-     *     <li>{@code check()} throws an {@code IllegalArgumentException}
-     *     <li>{@code checkState()} throws an {@code IllegalStateException}
-     * </ul>
-     *
-     * @param condition the condition to check
-     */
-    public static boolean checkState(boolean condition) {
-        return condition;
+    public static boolean isFalse(boolean condition) {
+        return !condition;
     }
 
     /**
@@ -62,15 +48,15 @@ public final class CheckBoolean {
      * <pre>
      * {@code
      *     // If null, throws: "User is null"
-     *     checkNotNull(user, "User");
+     *     isNotNull(user, "User");
      * }
      * </pre>
-     * {@code checkNotNull()} throws an NPE, and {@code checkNonNullState()} throws an ISE.
+     * {@code isNotNull()} throws an NPE, and {@code checkNonNullState()} throws an ISE.
      * @param obj the object to check
      * @param <T> the type of the object
      * @return the object, if it's not null, for chaining
      */
-    public static <T> boolean checkNotNull(@Nullable T obj) {
+    public static boolean isNotNull(@Nullable Object obj) {
         return obj != null;
     }
 
@@ -79,7 +65,7 @@ public final class CheckBoolean {
      * <pre>
      * {@code
      *     // If null or zero length, throws: "Name is empty"
-     *     checkNotEmpty(name, "Name");
+     *     isNotEmpty(name, "Name");
      * }
      * </pre>
      * @param str the string to check
@@ -87,8 +73,8 @@ public final class CheckBoolean {
      * @param <T> the type of the string
      * @return the string, if it's not null, for chaining
      */
-    public static <T extends CharSequence> boolean checkNotEmpty(@Nullable T str) {
-        return checkNotNull(str) && str.length() > 0;
+    public static <T extends CharSequence> boolean isNotEmpty(@Nullable T str) {
+        return isNotNull(str) && str.length() > 0;
     }
 
     /**
@@ -96,158 +82,187 @@ public final class CheckBoolean {
      * <pre>
      * {@code
      *     // If null or zero length, throws: "List of users is empty"
-     *     checkNotEmpty(users, "List of users");
+     *     isNotEmpty(users, "List of users");
      * }
      * </pre>
      * @param collection the collection to check
      * @param <T> the type of the collection
      * @return the collection, if it's not null, for chaining
      */
-    public static <T extends Collection<?>> boolean checkNotEmpty(@Nullable T collection) {
-        return checkNotNull(collection) && !collection.isEmpty();
+    public static <T extends Collection<?>> boolean isNotEmpty(@Nullable T collection) {
+        return isNotNull(collection) && !collection.isEmpty();
     }
 
-    public static <T extends Map<?, ?>> boolean checkNotEmpty(@Nullable T map) {
-        return checkNotNull(map) && !map.isEmpty();
+    public static <T extends Map<?, ?>> boolean isNotEmpty(@Nullable T map) {
+        return isNotNull(map) && !map.isEmpty();
     }
 
-    public static <T> boolean checkNotEmpty(@Nullable T[] array) {
-        return checkNotNull(array) && array.length > 0;
+    public static boolean isNotEmpty(@Nullable Object[] array) {
+        return isNotNull(array) && array.length > 0;
     }
 
-    public static <T extends CharSequence> boolean checkNotBlank(@Nullable T str) {
-        return checkNotNull(str) && str.toString().trim().length() > 0;
+    public static <T extends CharSequence> boolean isNotBlank(@Nullable T str) {
+        return isNotNull(str) && str.toString().trim().length() > 0;
     }
 
-    public static <T extends CharSequence> boolean checkLength(@Nullable T str, int minLength, int maxLength) {
-        return checkNotNull(str) && str.length() >= minLength && str.length() <= maxLength;
+    public static <T extends CharSequence> boolean hasLengthBetween(@Nullable T str, int minLength, int maxLength) {
+        return isNotNull(str) && str.length() >= minLength && str.length() <= maxLength;
     }
 
-    public static <T extends CharSequence> boolean checkLength(@Nullable T str, int minLength) {
-        return checkNotNull(str) && str.length() >= minLength;
+    public static <T extends CharSequence> boolean hasMinLength(@Nullable T str, int minLength) {
+        return isNotNull(str) && str.length() >= minLength;
     }
 
-    public static <T> boolean checkLength(@Nullable T[] array, int minLength, int maxLength) {
-        return checkNotNull(array) && array.length >= minLength && array.length <= maxLength;
+    public static boolean hasLengthBetween(@Nullable Object[] array, int minLength, int maxLength) {
+        return isNotNull(array) && array.length >= minLength && array.length <= maxLength;
     }
 
-    public static <T extends Collection<?>> boolean checkSize(@Nullable T collection, int minSize, int maxSize) {
-        return checkNotNull(collection) && collection.size() >= minSize && collection.size() <= maxSize;
+    public static boolean hasMinLength(@Nullable Object[] array, int minLength) {
+        return hasLengthBetween(array, minLength, Integer.MAX_VALUE);
     }
 
-    public static <T extends Map<?, ?>> boolean checkSize(@Nullable T map, int minSize, int maxSize) {
-        return checkNotNull(map) && map.size() >= minSize && map.size() <= maxSize;
+    public static boolean hasMaxLength(@Nullable Object[] array, int maxLength) {
+        return hasLengthBetween(array, 0, maxLength);
     }
 
-    public static boolean checkMin(int value, int minValue) {
+    public static boolean hasMinSize(@Nullable Collection<?> collection, int minSize) {
+        return isNotNull(collection) && collection.size() >= minSize;
+    }
+
+    public static boolean hasMinSize(@Nullable Map<?, ?> map, int minSize) {
+        return isNotNull(map) && map.size() >= minSize;
+    }
+
+    public static boolean hasMaxSize(@Nullable Collection<?> collection, int maxSize) {
+        return isNotNull(collection) && collection.size() <= maxSize;
+    }
+
+    public static boolean hasMaxSize(@Nullable Map<?, ?> map, int maxSize) {
+        return isNotNull(map) && map.size() <= maxSize;
+    }
+
+    public static <T extends Collection<?>> boolean hasSizeBetween(@Nullable T collection, int minSize, int maxSize) {
+        return isNotNull(collection) && collection.size() >= minSize && collection.size() <= maxSize;
+    }
+
+    public static <T extends Map<?, ?>> boolean hasSizeBetween(@Nullable T map, int minSize, int maxSize) {
+        return isNotNull(map) && map.size() >= minSize && map.size() <= maxSize;
+    }
+
+    public static boolean hasMinValue(int value, int minValue) {
         return value >= minValue;
     }
 
-    public static boolean checkMax(int value, int maxValue) {
+    public static boolean hasMaxValue(int value, int maxValue) {
         return value <= maxValue;
     }
 
-    public static boolean checkMinMax(int value, int minValue, int maxValue) {
+    public static boolean hasValueBetween(int value, int minValue, int maxValue) {
         return value >= minValue && value <= maxValue;
     }
 
-    public static boolean checkExists(@Nullable Path path) {
-        return checkNotNull(path) && Files.exists(path);
+    public static boolean pathExists(@Nullable Path path) {
+        return isNotNull(path) && Files.exists(path);
     }
 
-    public static boolean checkExists(@Nullable File file) {
-        return checkNotNull(file) && file.exists();
+    public static boolean pathExists(@Nullable File file) {
+        return isNotNull(file) && file.exists();
     }
 
-    public static boolean checkExists(@Nullable String path) {
+    public static boolean pathExists(@Nullable String path) {
         return Optional.ofNullable(path)
             .flatMap(RequireUtils::pathGetOptional)
-            .map(CheckBoolean::checkExists)
+            .map(CheckBoolean::pathExists)
             .orElse(false);
     }
 
-    public static boolean checkNotExists(@Nullable File path) {
-        return checkNotNull(path) && !path.exists();
+    public static boolean pathNotExists(@Nullable File path) {
+        return isNull(path) || !path.exists();
     }
 
-    public static boolean checkNotExists(@Nullable Path path) {
-        return checkNotNull(path) && Files.notExists(path);
+    public static boolean pathNotExists(@Nullable Path path) {
+        return isNull(path) || Files.notExists(path);
     }
 
-    public static boolean checkNotExists(@Nullable String path) {
-        return Optional.ofNullable(path)
+    public static boolean pathNotExists(@Nullable String path) {
+
+        if (path == null) {
+            return true;
+        }
+
+        return Optional.of(path)
             .flatMap(RequireUtils::pathGetOptional)
-            .map(CheckBoolean::checkNotExists)
+            .map(CheckBoolean::pathNotExists)
             .orElse(false);
     }
 
-    public static boolean checkRegularFile(@Nullable File file) {
-        return checkNotNull(file) && file.isFile();
+    public static boolean isRegularFile(@Nullable File file) {
+        return isNotNull(file) && file.isFile();
     }
 
-    public static boolean checkRegularFile(@Nullable Path file) {
-        return checkNotNull(file) && Files.isRegularFile(file);
+    public static boolean isRegularFile(@Nullable Path file) {
+        return isNotNull(file) && Files.isRegularFile(file);
     }
 
-    public static boolean checkRegularFile(@Nullable String filePath) {
+    public static boolean isRegularFile(@Nullable String filePath) {
         return Optional.ofNullable(filePath)
             .flatMap(RequireUtils::pathGetOptional)
-            .map(CheckBoolean::checkRegularFile)
+            .map(CheckBoolean::isRegularFile)
             .orElse(false);
     }
 
-    public static boolean checkDirectory(@Nullable File directory) {
-        return checkNotNull(directory) && directory.isDirectory();
+    public static boolean isDirectory(@Nullable File directory) {
+        return isNotNull(directory) && directory.isDirectory();
     }
 
-    public static boolean checkDirectory(@Nullable Path directory) {
-        return checkNotNull(directory) && Files.isDirectory(directory);
+    public static boolean isDirectory(@Nullable Path directory) {
+        return isNotNull(directory) && Files.isDirectory(directory);
     }
 
-    public static boolean checkDirectory(@Nullable String directoryPath) {
+    public static boolean isDirectory(@Nullable String directoryPath) {
         return Optional.ofNullable(directoryPath)
             .flatMap(RequireUtils::pathGetOptional)
-            .map(CheckBoolean::checkDirectory)
+            .map(CheckBoolean::isDirectory)
             .orElse(false);
     }
 
-    public static boolean checkFuture(@Nullable ZonedDateTime dateTime) {
-        return checkNotNull(dateTime) && dateTime.isAfter(ZonedDateTime.now());
+    public static boolean isFuture(@Nullable ZonedDateTime dateTime) {
+        return isNotNull(dateTime) && dateTime.isAfter(ZonedDateTime.now());
     }
 
-    public static boolean checkFuture(@Nullable OffsetDateTime dateTime) {
-        return checkNotNull(dateTime) && dateTime.isAfter(OffsetDateTime.now());
+    public static boolean isFuture(@Nullable OffsetDateTime dateTime) {
+        return isNotNull(dateTime) && dateTime.isAfter(OffsetDateTime.now());
     }
 
-    public static boolean checkFuture(@Nullable LocalDateTime dateTime) {
-        return checkNotNull(dateTime) && dateTime.isAfter(LocalDateTime.now());
+    public static boolean isFuture(@Nullable LocalDateTime dateTime) {
+        return isNotNull(dateTime) && dateTime.isAfter(LocalDateTime.now());
     }
 
-    public static boolean checkFuture(@Nullable LocalDate date) {
-        return checkNotNull(date) && date.isAfter(LocalDate.now());
+    public static boolean isFuture(@Nullable LocalDate date) {
+        return isNotNull(date) && date.isAfter(LocalDate.now());
     }
 
-    public static boolean checkFuture(@Nullable LocalTime time) {
-        return checkNotNull(time) && time.isAfter(LocalTime.now());
+    public static boolean isFuture(@Nullable LocalTime time) {
+        return isNotNull(time) && time.isAfter(LocalTime.now());
     }
 
-    public static boolean checkPast(@Nullable ZonedDateTime dateTime) {
-        return checkNotNull(dateTime) && dateTime.isBefore(ZonedDateTime.now());
+    public static boolean isPast(@Nullable ZonedDateTime dateTime) {
+        return isNotNull(dateTime) && dateTime.isBefore(ZonedDateTime.now());
     }
 
-    public static boolean checkPast(@Nullable OffsetDateTime dateTime) {
-        return checkNotNull(dateTime) && dateTime.isBefore(OffsetDateTime.now());
+    public static boolean isPast(@Nullable OffsetDateTime dateTime) {
+        return isNotNull(dateTime) && dateTime.isBefore(OffsetDateTime.now());
     }
 
-    public static boolean checkPast(@Nullable LocalDateTime dateTime) {
-        return checkNotNull(dateTime) && dateTime.isBefore(LocalDateTime.now());
+    public static boolean isPast(@Nullable LocalDateTime dateTime) {
+        return isNotNull(dateTime) && dateTime.isBefore(LocalDateTime.now());
     }
 
-    public static boolean checkPast(@Nullable LocalDate date) {
-        return checkNotNull(date) && date.isBefore(LocalDate.now());
+    public static boolean isPast(@Nullable LocalDate date) {
+        return isNotNull(date) && date.isBefore(LocalDate.now());
     }
 
-    public static boolean checkPast(@Nullable LocalTime time) {
-        return checkNotNull(time) && time.isBefore(LocalTime.now());
+    public static boolean isPast(@Nullable LocalTime time) {
+        return isNotNull(time) && time.isBefore(LocalTime.now());
     }
 }

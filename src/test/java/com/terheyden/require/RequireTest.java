@@ -13,6 +13,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.IntStream;
 
 import org.junit.jupiter.api.Test;
 
@@ -198,67 +199,67 @@ class RequireTest {
 
     @Test
     void requireLength_string() {
-        assertThatNoException().isThrownBy(() -> Require.requireLength(goodStr, goodStr.length()));
+        assertThatNoException().isThrownBy(() -> Require.requireMinLength(goodStr, goodStr.length()));
         assertThatNullPointerException()
-            .isThrownBy(() -> Require.requireLength(nullStr, 1))
+            .isThrownBy(() -> Require.requireMinLength(nullStr, 1))
             .withMessage("String is null");
         assertThatNullPointerException()
-            .isThrownBy(() -> Require.requireLength(nullStr, 1, ERROR))
+            .isThrownBy(() -> Require.requireMinLength(nullStr, 1, ERROR))
             .withMessage(ERROR + " is null");
         assertThatIllegalArgumentException()
-            .isThrownBy(() -> Require.requireLength(goodStr, goodStr.length() + 1))
+            .isThrownBy(() -> Require.requireMinLength(goodStr, goodStr.length() + 1))
             .withMessage("String length (4) is less than minimum: 5 — contents: good");
         assertThatIllegalArgumentException()
-            .isThrownBy(() -> Require.requireLength(goodStr, goodStr.length() + 1, ERROR))
+            .isThrownBy(() -> Require.requireMinLength(goodStr, goodStr.length() + 1, ERROR))
             .withMessage(ERROR + " (4) is less than minimum: 5 — contents: good");
     }
 
     @Test
     void requireLength_array() {
-        assertThatNoException().isThrownBy(() -> Require.requireLength(goodArray, goodArray.length));
+        assertThatNoException().isThrownBy(() -> Require.requireMinLength(goodArray, goodArray.length));
         assertThatNullPointerException()
-            .isThrownBy(() -> Require.requireLength(nullArray, 1))
+            .isThrownBy(() -> Require.requireMinLength(nullArray, 1))
             .withMessage("Array is null");
         assertThatNullPointerException()
-            .isThrownBy(() -> Require.requireLength(nullArray, 1, ERROR))
+            .isThrownBy(() -> Require.requireMinLength(nullArray, 1, ERROR))
             .withMessage(ERROR + " is null");
         assertThatIllegalArgumentException()
-            .isThrownBy(() -> Require.requireLength(goodArray, goodArray.length + 1))
+            .isThrownBy(() -> Require.requireMinLength(goodArray, goodArray.length + 1))
             .withMessage("Array length (3) is less than minimum: 4 — contents: [a, b, c]");
         assertThatIllegalArgumentException()
-            .isThrownBy(() -> Require.requireLength(goodArray, goodArray.length + 1, ERROR))
+            .isThrownBy(() -> Require.requireMinLength(goodArray, goodArray.length + 1, ERROR))
             .withMessage(ERROR + " (3) is less than minimum: 4 — contents: [a, b, c]");
     }
 
     @Test
     void requireSize_collection() {
-        assertThatNoException().isThrownBy(() -> Require.requireSize(goodList, goodList.size()));
+        assertThatNoException().isThrownBy(() -> Require.requireMinSize(goodList, goodList.size()));
         assertThatNullPointerException()
-            .isThrownBy(() -> Require.requireSize(nullList, 1))
+            .isThrownBy(() -> Require.requireMinSize(nullList, 1))
             .withMessage("Collection is null");
         assertThatNullPointerException()
-            .isThrownBy(() -> Require.requireSize(nullList, 1, ERROR))
+            .isThrownBy(() -> Require.requireMinSize(nullList, 1, ERROR))
             .withMessage(ERROR + " is null");
         assertThatIllegalArgumentException()
-            .isThrownBy(() -> Require.requireSize(goodList, goodList.size() + 1))
+            .isThrownBy(() -> Require.requireMinSize(goodList, goodList.size() + 1))
             .withMessage("Collection size (3) is less than minimum: 4 — contents: [a, b, c]");
         assertThatIllegalArgumentException()
-            .isThrownBy(() -> Require.requireSize(goodList, goodList.size() + 1, ERROR))
+            .isThrownBy(() -> Require.requireMinSize(goodList, goodList.size() + 1, ERROR))
             .withMessage(ERROR + " (3) is less than minimum: 4 — contents: [a, b, c]");
     }
 
     @Test
     void requireSize_map() {
-        assertThatNoException().isThrownBy(() -> Require.requireSize(goodMap, goodMap.size()));
-        assertThatNullPointerException().isThrownBy(() -> Require.requireSize(nullMap, 1)).withMessage("Map is null");
+        assertThatNoException().isThrownBy(() -> Require.requireMinSize(goodMap, goodMap.size()));
+        assertThatNullPointerException().isThrownBy(() -> Require.requireMinSize(nullMap, 1)).withMessage("Map is null");
         assertThatNullPointerException()
-            .isThrownBy(() -> Require.requireSize(nullMap, 1, ERROR))
+            .isThrownBy(() -> Require.requireMinSize(nullMap, 1, ERROR))
             .withMessage(ERROR + " is null");
         assertThatIllegalArgumentException()
-            .isThrownBy(() -> Require.requireSize(goodMap, goodMap.size() + 1))
+            .isThrownBy(() -> Require.requireMinSize(goodMap, goodMap.size() + 1))
             .withMessage("Map size (2) is less than minimum: 3 — contents: {a=1, b=2}");
         assertThatIllegalArgumentException()
-            .isThrownBy(() -> Require.requireSize(goodMap, goodMap.size() + 1, ERROR))
+            .isThrownBy(() -> Require.requireMinSize(goodMap, goodMap.size() + 1, ERROR))
             .withMessage(ERROR + " (2) is less than minimum: 3 — contents: {a=1, b=2}");
     }
 
@@ -275,56 +276,56 @@ class RequireTest {
 
     @Test
     void requireMax() {
-        assertThatNoException().isThrownBy(() -> Require.requireMax(0, 1));
+        assertThatNoException().isThrownBy(() -> Require.requireMaxValue(0, 1));
         assertThatIllegalArgumentException()
-            .isThrownBy(() -> Require.requireMax(1, 0))
+            .isThrownBy(() -> Require.requireMaxValue(1, 0))
             .withMessage("Value (1) is greater than maximum: 0");
         assertThatIllegalArgumentException()
-            .isThrownBy(() -> Require.requireMax(1, 0, ERROR))
+            .isThrownBy(() -> Require.requireMaxValue(1, 0, ERROR))
             .withMessage(ERROR + " (1) is greater than maximum: 0");
     }
 
     @Test
-    void requireExists() {
-        assertThatNoException().isThrownBy(() -> Require.requireExists(goodPathFile));
-        assertThatNoException().isThrownBy(() -> Require.requireExists(goodPathDir));
-        assertThatNoException().isThrownBy(() -> Require.requireExists(goodFileDir));
-        assertThatNoException().isThrownBy(() -> Require.requireExists(goodFileFile));
-        assertThatNoException().isThrownBy(() -> Require.requireExists(GOOD_FILE_STR));
-        assertThatNoException().isThrownBy(() -> Require.requireExists(GOOD_DIR_STR));
-        assertThatNullPointerException().isThrownBy(() -> Require.requireExists(nullFile)).withMessage("Path is null");
-        assertThatNullPointerException().isThrownBy(() -> Require.requireExists(nullFile, ERROR)).withMessage(ERROR + " is null");
-        assertThatNullPointerException().isThrownBy(() -> Require.requireExists(nullPath)).withMessage("Path is null");
-        assertThatNullPointerException().isThrownBy(() -> Require.requireExists(nullPath, ERROR)).withMessage(ERROR + " is null");
-        assertThatNullPointerException().isThrownBy(() -> Require.requireExists(nullStr)).withMessage("Path is null");
-        assertThatNullPointerException().isThrownBy(() -> Require.requireExists(nullStr, ERROR)).withMessage(ERROR + " is null");
-        assertThatIllegalArgumentException().isThrownBy(() -> Require.requireExists(badPathFile)).withMessageContainingAll("Path does not exist:", BAD);
-        assertThatIllegalArgumentException().isThrownBy(() -> Require.requireExists(badPathFile, ERROR)).withMessageContainingAll(ERROR + " does not exist:", BAD);
-        assertThatIllegalArgumentException().isThrownBy(() -> Require.requireExists(badFileFile)).withMessageContainingAll("Path does not exist:", BAD);
-        assertThatIllegalArgumentException().isThrownBy(() -> Require.requireExists(badFileFile, ERROR)).withMessageContainingAll(ERROR + " does not exist:", BAD);
-        assertThatIllegalArgumentException().isThrownBy(() -> Require.requireExists(BAD)).withMessageContainingAll("Path does not exist:", BAD);
-        assertThatIllegalArgumentException().isThrownBy(() -> Require.requireExists(BAD, ERROR)).withMessageContainingAll(ERROR + " does not exist:", BAD);
+    void requirePathExists() {
+        assertThatNoException().isThrownBy(() -> Require.requirePathExists(goodPathFile));
+        assertThatNoException().isThrownBy(() -> Require.requirePathExists(goodPathDir));
+        assertThatNoException().isThrownBy(() -> Require.requirePathExists(goodFileDir));
+        assertThatNoException().isThrownBy(() -> Require.requirePathExists(goodFileFile));
+        assertThatNoException().isThrownBy(() -> Require.requirePathExists(GOOD_FILE_STR));
+        assertThatNoException().isThrownBy(() -> Require.requirePathExists(GOOD_DIR_STR));
+        assertThatNullPointerException().isThrownBy(() -> Require.requirePathExists(nullFile)).withMessage("Path is null");
+        assertThatNullPointerException().isThrownBy(() -> Require.requirePathExists(nullFile, ERROR)).withMessage(ERROR + " is null");
+        assertThatNullPointerException().isThrownBy(() -> Require.requirePathExists(nullPath)).withMessage("Path is null");
+        assertThatNullPointerException().isThrownBy(() -> Require.requirePathExists(nullPath, ERROR)).withMessage(ERROR + " is null");
+        assertThatNullPointerException().isThrownBy(() -> Require.requirePathExists(nullStr)).withMessage("Path is null");
+        assertThatNullPointerException().isThrownBy(() -> Require.requirePathExists(nullStr, ERROR)).withMessage(ERROR + " is null");
+        assertThatIllegalArgumentException().isThrownBy(() -> Require.requirePathExists(badPathFile)).withMessageContainingAll("Path does not exist:", BAD);
+        assertThatIllegalArgumentException().isThrownBy(() -> Require.requirePathExists(badPathFile, ERROR)).withMessageContainingAll(ERROR + " does not exist:", BAD);
+        assertThatIllegalArgumentException().isThrownBy(() -> Require.requirePathExists(badFileFile)).withMessageContainingAll("Path does not exist:", BAD);
+        assertThatIllegalArgumentException().isThrownBy(() -> Require.requirePathExists(badFileFile, ERROR)).withMessageContainingAll(ERROR + " does not exist:", BAD);
+        assertThatIllegalArgumentException().isThrownBy(() -> Require.requirePathExists(BAD)).withMessageContainingAll("Path does not exist:", BAD);
+        assertThatIllegalArgumentException().isThrownBy(() -> Require.requirePathExists(BAD, ERROR)).withMessageContainingAll(ERROR + " does not exist:", BAD);
     }
 
     @Test
-    void requireNotExists() {
-        assertThatNoException().isThrownBy(() -> Require.requireNotExists(badPathFile));
-        assertThatNoException().isThrownBy(() -> Require.requireNotExists(badPathDir));
-        assertThatNoException().isThrownBy(() -> Require.requireNotExists(badFileDir));
-        assertThatNoException().isThrownBy(() -> Require.requireNotExists(badFileFile));
-        assertThatNoException().isThrownBy(() -> Require.requireNotExists(BAD));
-        assertThatNullPointerException().isThrownBy(() -> Require.requireNotExists(nullFile)).withMessage("Path is null");
-        assertThatNullPointerException().isThrownBy(() -> Require.requireNotExists(nullFile, ERROR)).withMessage(ERROR + " is null");
-        assertThatNullPointerException().isThrownBy(() -> Require.requireNotExists(nullPath)).withMessage("Path is null");
-        assertThatNullPointerException().isThrownBy(() -> Require.requireNotExists(nullPath, ERROR)).withMessage(ERROR + " is null");
-        assertThatNullPointerException().isThrownBy(() -> Require.requireNotExists(nullStr)).withMessage("Path is null");
-        assertThatNullPointerException().isThrownBy(() -> Require.requireNotExists(nullStr, ERROR)).withMessage(ERROR + " is null");
-        assertThatIllegalArgumentException().isThrownBy(() -> Require.requireNotExists(goodPathFile)).withMessageContainingAll("Path exists:", GOOD_FILE_STR);
-        assertThatIllegalArgumentException().isThrownBy(() -> Require.requireNotExists(goodPathFile, ERROR)).withMessageContainingAll(ERROR + " exists:", GOOD_FILE_STR);
-        assertThatIllegalArgumentException().isThrownBy(() -> Require.requireNotExists(goodFileFile)).withMessageContainingAll("Path exists:", GOOD_FILE_STR);
-        assertThatIllegalArgumentException().isThrownBy(() -> Require.requireNotExists(goodFileFile, ERROR)).withMessageContainingAll(ERROR + " exists:", GOOD_FILE_STR);
-        assertThatIllegalArgumentException().isThrownBy(() -> Require.requireNotExists(GOOD_FILE_STR)).withMessageContainingAll("Path exists:", GOOD_FILE_STR);
-        assertThatIllegalArgumentException().isThrownBy(() -> Require.requireNotExists(GOOD_FILE_STR, ERROR)).withMessageContainingAll(ERROR + " exists:", GOOD_FILE_STR);
+    void requirePathNotExists() {
+        assertThatNoException().isThrownBy(() -> Require.requirePathNotExists(badPathFile));
+        assertThatNoException().isThrownBy(() -> Require.requirePathNotExists(badPathDir));
+        assertThatNoException().isThrownBy(() -> Require.requirePathNotExists(badFileDir));
+        assertThatNoException().isThrownBy(() -> Require.requirePathNotExists(badFileFile));
+        assertThatNoException().isThrownBy(() -> Require.requirePathNotExists(BAD));
+        assertThatNullPointerException().isThrownBy(() -> Require.requirePathNotExists(nullFile)).withMessage("Path is null");
+        assertThatNullPointerException().isThrownBy(() -> Require.requirePathNotExists(nullFile, ERROR)).withMessage(ERROR + " is null");
+        assertThatNullPointerException().isThrownBy(() -> Require.requirePathNotExists(nullPath)).withMessage("Path is null");
+        assertThatNullPointerException().isThrownBy(() -> Require.requirePathNotExists(nullPath, ERROR)).withMessage(ERROR + " is null");
+        assertThatNullPointerException().isThrownBy(() -> Require.requirePathNotExists(nullStr)).withMessage("Path is null");
+        assertThatNullPointerException().isThrownBy(() -> Require.requirePathNotExists(nullStr, ERROR)).withMessage(ERROR + " is null");
+        assertThatIllegalArgumentException().isThrownBy(() -> Require.requirePathNotExists(goodPathFile)).withMessageContainingAll("Path exists:", GOOD_FILE_STR);
+        assertThatIllegalArgumentException().isThrownBy(() -> Require.requirePathNotExists(goodPathFile, ERROR)).withMessageContainingAll(ERROR + " exists:", GOOD_FILE_STR);
+        assertThatIllegalArgumentException().isThrownBy(() -> Require.requirePathNotExists(goodFileFile)).withMessageContainingAll("Path exists:", GOOD_FILE_STR);
+        assertThatIllegalArgumentException().isThrownBy(() -> Require.requirePathNotExists(goodFileFile, ERROR)).withMessageContainingAll(ERROR + " exists:", GOOD_FILE_STR);
+        assertThatIllegalArgumentException().isThrownBy(() -> Require.requirePathNotExists(GOOD_FILE_STR)).withMessageContainingAll("Path exists:", GOOD_FILE_STR);
+        assertThatIllegalArgumentException().isThrownBy(() -> Require.requirePathNotExists(GOOD_FILE_STR, ERROR)).withMessageContainingAll(ERROR + " exists:", GOOD_FILE_STR);
     }
 
     @Test
@@ -430,5 +431,14 @@ class RequireTest {
         assertThatNullPointerException().isThrownBy(() -> Require.requirePast(ldtNull)).withMessage("Date Time is null");
         assertThatNullPointerException().isThrownBy(() -> Require.requirePast(ldNull)).withMessage("Date is null");
         assertThatNullPointerException().isThrownBy(() -> Require.requirePast(ltNull)).withMessage("Time is null");
+    }
+
+    void betweenThings() {
+
+        // JDK methods that take inclusive, exclusive parameters:
+        goodStr.substring(0, 1);
+        goodStr.subSequence(0, 1);
+        Arrays.copyOfRange(goodArray, 0, 1);
+        IntStream.range(0, 1);
     }
 }

@@ -81,59 +81,59 @@ public final class Check {
             .filter(s -> s.toString().trim().length() > 0);
     }
 
-    public static <T extends CharSequence> Optional<T> checkLength(
+    public static <T extends CharSequence> Optional<T> checkLengthBetween(
         @Nullable T str,
         int minLength,
         int maxLength) {
 
         return checkNotNull(str)
-            .filter(s -> checkMinMax(s.length(), minLength, maxLength).isPresent());
+            .filter(s -> checkValueBetween(s.length(), minLength, maxLength).isPresent());
     }
 
-    public static <T extends CharSequence> Optional<T> checkLength(
+    public static <T extends CharSequence> Optional<T> checkMinLength(
         @Nullable T str,
         int minLength) {
 
-        return checkLength(str, minLength, Integer.MAX_VALUE);
+        return checkLengthBetween(str, minLength, Integer.MAX_VALUE);
     }
 
-    public static <T> Optional<T[]> checkLength(@Nullable T[] array, int minLength, int maxLength) {
+    public static <T> Optional<T[]> checkLengthBetween(@Nullable T[] array, int minLength, int maxLength) {
 
         return checkNotNull(array)
-            .filter(a -> checkMinMax(a.length, minLength, maxLength).isPresent());
+            .filter(a -> checkValueBetween(a.length, minLength, maxLength).isPresent());
     }
 
-    public static <T> Optional<T[]> checkLength(@Nullable T[] array, int minSize) {
-        return checkLength(array, minSize, Integer.MAX_VALUE);
+    public static <T> Optional<T[]> checkMinLength(@Nullable T[] array, int minSize) {
+        return checkLengthBetween(array, minSize, Integer.MAX_VALUE);
     }
 
-    public static <T extends Collection<?>> Optional<T> checkSize(
+    public static <T extends Collection<?>> Optional<T> checkSizeBetween(
         @Nullable T collection,
         int minSize,
         int maxSize) {
 
         return checkNotNull(collection)
-            .filter(c -> checkMinMax(c.size(), minSize, maxSize).isPresent());
+            .filter(c -> checkValueBetween(c.size(), minSize, maxSize).isPresent());
     }
 
-    public static <T extends Collection<?>> Optional<T> checkSize(@Nullable T collection, int minSize) {
-        return checkSize(collection, minSize, Integer.MAX_VALUE);
+    public static <T extends Collection<?>> Optional<T> checkMinSize(@Nullable T collection, int minSize) {
+        return checkSizeBetween(collection, minSize, Integer.MAX_VALUE);
     }
 
-    public static <T extends Map<?, ?>> Optional<T> checkSize(
+    public static <T extends Map<?, ?>> Optional<T> checkSizeBetween(
         @Nullable T map,
         int minSize,
         int maxSize) {
 
         return checkNotNull(map)
-            .filter(m -> checkMinMax(m.size(), minSize, maxSize).isPresent());
+            .filter(m -> checkValueBetween(m.size(), minSize, maxSize).isPresent());
     }
 
-    public static <T extends Map<?, ?>> Optional<T> checkSize(@Nullable T map, int minSize) {
-        return checkSize(map, minSize, Integer.MAX_VALUE);
+    public static <T extends Map<?, ?>> Optional<T> checkMinSize(@Nullable T map, int minSize) {
+        return checkSizeBetween(map, minSize, Integer.MAX_VALUE);
     }
 
-    public static Optional<Integer> checkMin(int value, int minValue) {
+    public static Optional<Integer> checkMinValue(int value, int minValue) {
 
         if (value < minValue) {
             return Optional.empty();
@@ -142,7 +142,7 @@ public final class Check {
         return Optional.of(value);
     }
 
-    public static Optional<Integer> checkMax(int value, int maxValue) {
+    public static Optional<Integer> checkMaxValue(int value, int maxValue) {
 
         if (value > maxValue) {
             return Optional.empty();
@@ -151,60 +151,60 @@ public final class Check {
         return Optional.of(value);
     }
 
-    public static Optional<Integer> checkMinMax(int value, int minValue, int maxValue) {
-        return checkMin(value, minValue)
-            .flatMap(v -> checkMax(v, maxValue));
+    public static Optional<Integer> checkValueBetween(int value, int minValue, int maxValue) {
+        return checkMinValue(value, minValue)
+            .flatMap(v -> checkMaxValue(v, maxValue));
     }
 
-    public static Optional<Path> checkExists(@Nullable Path path) {
+    public static Optional<Path> checkPathExists(@Nullable Path path) {
 
         return checkNotNull(path)
             .filter(Files::exists);
     }
 
-    public static Optional<File> checkExists(@Nullable File file) {
+    public static Optional<File> checkPathExists(@Nullable File file) {
 
         return checkNotNull(file)
             .filter(File::exists);
     }
 
-    public static Optional<Path> checkExists(@Nullable String path) {
+    public static Optional<Path> checkPathExists(@Nullable String path) {
 
         return checkNotNull(path)
             .flatMap(RequireUtils::pathGetOptional)
-            .flatMap(Check::checkExists);
+            .flatMap(Check::checkPathExists);
     }
 
-    public static Optional<File> checkNotExists(@Nullable File path) {
+    public static Optional<File> checkPathNotExists(@Nullable File path) {
 
         return checkNotNull(path)
             .filter(f -> !f.exists());
     }
 
-    public static Optional<Path> checkNotExists(@Nullable Path path) {
+    public static Optional<Path> checkPathNotExists(@Nullable Path path) {
 
         return checkNotNull(path)
             .filter(Files::notExists);
     }
 
-    public static Optional<Path> checkNotExists(@Nullable String path) {
+    public static Optional<Path> checkPathNotExists(@Nullable String path) {
 
         return checkNotNull(path)
             .flatMap(RequireUtils::pathGetOptional)
-            .flatMap(Check::checkNotExists);
+            .flatMap(Check::checkPathNotExists);
     }
 
     public static Optional<File> checkRegularFile(@Nullable File file) {
 
         return checkNotNull(file)
-            .filter(f -> checkExists(f).isPresent())
+            .filter(f -> checkPathExists(f).isPresent())
             .filter(File::isFile);
     }
 
     public static Optional<Path> checkRegularFile(@Nullable Path file) {
 
         return checkNotNull(file)
-            .filter(f -> checkExists(f).isPresent())
+            .filter(f -> checkPathExists(f).isPresent())
             .filter(Files::isRegularFile);
     }
 
@@ -218,14 +218,14 @@ public final class Check {
     public static Optional<File> checkDirectory(@Nullable File directory) {
 
         return checkNotNull(directory)
-            .filter(f -> checkExists(f).isPresent())
+            .filter(f -> checkPathExists(f).isPresent())
             .filter(File::isDirectory);
     }
 
     public static Optional<Path> checkDirectory(@Nullable Path directory) {
 
         return checkNotNull(directory)
-            .filter(f -> checkExists(f).isPresent())
+            .filter(f -> checkPathExists(f).isPresent())
             .filter(Files::isDirectory);
     }
 

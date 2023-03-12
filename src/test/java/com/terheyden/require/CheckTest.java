@@ -132,82 +132,82 @@ class CheckTest {
 
     @Test
     void checkLength_array() {
-        assertThat(Check.checkLength(goodArray, goodArray.length)).isNotEmpty();
-        assertThat(Check.checkLength(nullArray, 1)).isEmpty();
-        assertThat(Check.checkLength(goodArray, goodArray.length + 1)).isEmpty();
+        assertThat(Check.checkMinLength(goodArray, goodArray.length)).isNotEmpty();
+        assertThat(Check.checkMinLength(nullArray, 1)).isEmpty();
+        assertThat(Check.checkMinLength(goodArray, goodArray.length + 1)).isEmpty();
     }
 
     @Test
     void checkLength_string() {
-        assertThat(Check.checkLength(goodStr, goodStr.length())).isNotEmpty();
-        assertThat(Check.checkLength(nullStr, 1)).isEmpty();
-        assertThat(Check.checkLength(goodStr, goodStr.length() + 1)).isEmpty();
+        assertThat(Check.checkMinLength(goodStr, goodStr.length())).isNotEmpty();
+        assertThat(Check.checkMinLength(nullStr, 1)).isEmpty();
+        assertThat(Check.checkMinLength(goodStr, goodStr.length() + 1)).isEmpty();
     }
 
     @Test
     void checkSize_collection() {
-        assertThat(Check.checkSize(goodList, goodList.size())).isNotEmpty();
-        assertThat(Check.checkSize(nullList, 1)).isEmpty();
-        assertThat(Check.checkSize(goodList, goodList.size() + 1)).isEmpty();
+        assertThat(Check.checkMinSize(goodList, goodList.size())).isNotEmpty();
+        assertThat(Check.checkMinSize(nullList, 1)).isEmpty();
+        assertThat(Check.checkMinSize(goodList, goodList.size() + 1)).isEmpty();
     }
 
     @Test
     void checkSize_map() {
-        assertThat(Check.checkSize(goodMap, goodMap.size())).isNotEmpty();
-        assertThat(Check.checkSize(nullMap, 1)).isEmpty();
-        assertThat(Check.checkSize(goodMap, goodMap.size() + 1)).isEmpty();
+        assertThat(Check.checkMinSize(goodMap, goodMap.size())).isNotEmpty();
+        assertThat(Check.checkMinSize(nullMap, 1)).isEmpty();
+        assertThat(Check.checkMinSize(goodMap, goodMap.size() + 1)).isEmpty();
     }
 
     @Test
-    void checkExists_path() {
-        assertThat(Check.checkExists(goodPathDir)).isNotEmpty();
-        assertThat(Check.checkExists(goodPathFile)).isNotEmpty();
-        assertThat(Check.checkExists(badPathDir)).isEmpty();
-        assertThat(Check.checkExists(badPathFile)).isEmpty();
-        assertThat(Check.checkExists(nullPath)).isEmpty();
+    void checkPathExists_path() {
+        assertThat(Check.checkPathExists(goodPathDir)).isNotEmpty();
+        assertThat(Check.checkPathExists(goodPathFile)).isNotEmpty();
+        assertThat(Check.checkPathExists(badPathDir)).isEmpty();
+        assertThat(Check.checkPathExists(badPathFile)).isEmpty();
+        assertThat(Check.checkPathExists(nullPath)).isEmpty();
     }
 
     @Test
-    void checkExists_file() {
-        assertThat(Check.checkExists(goodFileDir)).isNotEmpty();
-        assertThat(Check.checkExists(goodFileFile)).isNotEmpty();
-        assertThat(Check.checkExists(badFileDir)).isEmpty();
-        assertThat(Check.checkExists(badFileFile)).isEmpty();
-        assertThat(Check.checkExists(nullFile)).isEmpty();
+    void checkPathExists_file() {
+        assertThat(Check.checkPathExists(goodFileDir)).isNotEmpty();
+        assertThat(Check.checkPathExists(goodFileFile)).isNotEmpty();
+        assertThat(Check.checkPathExists(badFileDir)).isEmpty();
+        assertThat(Check.checkPathExists(badFileFile)).isEmpty();
+        assertThat(Check.checkPathExists(nullFile)).isEmpty();
     }
 
     @Test
-    void checkExists_string() {
-        assertThat(Check.checkExists(GOOD_DIR_STR)).isNotEmpty();
-        assertThat(Check.checkExists(GOOD_FILE_STR)).isNotEmpty();
-        assertThat(Check.checkExists(BAD)).isEmpty();
-        assertThat(Check.checkExists(nullStr)).isEmpty();
+    void checkPathExists_string() {
+        assertThat(Check.checkPathExists(GOOD_DIR_STR)).isNotEmpty();
+        assertThat(Check.checkPathExists(GOOD_FILE_STR)).isNotEmpty();
+        assertThat(Check.checkPathExists(BAD)).isEmpty();
+        assertThat(Check.checkPathExists(nullStr)).isEmpty();
     }
 
     @Test
-    void checkNotExists_path() {
-        assertThat(Check.checkNotExists(goodPathDir)).isEmpty();
-        assertThat(Check.checkNotExists(goodPathFile)).isEmpty();
-        assertThat(Check.checkNotExists(badPathDir)).isNotEmpty();
-        assertThat(Check.checkNotExists(badPathFile)).isNotEmpty();
-        assertThat(Check.checkNotExists(nullPath)).isEmpty();
+    void checkPathNotExists_path() {
+        assertThat(Check.checkPathNotExists(goodPathDir)).isEmpty();
+        assertThat(Check.checkPathNotExists(goodPathFile)).isEmpty();
+        assertThat(Check.checkPathNotExists(badPathDir)).isNotEmpty();
+        assertThat(Check.checkPathNotExists(badPathFile)).isNotEmpty();
+        assertThat(Check.checkPathNotExists(nullPath)).isEmpty();
     }
 
     @Test
-    void checkNotExists_file() {
-        assertThat(Check.checkNotExists(goodFileDir)).isEmpty();
-        assertThat(Check.checkNotExists(goodFileFile)).isEmpty();
-        assertThat(Check.checkNotExists(badFileDir)).isNotEmpty();
-        assertThat(Check.checkNotExists(badFileFile)).isNotEmpty();
-        assertThat(Check.checkNotExists(nullFile)).isEmpty();
+    void checkPathNotExists_file() {
+        assertThat(Check.checkPathNotExists(goodFileDir)).isEmpty();
+        assertThat(Check.checkPathNotExists(goodFileFile)).isEmpty();
+        assertThat(Check.checkPathNotExists(badFileDir)).isNotEmpty();
+        assertThat(Check.checkPathNotExists(badFileFile)).isNotEmpty();
+        assertThat(Check.checkPathNotExists(nullFile)).isEmpty();
     }
 
     @Test
-    void checkNotExists_string() {
-        assertThat(Check.checkNotExists(GOOD_DIR_STR)).isEmpty();
-        assertThat(Check.checkNotExists(GOOD_FILE_STR)).isEmpty();
-        assertThat(Check.checkNotExists(BAD)).isNotEmpty();
-        assertThat(Check.checkNotExists(nullStr)).isEmpty();
+    void checkPathNotExists_string() {
+        assertThat(Check.checkPathNotExists(GOOD_DIR_STR)).isEmpty();
+        assertThat(Check.checkPathNotExists(GOOD_FILE_STR)).isEmpty();
+        assertThat(Check.checkPathNotExists(BAD)).isNotEmpty();
+        assertThat(Check.checkPathNotExists(nullStr)).isEmpty();
     }
 
     @Test

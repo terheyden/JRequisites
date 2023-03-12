@@ -15,7 +15,6 @@ import static com.terheyden.require.Require.requireNotBlank;
 import static com.terheyden.require.Require.requireNotEmpty;
 import static com.terheyden.require.Require.requireNotNull;
 import static com.terheyden.require.Require.requireRegularFile;
-import static com.terheyden.require.Require.requireSize;
 import static com.terheyden.require.Require.requireState;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.emptyMap;
@@ -64,7 +63,7 @@ class Tutorial {
         logMessages.sort(Comparator.naturalOrder());
 
         // With Java Requirements:
-        requireSize(logMessages, 3).sort(Comparator.naturalOrder());
+        Require.requireMinSize(logMessages, 3).sort(Comparator.naturalOrder());
 
         // There are also checks for files and dirs, and even conversion from String:
         Path settingsFile = requireRegularFile("/some/path/settings.txt");

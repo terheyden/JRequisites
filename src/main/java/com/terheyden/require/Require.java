@@ -281,7 +281,7 @@ public final class Require {
         return requireNotBlank(str, null);
     }
 
-    public static <T extends CharSequence> T requireLength(
+    public static <T extends CharSequence> T requireLengthBetween(
         @Nullable T str,
         int minLength,
         int maxLength,
@@ -292,42 +292,42 @@ public final class Require {
         return str;
     }
 
-    public static <T extends CharSequence> T requireLength(@Nullable T str, int minLength, int maxLength) {
-        return requireLength(str, minLength, maxLength, null);
+    public static <T extends CharSequence> T requireLengthBetween(@Nullable T str, int minLength, int maxLength) {
+        return requireLengthBetween(str, minLength, maxLength, null);
     }
 
-    public static <T extends CharSequence> T requireLength(
+    public static <T extends CharSequence> T requireMinLength(
         @Nullable T str,
         int minLength,
         @Nullable String label) {
 
-        return requireLength(str, minLength, Integer.MAX_VALUE, label);
+        return requireLengthBetween(str, minLength, Integer.MAX_VALUE, label);
     }
 
-    public static <T extends CharSequence> T requireLength(@Nullable T str, int minLength) {
-        return requireLength(str, minLength, Integer.MAX_VALUE, null);
+    public static <T extends CharSequence> T requireMinLength(@Nullable T str, int minLength) {
+        return requireLengthBetween(str, minLength, Integer.MAX_VALUE, null);
     }
 
-    public static <T> T[] requireLength(@Nullable T[] array, int minLength, int maxLength, @Nullable String label) {
+    public static <T> T[] requireLengthBetween(@Nullable T[] array, int minLength, int maxLength, @Nullable String label) {
 
         requireNotNull(array, getLabel(label, "Array"));
         requireMinMaxContainers(array.length, minLength, maxLength, getLabel(label, "Array length"), Arrays.toString(array));
         return array;
     }
 
-    public static <T> T[] requireLength(@Nullable T[] array, int minLength, int maxLength) {
-        return requireLength(array, minLength, maxLength, null);
+    public static <T> T[] requireLengthBetween(@Nullable T[] array, int minLength, int maxLength) {
+        return requireLengthBetween(array, minLength, maxLength, null);
     }
 
-    public static <T> T[] requireLength(@Nullable T[] array, int minLength, @Nullable String label) {
-        return requireLength(array, minLength, Integer.MAX_VALUE, label);
+    public static <T> T[] requireMinLength(@Nullable T[] array, int minLength, @Nullable String label) {
+        return requireLengthBetween(array, minLength, Integer.MAX_VALUE, label);
     }
 
-    public static <T> T[] requireLength(@Nullable T[] array, int minLength) {
-        return requireLength(array, minLength, Integer.MAX_VALUE, null);
+    public static <T> T[] requireMinLength(@Nullable T[] array, int minLength) {
+        return requireLengthBetween(array, minLength, Integer.MAX_VALUE, null);
     }
 
-    public static <T extends Collection<?>> T requireSize(
+    public static <T extends Collection<?>> T requireSizeBetween(
         @Nullable T collection,
         int minSize,
         int maxSize,
@@ -338,19 +338,19 @@ public final class Require {
         return collection;
     }
 
-    public static <T extends Collection<?>> T requireSize(@Nullable T collection, int minSize, int maxSize) {
-        return requireSize(collection, minSize, maxSize, null);
+    public static <T extends Collection<?>> T requireSizeBetween(@Nullable T collection, int minSize, int maxSize) {
+        return requireSizeBetween(collection, minSize, maxSize, null);
     }
 
-    public static <T extends Collection<?>> T requireSize(@Nullable T collection, int minSize, @Nullable String label) {
-        return requireSize(collection, minSize, Integer.MAX_VALUE, label);
+    public static <T extends Collection<?>> T requireMinSize(@Nullable T collection, int minSize, @Nullable String label) {
+        return requireSizeBetween(collection, minSize, Integer.MAX_VALUE, label);
     }
 
-    public static <T extends Collection<?>> T requireSize(@Nullable T collection, int minSize) {
-        return requireSize(collection, minSize, Integer.MAX_VALUE, null);
+    public static <T extends Collection<?>> T requireMinSize(@Nullable T collection, int minSize) {
+        return requireSizeBetween(collection, minSize, Integer.MAX_VALUE, null);
     }
 
-    public static <T extends Map<?, ?>> T requireSize(
+    public static <T extends Map<?, ?>> T requireSizeBetween(
         @Nullable T map,
         int minSize,
         int maxSize,
@@ -361,16 +361,16 @@ public final class Require {
         return map;
     }
 
-    public static <T extends Map<?, ?>> T requireSize(@Nullable T map, int minSize, int maxSize) {
-        return requireSize(map, minSize, maxSize, null);
+    public static <T extends Map<?, ?>> T requireSizeBetween(@Nullable T map, int minSize, int maxSize) {
+        return requireSizeBetween(map, minSize, maxSize, null);
     }
 
-    public static <T extends Map<?, ?>> T requireSize(@Nullable T map, int minSize, @Nullable String label) {
-        return requireSize(map, minSize, Integer.MAX_VALUE, label);
+    public static <T extends Map<?, ?>> T requireMinSize(@Nullable T map, int minSize, @Nullable String label) {
+        return requireSizeBetween(map, minSize, Integer.MAX_VALUE, label);
     }
 
-    public static <T extends Map<?, ?>> T requireSize(@Nullable T map, int minSize) {
-        return requireSize(map, minSize, Integer.MAX_VALUE, null);
+    public static <T extends Map<?, ?>> T requireMinSize(@Nullable T map, int minSize) {
+        return requireSizeBetween(map, minSize, Integer.MAX_VALUE, null);
     }
 
     public static int requireMin(int value, int minValue, @Nullable String label) {
@@ -386,7 +386,7 @@ public final class Require {
         return requireMin(value, minValue, null);
     }
 
-    public static int requireMax(int value, int maxValue, @Nullable String label) {
+    public static int requireMaxValue(int value, int maxValue, @Nullable String label) {
 
         if (value > maxValue) {
             throwIAE(label, "Value", " (" + value + ") is greater than maximum: " + maxValue);
@@ -395,20 +395,20 @@ public final class Require {
         return value;
     }
 
-    public static int requireMax(int value, int maxValue) {
-        return requireMax(value, maxValue, null);
+    public static int requireMaxValue(int value, int maxValue) {
+        return requireMaxValue(value, maxValue, null);
     }
 
-    public static int requireMinMax(int value, int minValue, int maxValue, @Nullable String label) {
-        return requireMin(requireMax(value, maxValue, label), minValue, label);
+    public static int requireValueBetween(int value, int minValue, int maxValue, @Nullable String label) {
+        return requireMin(requireMaxValue(value, maxValue, label), minValue, label);
     }
 
-    public static int requireMinMax(int value, int minValue, int maxValue) {
-        return requireMinMax(value, minValue, maxValue, null);
+    public static int requireValueBetween(int value, int minValue, int maxValue) {
+        return requireValueBetween(value, minValue, maxValue, null);
     }
 
     @Contract(value = "null, _ -> fail; !null, _ -> param1", pure = true)
-    public static Path requireExists(@Nullable Path path, @Nullable String label) {
+    public static Path requirePathExists(@Nullable Path path, @Nullable String label) {
 
         requireNotNull(path, getLabel(label, "Path"));
 
@@ -420,11 +420,11 @@ public final class Require {
     }
 
     @Contract(value = "null -> fail; !null -> param1", pure = true)
-    public static Path requireExists(@Nullable Path path) {
-        return requireExists(path, null);
+    public static Path requirePathExists(@Nullable Path path) {
+        return requirePathExists(path, null);
     }
 
-    public static File requireExists(@Nullable File file, @Nullable String label) {
+    public static File requirePathExists(@Nullable File file, @Nullable String label) {
 
         requireNotNull(file, getLabel(label, "Path"));
 
@@ -435,22 +435,22 @@ public final class Require {
         return file;
     }
 
-    public static File requireExists(@Nullable File file) {
-        return requireExists(file, null);
+    public static File requirePathExists(@Nullable File file) {
+        return requirePathExists(file, null);
     }
 
-    public static Path requireExists(@Nullable String path, @Nullable String label) {
+    public static Path requirePathExists(@Nullable String path, @Nullable String label) {
 
         requireNotNull(path, getLabel(label, "Path"));
 
-        return requireExists(Paths.get(path), label);
+        return requirePathExists(Paths.get(path), label);
     }
 
-    public static Path requireExists(@Nullable String path) {
-        return requireExists(path, null);
+    public static Path requirePathExists(@Nullable String path) {
+        return requirePathExists(path, null);
     }
 
-    public static File requireNotExists(@Nullable File path, @Nullable String label) {
+    public static File requirePathNotExists(@Nullable File path, @Nullable String label) {
 
         requireNotNull(path, getLabel(label, "Path"));
 
@@ -461,12 +461,12 @@ public final class Require {
         return path;
     }
 
-    public static File requireNotExists(@Nullable File file) {
-        return requireNotExists(file, null);
+    public static File requirePathNotExists(@Nullable File file) {
+        return requirePathNotExists(file, null);
     }
 
     @Contract(value = "null, _ -> fail; !null, _ -> param1", pure = true)
-    public static Path requireNotExists(@Nullable Path path, @Nullable String label) {
+    public static Path requirePathNotExists(@Nullable Path path, @Nullable String label) {
 
         requireNotNull(path, getLabel(label, "Path"));
 
@@ -478,25 +478,25 @@ public final class Require {
         return path;
     }
 
-    public static Path requireNotExists(@Nullable Path path) {
-        return requireNotExists(path, null);
+    public static Path requirePathNotExists(@Nullable Path path) {
+        return requirePathNotExists(path, null);
     }
 
-    public static Path requireNotExists(@Nullable String path, @Nullable String label) {
+    public static Path requirePathNotExists(@Nullable String path, @Nullable String label) {
 
         requireNotNull(path, getLabel(label, "Path"));
 
-        return requireNotExists(Paths.get(path), label);
+        return requirePathNotExists(Paths.get(path), label);
     }
 
-    public static Path requireNotExists(@Nullable String filePath) {
-        return requireNotExists(filePath, null);
+    public static Path requirePathNotExists(@Nullable String filePath) {
+        return requirePathNotExists(filePath, null);
     }
 
     public static File requireRegularFile(@Nullable File file, @Nullable String label) {
 
         requireNotNull(file, getLabel(label, "File"));
-        requireExists(file, getLabel(label, "File"));
+        requirePathExists(file, getLabel(label, "File"));
 
         if (!file.isFile()) {
             throwIAE(label, "File", " is not a regular file: " + file.getAbsolutePath());
@@ -513,7 +513,7 @@ public final class Require {
     public static Path requireRegularFile(@Nullable Path file, @Nullable String label) {
 
         requireNotNull(file, getLabel(label, "File"));
-        requireExists(file, getLabel(label, "File"));
+        requirePathExists(file, getLabel(label, "File"));
 
         if (!Files.isRegularFile(file)) {
             throwIAE(label, "File", " is not a regular file: " + file.toAbsolutePath());
@@ -539,7 +539,7 @@ public final class Require {
     public static File requireDirectory(@Nullable File directory, @Nullable String label) {
 
         requireNotNull(directory, getLabel(label, "Directory"));
-        requireExists(directory, getLabel(label, "Directory"));
+        requirePathExists(directory, getLabel(label, "Directory"));
 
         if (!directory.isDirectory()) {
             throwIAE(label, "Directory", " is not a directory: " + directory.getAbsolutePath());
@@ -556,7 +556,7 @@ public final class Require {
     public static Path requireDirectory(@Nullable Path directory, @Nullable String label) {
 
         requireNotNull(directory, getLabel(label, "Directory"));
-        requireExists(directory, getLabel(label, "Directory"));
+        requirePathExists(directory, getLabel(label, "Directory"));
 
         if (!Files.isDirectory(directory)) {
             throwIAE(label, "Directory", " is not a directory: " + directory.toAbsolutePath());
