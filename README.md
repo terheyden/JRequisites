@@ -94,8 +94,16 @@ String name = checkNotNull(userId, "User ID")
 ## How `null` is Handled
 
 Our opinionated philosophy is that _nulls are a code smell_.
-Unlike Jakarta Bean Validation, which treats nulls as valid unless
-annotated with `@NotNull`, we treat null arguments as invalid for all checks.
+Nulls always throw or return false.
+
+Consider:
+```java
+return notExists(filePath);
+```
+When `filePath` is null, do we return `true` or `false`?
+It's true that a null path does not exist, but returning true
+would be misleading; it implies that the check was successful
+when it was not. Nulls are always false.
 
 ## Contents
 
