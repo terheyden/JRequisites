@@ -5,6 +5,7 @@ import java.io.File;
 import java.nio.file.InvalidPathException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Iterator;
 import java.util.Optional;
 
 /**
@@ -57,5 +58,27 @@ final class RequireUtils {
     @SuppressWarnings("unchecked")
     static <E extends Throwable, R> R throwUnchecked(Throwable throwable) throws E {
         throw (E) throwable;
+    }
+
+    /**
+     * A check just for Iterables to determine length checks.
+     * This doesn't account for nulls, so the iterable param must be non-null.
+     * @return the iterator used for checking, or {@link Optional#empty()}.
+     */
+    static <T> Optional<Iterator<T>> hasAtLeastSize(Iterable<T> iterable, int length) {
+
+        if (iterable == null) {
+            return Optional.empty();
+        }
+
+        Iterator<T> iterator = iterable.iterator();
+
+        while (iterator.hasNext() && length > 0) {
+            iterator.next();
+            length--;
+        }
+
+        // If we ran out of items before hitting the length, then the check fails.
+        return length > 0 ? Optional.empty() : Optional.of(iterator);
     }
 }

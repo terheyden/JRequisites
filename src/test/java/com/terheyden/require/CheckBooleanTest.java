@@ -57,6 +57,9 @@ class CheckBooleanTest {
     private final List<String> goodList = Arrays.asList("a", "b", "c");
     private final List<String> emptyList = emptyList();
     private final List<String> nullList = null;
+    private final Iterable<String> goodIter = goodList;
+    private final Iterable<String> emptyIter = emptyList;
+    private final Iterable<String> nullIter = null;
     private final Map<String, Integer> goodMap = new HashMap() {{
         put("a", 1);
         put("b", 2);
@@ -137,6 +140,13 @@ class CheckBooleanTest {
     }
 
     @Test
+    void isEmpty_iterable() {
+        assertThat(isEmpty(goodIter)).isFalse();
+        assertThat(isEmpty(emptyIter)).isTrue();
+        assertThat(isEmpty(nullIter)).isFalse();
+    }
+
+    @Test
     void isEmpty_map() {
         assertThat(isEmpty(goodMap)).isFalse();
         assertThat(isEmpty(emptyMap)).isTrue();
@@ -166,6 +176,13 @@ class CheckBooleanTest {
         assertThat(isNotEmpty(goodList)).isTrue();
         assertThat(isNotEmpty(emptyList)).isFalse();
         assertThat(isNotEmpty(nullList)).isFalse();
+    }
+
+    @Test
+    void isNotEmpty_iterable() {
+        assertThat(isNotEmpty(goodIter)).isTrue();
+        assertThat(isNotEmpty(emptyIter)).isFalse();
+        assertThat(isNotEmpty(nullIter)).isFalse();
     }
 
     @Test
@@ -238,7 +255,7 @@ class CheckBooleanTest {
         assertThat(hasLengthLessOrEqualTo(nullStr, 0)).isFalse(); // null has no length, it is null
 
         assertThat(hasLengthBetween(goodStr, goodStr.length(), goodStr.length())).isTrue();
-        assertThat(hasLengthBetween(goodStr, 0,                goodStr.length())).isTrue();
+        assertThat(hasLengthBetween(goodStr, 0, goodStr.length())).isTrue();
         assertThat(hasLengthBetween(goodStr, goodStr.length(), goodStr.length() + 1)).isTrue();
         assertThat(hasLengthBetween(goodStr, goodStr.length() + 1, goodStr.length())).isFalse();
         assertThat(hasLengthBetween(emptyStr, 0, 0)).isTrue();
@@ -249,49 +266,95 @@ class CheckBooleanTest {
     @Test
     void hasLength_array() {
 
-        assertThat(hasLength(goodArray, goodArray.length)).isTrue();
-        assertThat(hasLength(goodArray, goodArray.length + 1)).isFalse();
-        assertThat(hasLength(goodArray, goodArray.length - 1)).isFalse();
-        assertThat(hasLength(emptyArray, 0)).isTrue();
+        assertThat(hasLength(goodArray, goodArray.length)).isTrue(); // test max inclusive
+        assertThat(hasLength(goodArray, goodArray.length + 1)).isFalse(); // plus or minus 1
+        assertThat(hasLength(goodArray, goodArray.length - 1)).isFalse(); // is wrong
+        assertThat(hasLength(emptyArray, 0)).isTrue(); // test empty
         assertThat(hasLength(emptyArray, 1)).isFalse();
-        assertThat(hasLength(nullArray, 1)).isFalse();
         assertThat(hasLength(nullArray, 0)).isFalse(); // null has no length, it is null
+        assertThat(hasLength(nullArray, 1)).isFalse(); // test null
+
+        assertThat(hasLength(goodPrimitiveArray, goodPrimitiveArray.length)).isTrue(); // test max inclusive
+        assertThat(hasLength(goodPrimitiveArray, goodPrimitiveArray.length + 1)).isFalse(); // plus or minus 1
+        assertThat(hasLength(goodPrimitiveArray, goodPrimitiveArray.length - 1)).isFalse(); // is wrong
+        assertThat(hasLength(emptyPrimitiveArray, 0)).isTrue(); // test empty
+        assertThat(hasLength(emptyPrimitiveArray, 1)).isFalse();
+        assertThat(hasLength(nullPrimitiveArray, 0)).isFalse(); // null has no length, it is null
+        assertThat(hasLength(nullPrimitiveArray, 1)).isFalse(); // test null
 
         assertThat(hasLengthGreaterThan(goodArray, goodArray.length - 1)).isTrue();
         assertThat(hasLengthGreaterThan(goodArray, goodArray.length)).isFalse();
-        assertThat(hasLengthGreaterThan(goodArray, goodArray.length + 1)).isFalse();
-        assertThat(hasLengthGreaterThan(emptyArray, 1)).isFalse();
-        assertThat(hasLengthGreaterThan(nullArray, 1)).isFalse();
+        assertThat(hasLengthGreaterThan(emptyArray, 0)).isFalse();
         assertThat(hasLengthGreaterThan(nullArray, 0)).isFalse(); // null has no length, it is null
+
+        assertThat(hasLengthGreaterThan(goodPrimitiveArray, goodPrimitiveArray.length - 1)).isTrue();
+        assertThat(hasLengthGreaterThan(goodPrimitiveArray, goodPrimitiveArray.length)).isFalse();
+        assertThat(hasLengthGreaterThan(emptyPrimitiveArray, 0)).isFalse();
+        assertThat(hasLengthGreaterThan(nullPrimitiveArray, 0)).isFalse(); // null has no length, it is null
 
         assertThat(hasLengthGreaterOrEqualTo(goodArray, goodArray.length)).isTrue();
         assertThat(hasLengthGreaterOrEqualTo(goodArray, goodArray.length + 1)).isFalse();
         assertThat(hasLengthGreaterOrEqualTo(goodArray, goodArray.length - 1)).isTrue();
+        assertThat(hasLengthGreaterOrEqualTo(emptyArray, 0)).isTrue();
         assertThat(hasLengthGreaterOrEqualTo(emptyArray, 1)).isFalse();
-        assertThat(hasLengthGreaterOrEqualTo(nullArray, 1)).isFalse();
         assertThat(hasLengthGreaterOrEqualTo(nullArray, 0)).isFalse(); // null has no length, it is null
+
+        assertThat(hasLengthGreaterOrEqualTo(goodPrimitiveArray, goodPrimitiveArray.length)).isTrue();
+        assertThat(hasLengthGreaterOrEqualTo(goodPrimitiveArray, goodPrimitiveArray.length + 1)).isFalse();
+        assertThat(hasLengthGreaterOrEqualTo(goodPrimitiveArray, goodPrimitiveArray.length - 1)).isTrue();
+        assertThat(hasLengthGreaterOrEqualTo(emptyPrimitiveArray, 0)).isTrue();
+        assertThat(hasLengthGreaterOrEqualTo(emptyPrimitiveArray, 1)).isFalse();
+        assertThat(hasLengthGreaterOrEqualTo(nullPrimitiveArray, 0)).isFalse(); // null has no length, it is null
 
         assertThat(hasLengthLessThan(goodArray, goodArray.length + 1)).isTrue();
         assertThat(hasLengthLessThan(goodArray, goodArray.length)).isFalse();
-        assertThat(hasLengthLessThan(goodArray, goodArray.length - 1)).isFalse();
         assertThat(hasLengthLessThan(emptyArray, 1)).isTrue();
+        assertThat(hasLengthLessThan(emptyArray, 0)).isFalse();
         assertThat(hasLengthLessThan(nullArray, 1)).isFalse();
         assertThat(hasLengthLessThan(nullArray, 0)).isFalse(); // null has no length, it is null
+
+        assertThat(hasLengthLessThan(goodPrimitiveArray, goodPrimitiveArray.length + 1)).isTrue();
+        assertThat(hasLengthLessThan(goodPrimitiveArray, goodPrimitiveArray.length)).isFalse();
+        assertThat(hasLengthLessThan(emptyPrimitiveArray, 1)).isTrue();
+        assertThat(hasLengthLessThan(emptyPrimitiveArray, 0)).isFalse();
+        assertThat(hasLengthLessThan(nullPrimitiveArray, 1)).isFalse();
+        assertThat(hasLengthLessThan(nullPrimitiveArray, 0)).isFalse(); // null has no length, it is null
 
         assertThat(hasLengthLessOrEqualTo(goodArray, goodArray.length)).isTrue();
         assertThat(hasLengthLessOrEqualTo(goodArray, goodArray.length + 1)).isTrue();
         assertThat(hasLengthLessOrEqualTo(goodArray, goodArray.length - 1)).isFalse();
         assertThat(hasLengthLessOrEqualTo(emptyArray, 1)).isTrue();
+        assertThat(hasLengthLessOrEqualTo(emptyArray, 0)).isTrue();
         assertThat(hasLengthLessOrEqualTo(nullArray, 1)).isFalse();
         assertThat(hasLengthLessOrEqualTo(nullArray, 0)).isFalse(); // null has no length, it is null
 
-        assertThat(hasLengthBetween(goodArray, goodArray.length, goodArray.length)).isTrue();
-        assertThat(hasLengthBetween(goodArray, 0,                goodArray.length)).isTrue();
-        assertThat(hasLengthBetween(goodArray, goodArray.length, goodArray.length + 1)).isTrue();
-        assertThat(hasLengthBetween(goodArray, goodArray.length + 1, goodArray.length)).isFalse();
+        assertThat(hasLengthLessOrEqualTo(goodPrimitiveArray, goodPrimitiveArray.length)).isTrue();
+        assertThat(hasLengthLessOrEqualTo(goodPrimitiveArray, goodPrimitiveArray.length + 1)).isTrue();
+        assertThat(hasLengthLessOrEqualTo(goodPrimitiveArray, goodPrimitiveArray.length - 1)).isFalse();
+        assertThat(hasLengthLessOrEqualTo(emptyPrimitiveArray, 1)).isTrue();
+        assertThat(hasLengthLessOrEqualTo(emptyPrimitiveArray, 0)).isTrue();
+        assertThat(hasLengthLessOrEqualTo(nullPrimitiveArray, 1)).isFalse();
+        assertThat(hasLengthLessOrEqualTo(nullPrimitiveArray, 0)).isFalse(); // null has no length, it is null
+
+        assertThat(hasLengthBetween(goodArray, goodArray.length, goodArray.length)).isTrue(); // length is the same
+        assertThat(hasLengthBetween(goodArray, 0, goodArray.length)).isTrue(); // length of upper bound
+        assertThat(hasLengthBetween(goodArray, goodArray.length, goodArray.length + 1)).isTrue(); // length is lower bound
+        assertThat(hasLengthBetween(goodArray, goodArray.length + 1, goodArray.length + 2)).isFalse(); // length is out of bounds
+        assertThat(hasLengthBetween(goodArray, 0, goodArray.length - 1)).isFalse(); // length is out of bounds
         assertThat(hasLengthBetween(emptyArray, 0, 0)).isTrue();
+        assertThat(hasLengthBetween(emptyArray, 0, 1)).isTrue();
         assertThat(hasLengthBetween(emptyArray, 1, 1)).isFalse();
         assertThat(hasLengthBetween(nullArray, 0, 0)).isFalse(); // null has no length, it is null
+
+        assertThat(hasLengthBetween(goodPrimitiveArray, goodPrimitiveArray.length, goodPrimitiveArray.length)).isTrue(); // length is the same
+        assertThat(hasLengthBetween(goodPrimitiveArray, 0, goodPrimitiveArray.length)).isTrue(); // length of upper bound
+        assertThat(hasLengthBetween(goodPrimitiveArray, goodPrimitiveArray.length, goodPrimitiveArray.length + 1)).isTrue(); // length is lower bound
+        assertThat(hasLengthBetween(goodPrimitiveArray, goodPrimitiveArray.length + 1, goodPrimitiveArray.length + 2)).isFalse(); // length is out of bounds
+        assertThat(hasLengthBetween(goodPrimitiveArray, 0, goodPrimitiveArray.length - 1)).isFalse(); // length is out of bounds
+        assertThat(hasLengthBetween(emptyPrimitiveArray, 0, 0)).isTrue();
+        assertThat(hasLengthBetween(emptyPrimitiveArray, 0, 1)).isTrue();
+        assertThat(hasLengthBetween(emptyPrimitiveArray, 1, 1)).isFalse();
+        assertThat(hasLengthBetween(nullPrimitiveArray, 0, 0)).isFalse(); // null has no length, it is null
     }
 
     @Test
@@ -336,12 +399,64 @@ class CheckBooleanTest {
         assertThat(hasSizeLessOrEqualTo(nullList, 0)).isFalse(); // null has no size, it is null
 
         assertThat(hasSizeBetween(goodList, goodList.size(), goodList.size())).isTrue();
-        assertThat(hasSizeBetween(goodList, 0,                goodList.size())).isTrue();
+        assertThat(hasSizeBetween(goodList, 0, goodList.size())).isTrue();
         assertThat(hasSizeBetween(goodList, goodList.size(), goodList.size() + 1)).isTrue();
         assertThat(hasSizeBetween(goodList, goodList.size() + 1, goodList.size())).isFalse();
+        assertThat(hasSizeBetween(goodList, 1, goodList.size() - 1)).isFalse();
         assertThat(hasSizeBetween(emptyList, 0, 0)).isTrue();
         assertThat(hasSizeBetween(emptyList, 1, 1)).isFalse();
         assertThat(hasSizeBetween(nullList, 0, 0)).isFalse(); // null has no size, it is null
+    }
+
+    @Test
+    void hasSize_iterable() {
+
+        assertThat(hasSize(goodIter, goodList.size())).isTrue();
+        assertThat(hasSize(goodIter, goodList.size() + 1)).isFalse();
+        assertThat(hasSize(goodIter, goodList.size() - 1)).isFalse();
+        assertThat(hasSize(emptyIter, 0)).isTrue();
+        assertThat(hasSize(emptyIter, 1)).isFalse();
+        assertThat(hasSize(nullIter, 1)).isFalse();
+        assertThat(hasSize(nullIter, 0)).isFalse(); // null has no size, it is null
+
+        assertThat(hasSizeGreaterThan(goodIter, goodList.size() - 1)).isTrue();
+        assertThat(hasSizeGreaterThan(goodIter, goodList.size())).isFalse();
+        assertThat(hasSizeGreaterThan(goodIter, goodList.size() + 1)).isFalse();
+        assertThat(hasSizeGreaterThan(emptyIter, 1)).isFalse();
+        assertThat(hasSizeGreaterThan(nullIter, 1)).isFalse();
+        assertThat(hasSizeGreaterThan(nullIter, 0)).isFalse(); // null has no size, it is null
+
+        assertThat(hasSizeGreaterOrEqualTo(goodIter, goodList.size())).isTrue();
+        assertThat(hasSizeGreaterOrEqualTo(goodIter, goodList.size() + 1)).isFalse();
+        assertThat(hasSizeGreaterOrEqualTo(goodIter, goodList.size() - 1)).isTrue();
+        assertThat(hasSizeGreaterOrEqualTo(goodIter, 1)).isTrue();
+        assertThat(hasSizeGreaterOrEqualTo(emptyIter, 1)).isFalse();
+        assertThat(hasSizeGreaterOrEqualTo(emptyIter, 0)).isTrue();
+        assertThat(hasSizeGreaterOrEqualTo(nullIter, 1)).isFalse();
+        assertThat(hasSizeGreaterOrEqualTo(nullIter, 0)).isFalse(); // null has no size, it is null
+
+        assertThat(hasSizeLessThan(goodIter, goodList.size() + 1)).isTrue();
+        assertThat(hasSizeLessThan(goodIter, goodList.size())).isFalse();
+        assertThat(hasSizeLessThan(goodIter, goodList.size() - 1)).isFalse();
+        assertThat(hasSizeLessThan(emptyIter, 1)).isTrue();
+        assertThat(hasSizeLessThan(nullIter, 1)).isFalse();
+        assertThat(hasSizeLessThan(nullIter, 0)).isFalse(); // null has no size, it is null
+
+        assertThat(hasSizeLessOrEqualTo(goodIter, goodList.size())).isTrue();
+        assertThat(hasSizeLessOrEqualTo(goodIter, goodList.size() + 1)).isTrue();
+        assertThat(hasSizeLessOrEqualTo(goodIter, goodList.size() - 1)).isFalse();
+        assertThat(hasSizeLessOrEqualTo(emptyIter, 1)).isTrue();
+        assertThat(hasSizeLessOrEqualTo(nullIter, 1)).isFalse();
+        assertThat(hasSizeLessOrEqualTo(nullIter, 0)).isFalse(); // null has no size, it is null
+
+        assertThat(hasSizeBetween(goodIter, goodList.size(), goodList.size())).isTrue();
+        assertThat(hasSizeBetween(goodIter, 0, goodList.size())).isTrue();
+        assertThat(hasSizeBetween(goodIter, goodList.size(), goodList.size() + 1)).isTrue();
+        assertThat(hasSizeBetween(goodIter, goodList.size() + 1, goodList.size())).isFalse();
+        assertThat(hasSizeBetween(goodIter, 1, goodList.size() - 1)).isFalse();
+        assertThat(hasSizeBetween(emptyIter, 0, 0)).isTrue();
+        assertThat(hasSizeBetween(emptyIter, 1, 1)).isFalse();
+        assertThat(hasSizeBetween(nullIter, 0, 0)).isFalse(); // null has no size, it is null
     }
 
     @Test
@@ -387,9 +502,10 @@ class CheckBooleanTest {
         assertThat(hasSizeLessOrEqualTo(nullMap, 0)).isFalse(); // null has no size, it is null
 
         assertThat(hasSizeBetween(goodMap, goodMap.size(), goodMap.size())).isTrue();
-        assertThat(hasSizeBetween(goodMap, 0,                goodMap.size())).isTrue();
+        assertThat(hasSizeBetween(goodMap, 0, goodMap.size())).isTrue();
         assertThat(hasSizeBetween(goodMap, goodMap.size(), goodMap.size() + 1)).isTrue();
         assertThat(hasSizeBetween(goodMap, goodMap.size() + 1, goodMap.size())).isFalse();
+        assertThat(hasSizeBetween(goodMap, 1, goodMap.size() - 1)).isFalse();
         assertThat(hasSizeBetween(emptyMap, 0, 0)).isTrue();
         assertThat(hasSizeBetween(emptyMap, 1, 1)).isFalse();
         assertThat(hasSizeBetween(nullMap, 0, 0)).isFalse(); // null has no size, it is null
@@ -477,10 +593,10 @@ class CheckBooleanTest {
 
     @Test
     void isDirectory_file() {
-        assertThat(CheckBoolean.isDirectory(goodFileFile)).isFalse();
         assertThat(CheckBoolean.isDirectory(goodFileDir)).isTrue();
-        assertThat(CheckBoolean.isDirectory(badFileFile)).isFalse();
+        assertThat(CheckBoolean.isDirectory(badFileDir)).isFalse();
         assertThat(CheckBoolean.isDirectory(nullFile)).isFalse();
+        assertThat(CheckBoolean.isDirectory(goodFileFile)).isFalse();
     }
 
     @Test
@@ -589,5 +705,30 @@ class CheckBooleanTest {
         assertThat(isNowOrPast(ltFuture)).isFalse();
         assertThat(isNowOrPast(ltPast)).isTrue();
         assertThat(isNowOrPast(ltNull)).isFalse();
+    }
+
+    @Test
+    public void testIsAssignableFrom() {
+
+        // String is a subclass of CharSequence.
+        assertThat(goodStr).isInstanceOf(String.class);
+        assertThat(goodStr).isInstanceOf(CharSequence.class);
+
+        CharSequence charSeq = new StringBuilder();
+        assertThat(charSeq).isNotInstanceOf(String.class);
+
+        // String is a subclass of CharSequence.
+        assertThat(CharSequence.class.isAssignableFrom(String.class)).isTrue();
+        assertThat(String.class.isAssignableFrom(CharSequence.class)).isFalse();
+        // What about same type?
+        assertThat(CharSequence.class.isAssignableFrom(CharSequence.class)).isTrue();
+    }
+
+    @Test
+    void isInstanceOf() {
+        assertThat(CheckBoolean.isInstanceOf(goodStr, CharSequence.class)).isTrue();
+        assertThat(CheckBoolean.isInstanceOf(goodStr, Map.class)).isFalse();
+        assertThat(CheckBoolean.isNotInstanceOf(goodStr, CharSequence.class)).isFalse();
+        assertThat(CheckBoolean.isNotInstanceOf(goodStr, Map.class)).isTrue();
     }
 }
