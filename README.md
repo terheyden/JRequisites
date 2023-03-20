@@ -105,6 +105,91 @@ It's true that a null path does not exist, but returning true
 would be misleading; it implies that the check was successful
 when it was not. Nulls are always false.
 
+## Naming
+
+### Parameter Order
+Every effort has been made to make method usage as easy to read as possible.
+This is why constant parameters / limits come first. Compare:
+```java
+// Bad: reading is disjointed: "Is length SSN 9? Oh I see, is the length of the ssn var equal to 9."
+isLength(ssn, 9);
+// Better: reading is consistent: "Is length 9? Of ssn?"
+isLength(9, ssn);
+```
+
+### Consistent Naming
+- most throwing checks begin with `require`
+- most boolean checks begin with `is`
+- most Optional checks begin with `check`
+
+Even if it might make more sense (in English) to have e.g. `hasLength()`,
+we chose `isLength()` for consistency.
+
+### Inclusive and Exclusive Ranges
+
+For simplicity, JRequisites uses _closed_ ranges, meaning that both the beginning and end are inclusive.
+For example:
+```java
+isLengthBetween(3, 8, "cat"); // is length between 3-8 (inclusive)? Yes.
+```
+
+### Stricter Definitions
+JRequisites uses more precise definitions than you may be used to from other libraries.
+Compare:
+```java
+// JRequisites:
+isEmpty(null);     // false — a null value is not empty, it is invalid
+nullOrEmpty(null); // true
+
+// Apache Commons Validation:
+isEmpty(null); // true
+```
+
+## Comparison to Other Libraries
+
+| [Jakarta + Hibernate](https://docs.jboss.org/hibernate/stable/validator/reference/en-US/html_single/#section-builtin-constraints) | JRequisites                           |
+|-----------------------------------------------------------------------------------------------------------------------------------|---------------------------------------|
+| `@AssertFalse`                                                                                                                    | `isFalse()`                           |
+| `@AssertTrue`                                                                                                                     | `isTrue()`                            |
+| `@DecimalMax`                                                                                                                     | `isLessThan()`                        |
+| `@DecimalMin`                                                                                                                     | `isGreaterThan()`                     |
+| `@Digits`                                                                                                                         | `isDigits()`                          |
+| `@Email`                                                                                                                          | `isEmail()`                           |
+| `@Future`                                                                                                                         | `isFuture()`                          |
+| `@FutureOrPresent`                                                                                                                | `isNowOrFuture()`                     |
+| `@Max`                                                                                                                            | `isLessOrEqualTo()`                   |
+| `@Min`                                                                                                                            | `isGreaterOrEqualTo()`                |
+| `@NotBlank`                                                                                                                       | `isNotBlank()`                        |
+| `@NotEmpty`                                                                                                                       | `isNotEmpty()`                        |
+| `@NotNull`                                                                                                                        | `isNotNull()`                         |
+| `@Negative`                                                                                                                       | `isLessThan()`                        |
+| `@NegativeOrZero`                                                                                                                 | `isLessOrEqualTo()`                   |
+| `@Null`                                                                                                                           | `isNull()`                            |
+| `@Past`                                                                                                                           | `isPast()`                            |
+| `@PastOrPresent`                                                                                                                  | `isNowOrPast()`                       |
+| `@Pattern`                                                                                                                        | `isMatch()`                           |
+| `@Positive`                                                                                                                       | `isGreaterThan()`                     |
+| `@PositiveOrZero`                                                                                                                 | `isGreaterOrEqualTo()`                |
+| `@Size`                                                                                                                           | `isSize() / isLength()`               |
+| `@CreditCardNumber`                                                                                                               | ---                |
+| `@Currency`                                                                                                                       | ---                        |
+| `@DurationMax`                                                                                                                    | `isDurationLessThan()`                |
+| `@DurationMin`                                                                                                                    | `isDurationGreaterThan()`             |
+| `@EAN`                                                                                                                            | ---                             |
+| `@ISBN`                                                                                                                           | ---                            |
+| `@Length`                                                                                                                         | `isLengthBetween() / isSizeBetween()` |
+| `@CodePointLength`                                                                                                                | ---                                   |
+| `@LuhnCheck`                                                                                                                      | ---                                   |
+| `@Mod10Check`                                                                                                                     | ---                                   |
+| `@Mod11Check`                                                                                                                     | ---                                   |
+| `@Normalized`                                                                                                                     | ---                                   |
+| `@Range`                                                                                                                          | `isLengthBetween(), isSizeBetween()`  |
+| `@ScriptAssert`                                                                                                                   | ---                                   |
+| `@UniqueElements`                                                                                                                 | `isUniqueElements()`                  |
+| `@URL`                                                                                                                            | `isURL()`                             |
+| `@UUID`                                                                                                                           | `isUUID()`                            |
+
+
 ## Contents
 
 ### Validating State (Boolean Expression)

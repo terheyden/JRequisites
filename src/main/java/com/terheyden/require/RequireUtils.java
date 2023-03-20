@@ -1,6 +1,8 @@
 package com.terheyden.require;
 
 import javax.annotation.Nullable;
+import javax.xml.XMLConstants;
+import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.File;
 import java.nio.file.InvalidPathException;
 import java.nio.file.Path;
@@ -12,6 +14,12 @@ import java.util.Optional;
  * RequireUtils class.
  */
 final class RequireUtils {
+
+    /**
+     * Used to do XML parsing / validation.
+     */
+    @Nullable
+    private static DocumentBuilderFactory lazyDocumentBuilderFactory;
 
     private RequireUtils() {
         // Private since this class shouldn't be instantiated.
@@ -80,5 +88,71 @@ final class RequireUtils {
 
         // If we ran out of items before hitting the length, then the check fails.
         return length > 0 ? Optional.empty() : Optional.of(iterator);
+    }
+
+    private static DocumentBuilderFactory getDocumentBuilderFactory() {
+
+            if (lazyDocumentBuilderFactory == null) {
+                // It's not super important if there's a thread collision, it'll just get created twice.
+                lazyDocumentBuilderFactory = createDocumentBuilderFactory();
+            }
+
+            return lazyDocumentBuilderFactory;
+    }
+
+    /**
+     * Creates a new DocumentBuilderFactory with some security features enabled.
+     * Should only be called once when we need to set up our lazy global DocumentBuilderFactory.
+     */
+    private static DocumentBuilderFactory createDocumentBuilderFactory() {
+        try {
+
+            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+            // Prevent XXE attacks and other XML vulnerabilities:
+            // I got these from a SonarQube rule:
+            // completely disable DOCTYPE declaration:
+            factory.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
+            // completely disable external entities declarations:
+            factory.setFeature("http://xml.org/sax/features/external-general-entities", false);
+            factory.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
+            // prohibit the use of all protocols by external entities:
+            factory.setAttribute(XMLConstants.ACCESS_EXTERNAL_DTD, "");
+            factory.setAttribute(XMLConstants.ACCESS_EXTERNAL_SCHEMA, "");
+            // disable entity expansion but keep in mind that this doesn't prevent fetching external entities
+            // and this solution is not correct for OpenJDK < 13 due to a bug:
+            // https://bugs.openjdk.java.net/browse/JDK-8206132
+            factory.setExpandEntityReferences(false);
+
+            return factory;
+
+        } catch (Exception e) {
+            return throwUnchecked(e);
+        }
+    }
+
+    static boolean isXml(String xml) {
+
+        try {
+
+            getDocumentBuilderFactory().newDocumentBuilder().parse(xml);
+            return true;
+
+        } catch (Exception ignore) {
+            return false;
+        }
+    }
+
+    static boolean isJson(String json) {
+
+        String cleanJson = json.trim();
+
+        if (cleanJson.startsWith("{")) {
+            return cleanJson.endsWith("}");
+        } else if (cleanJson.startsWith("[")) {
+            return cleanJson.endsWith("]");
+        } else {
+            return false;
+        }
+
     }
 }

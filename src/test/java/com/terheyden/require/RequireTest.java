@@ -13,6 +13,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.stream.IntStream;
 
 import org.junit.jupiter.api.Test;
@@ -438,7 +439,9 @@ class RequireTest {
         // JDK methods that take inclusive, exclusive parameters:
         goodStr.substring(0, 1);
         goodStr.subSequence(0, 1);
+        goodList.subList(0, 1);
         Arrays.copyOfRange(goodArray, 0, 1);
         IntStream.range(0, 1);
+        new Random().ints(0, 1);
     }
 }
