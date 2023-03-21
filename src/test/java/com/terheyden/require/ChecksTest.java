@@ -18,19 +18,22 @@ import java.util.Map;
 import org.junit.jupiter.api.Test;
 
 import static com.terheyden.require.Checks.contains;
+import static com.terheyden.require.Checks.containsKey;
+import static com.terheyden.require.Checks.containsNull;
 import static com.terheyden.require.Checks.containsRegex;
+import static com.terheyden.require.Checks.containsUniqueElements;
+import static com.terheyden.require.Checks.containsValue;
+import static com.terheyden.require.Checks.greaterOrEqualTo;
+import static com.terheyden.require.Checks.greaterThan;
 import static com.terheyden.require.Checks.isBetween;
 import static com.terheyden.require.Checks.isBlank;
-import static com.terheyden.require.Checks.isEmpty;
+import static com.terheyden.require.Checks.isEmail;
 import static com.terheyden.require.Checks.isFuture;
-import static com.terheyden.require.Checks.isGreaterOrEqualTo;
-import static com.terheyden.require.Checks.isGreaterThan;
-import static com.terheyden.require.Checks.isLessOrEqualTo;
-import static com.terheyden.require.Checks.isLessThan;
-import static com.terheyden.require.Checks.isNotBlank;
+import static com.terheyden.require.Checks.isIPv6Address;
+import static com.terheyden.require.Checks.isIpAddress;
+import static com.terheyden.require.Checks.isJson;
 import static com.terheyden.require.Checks.isNowOrFuture;
 import static com.terheyden.require.Checks.isNowOrPast;
-import static com.terheyden.require.Checks.isNullOrBlank;
 import static com.terheyden.require.Checks.isPast;
 import static com.terheyden.require.Checks.isSize;
 import static com.terheyden.require.Checks.isSizeBetween;
@@ -38,7 +41,14 @@ import static com.terheyden.require.Checks.isSizeGreaterOrEqualTo;
 import static com.terheyden.require.Checks.isSizeGreaterThan;
 import static com.terheyden.require.Checks.isSizeLessOrEqualTo;
 import static com.terheyden.require.Checks.isSizeLessThan;
+import static com.terheyden.require.Checks.isUUID;
+import static com.terheyden.require.Checks.isUrl;
+import static com.terheyden.require.Checks.isXml;
+import static com.terheyden.require.Checks.lessOrEqualTo;
+import static com.terheyden.require.Checks.lessThan;
 import static com.terheyden.require.Checks.matchesRegex;
+import static com.terheyden.require.Checks.notBlank;
+import static com.terheyden.require.Checks.notContainsNull;
 import static com.terheyden.require.Checks.pathExists;
 import static com.terheyden.require.Checks.pathNotExists;
 import static java.util.Collections.emptyList;
@@ -61,18 +71,29 @@ class ChecksTest {
     private final List<String> goodList = Arrays.asList("a", "b", "c");
     private final List<String> emptyList = emptyList();
     private final List<String> nullList = null;
+    private final List<String> nullInsideList = Arrays.asList("a", null, "c");
     private final Iterable<String> goodIter = goodList;
     private final Iterable<String> emptyIter = emptyList;
     private final Iterable<String> nullIter = null;
+    private final Iterable<String> nullInsideIter = nullInsideList;
     private final Map<String, Integer> goodMap = new HashMap() {{
         put("a", 1);
         put("b", 2);
     }};
     private final Map<String, String> emptyMap = Collections.emptyMap();
     private final Map<String, String> nullMap = null;
+    private final Map<String, Integer> nullInsideMapKey = new HashMap() {{
+        put(null, 1);
+        put("b", 2);
+    }};
+    private final Map<String, Integer> nullInsideMapValue = new HashMap() {{
+        put("a", 1);
+        put("b", null);
+    }};
     private final String[] goodArray = new String[] { "a", "b", "c" };
     private final String[] emptyArray = new String[0];
     private final String[] nullArray = null;
+    private final String[] nullInsideArray = new String[] { "a", null, "c" };
     private final int[] goodPrimitiveArray = new int[] { 1, 2, 3 };
     private final int[] emptyPrimitiveArray = new int[0];
     private final int[] nullPrimitiveArray = null;
@@ -103,10 +124,18 @@ class ChecksTest {
     private final LocalDateTime ldtNull = null;
     private final LocalDate ldNull = null;
     private final LocalTime ltNull = null;
+    private final Duration oneNs = Duration.ofNanos(1);
+    private final Duration fiveNs = Duration.ofNanos(5);
+    private final Duration oneMs = Duration.ofMillis(1);
+    private final Duration fiveMs = Duration.ofMillis(5);
+    private final Duration oneSec = Duration.ofSeconds(1);
+    private final Duration fiveSecs = Duration.ofSeconds(5);
     private final Duration oneMin = Duration.ofMinutes(1);
     private final Duration fiveMins = Duration.ofMinutes(5);
-    private final Duration tenMins = Duration.ofMinutes(10);
-    private final Duration fifteenMins = Duration.ofMinutes(15);
+    private final Duration oneHour = Duration.ofHours(1);
+    private final Duration fiveHours = Duration.ofHours(5);
+    private final Duration oneDay = Duration.ofDays(1);
+    private final Duration fiveDays = Duration.ofDays(5);
     private final Duration nullDuration = null;
 
     @Test
@@ -128,232 +157,232 @@ class ChecksTest {
     }
 
     @Test
-    void isNotNull() {
-        assertThat(Checks.isNotNull(goodStr)).isTrue();
-        assertThat(Checks.isNotNull(nullStr)).isFalse();
+    void notNull() {
+        assertThat(Checks.notNull(goodStr)).isTrue();
+        assertThat(Checks.notNull(nullStr)).isFalse();
     }
 
     @Test
     void testIsDigitsOnly() {
-        assertThat(Checks.isDigitsOnly("123")).isTrue();
-        assertThat(Checks.isDigitsOnly("123.")).isFalse();
-        assertThat(Checks.isDigitsOnly("")).isTrue();
-        assertThat(Checks.isDigitsOnly(null)).isFalse();
+        assertThat(Checks.digitsOnly("123")).isTrue();
+        assertThat(Checks.digitsOnly("123.")).isFalse();
+        assertThat(Checks.digitsOnly("")).isTrue();
+        assertThat(Checks.digitsOnly(null)).isFalse();
     }
 
     @Test
     void testIsAlphaOnly() {
-        assertThat(Checks.isAlphaOnly("abc")).isTrue();
-        assertThat(Checks.isAlphaOnly("abc123")).isFalse();
-        assertThat(Checks.isAlphaOnly("")).isTrue();
-        assertThat(Checks.isAlphaOnly(null)).isFalse();
+        assertThat(Checks.alphaOnly("abc")).isTrue();
+        assertThat(Checks.alphaOnly("abc123")).isFalse();
+        assertThat(Checks.alphaOnly("")).isTrue();
+        assertThat(Checks.alphaOnly(null)).isFalse();
     }
 
     @Test
     void testIsAlphaNumericOnly() {
-        assertThat(Checks.isAlphaNumericOnly("abc123")).isTrue();
-        assertThat(Checks.isAlphaNumericOnly("123")).isTrue();
-        assertThat(Checks.isAlphaNumericOnly("abc")).isTrue();
-        assertThat(Checks.isAlphaNumericOnly("abc123.")).isFalse();
-        assertThat(Checks.isAlphaNumericOnly("")).isTrue();
-        assertThat(Checks.isAlphaNumericOnly(null)).isFalse();
+        assertThat(Checks.alphaNumericOnly("abc123")).isTrue();
+        assertThat(Checks.alphaNumericOnly("123")).isTrue();
+        assertThat(Checks.alphaNumericOnly("abc")).isTrue();
+        assertThat(Checks.alphaNumericOnly("abc123.")).isFalse();
+        assertThat(Checks.alphaNumericOnly("")).isTrue();
+        assertThat(Checks.alphaNumericOnly(null)).isFalse();
     }
 
     @Test
     void isEmpty_string() {
-        assertThat(isEmpty(goodStr)).isFalse();
-        assertThat(isEmpty(blankStr)).isFalse();
-        assertThat(isEmpty(emptyStr)).isTrue();
-        assertThat(isEmpty(nullStr)).isFalse();
+        assertThat(Checks.isEmpty(goodStr)).isFalse();
+        assertThat(Checks.isEmpty(blankStr)).isFalse();
+        assertThat(Checks.isEmpty(emptyStr)).isTrue();
+        assertThat(Checks.isEmpty(nullStr)).isTrue();
     }
 
     @Test
     void isEmpty_collection() {
-        assertThat(isEmpty(goodList)).isFalse();
-        assertThat(isEmpty(emptyList)).isTrue();
-        assertThat(isEmpty(nullList)).isFalse();
+        assertThat(Checks.isEmpty(goodList)).isFalse();
+        assertThat(Checks.isEmpty(emptyList)).isTrue();
+        assertThat(Checks.isEmpty(nullList)).isTrue();
     }
 
     @Test
     void isEmpty_iterable() {
-        assertThat(isEmpty(goodIter)).isFalse();
-        assertThat(isEmpty(emptyIter)).isTrue();
-        assertThat(isEmpty(nullIter)).isFalse();
+        assertThat(Checks.isEmpty(goodIter)).isFalse();
+        assertThat(Checks.isEmpty(emptyIter)).isTrue();
+        assertThat(Checks.isEmpty(nullIter)).isTrue();
     }
 
     @Test
     void isEmpty_map() {
-        assertThat(isEmpty(goodMap)).isFalse();
-        assertThat(isEmpty(emptyMap)).isTrue();
-        assertThat(isEmpty(nullMap)).isFalse();
+        assertThat(Checks.isEmpty(goodMap)).isFalse();
+        assertThat(Checks.isEmpty(emptyMap)).isTrue();
+        assertThat(Checks.isEmpty(nullMap)).isTrue();
     }
 
     @Test
     void isEmpty_array() {
-        assertThat(isEmpty(goodArray)).isFalse();
-        assertThat(isEmpty(emptyArray)).isTrue();
-        assertThat(isEmpty(nullArray)).isFalse();
-        assertThat(isEmpty(goodPrimitiveArray)).isFalse();
-        assertThat(isEmpty(emptyPrimitiveArray)).isTrue();
-        assertThat(isEmpty(nullPrimitiveArray)).isFalse();
+        assertThat(Checks.isEmpty(goodArray)).isFalse();
+        assertThat(Checks.isEmpty(emptyArray)).isTrue();
+        assertThat(Checks.isEmpty(nullArray)).isTrue();
+        assertThat(Checks.isEmpty(goodPrimitiveArray)).isFalse();
+        assertThat(Checks.isEmpty(emptyPrimitiveArray)).isTrue();
+        assertThat(Checks.isEmpty(nullPrimitiveArray)).isTrue();
     }
 
     @Test
-    void isNotEmpty_string() {
-        assertThat(Checks.isNotEmpty(goodStr)).isTrue();
-        assertThat(Checks.isNotEmpty(blankStr)).isTrue();
-        assertThat(Checks.isNotEmpty(emptyStr)).isFalse();
-        assertThat(Checks.isNotEmpty(nullStr)).isFalse();
+    void notEmpty_string() {
+        assertThat(Checks.notEmpty(goodStr)).isTrue();
+        assertThat(Checks.notEmpty(blankStr)).isTrue();
+        assertThat(Checks.notEmpty(emptyStr)).isFalse();
+        assertThat(Checks.notEmpty(nullStr)).isFalse();
     }
 
     @Test
-    void isNotEmpty_collection() {
-        assertThat(Checks.isNotEmpty(goodList)).isTrue();
-        assertThat(Checks.isNotEmpty(emptyList)).isFalse();
-        assertThat(Checks.isNotEmpty(nullList)).isFalse();
+    void notEmpty_collection() {
+        assertThat(Checks.notEmpty(goodList)).isTrue();
+        assertThat(Checks.notEmpty(emptyList)).isFalse();
+        assertThat(Checks.notEmpty(nullList)).isFalse();
     }
 
     @Test
-    void isNotEmpty_iterable() {
-        assertThat(Checks.isNotEmpty(goodIter)).isTrue();
-        assertThat(Checks.isNotEmpty(emptyIter)).isFalse();
-        assertThat(Checks.isNotEmpty(nullIter)).isFalse();
+    void notEmpty_iterable() {
+        assertThat(Checks.notEmpty(goodIter)).isTrue();
+        assertThat(Checks.notEmpty(emptyIter)).isFalse();
+        assertThat(Checks.notEmpty(nullIter)).isFalse();
     }
 
     @Test
-    void isNotEmpty_map() {
-        assertThat(Checks.isNotEmpty(goodMap)).isTrue();
-        assertThat(Checks.isNotEmpty(emptyMap)).isFalse();
-        assertThat(Checks.isNotEmpty(nullMap)).isFalse();
+    void notEmpty_map() {
+        assertThat(Checks.notEmpty(goodMap)).isTrue();
+        assertThat(Checks.notEmpty(emptyMap)).isFalse();
+        assertThat(Checks.notEmpty(nullMap)).isFalse();
     }
 
     @Test
-    void isNotEmpty_array() {
-        assertThat(Checks.isNotEmpty(goodArray)).isTrue();
-        assertThat(Checks.isNotEmpty(emptyArray)).isFalse();
-        assertThat(Checks.isNotEmpty(nullArray)).isFalse();
-        assertThat(Checks.isNotEmpty(goodPrimitiveArray)).isTrue();
-        assertThat(Checks.isNotEmpty(emptyPrimitiveArray)).isFalse();
-        assertThat(Checks.isNotEmpty(nullPrimitiveArray)).isFalse();
+    void notEmpty_array() {
+        assertThat(Checks.notEmpty(goodArray)).isTrue();
+        assertThat(Checks.notEmpty(emptyArray)).isFalse();
+        assertThat(Checks.notEmpty(nullArray)).isFalse();
+        assertThat(Checks.notEmpty(goodPrimitiveArray)).isTrue();
+        assertThat(Checks.notEmpty(emptyPrimitiveArray)).isFalse();
+        assertThat(Checks.notEmpty(nullPrimitiveArray)).isFalse();
     }
 
     @Test
     void nullOrEmpty_string() {
-        assertThat(Checks.isNullOrEmpty(goodStr)).isFalse();
-        assertThat(Checks.isNullOrEmpty(blankStr)).isFalse();
-        assertThat(Checks.isNullOrEmpty(emptyStr)).isTrue();
-        assertThat(Checks.isNullOrEmpty(nullStr)).isTrue();
+        assertThat(Checks.isEmpty(goodStr)).isFalse();
+        assertThat(Checks.isEmpty(blankStr)).isFalse();
+        assertThat(Checks.isEmpty(emptyStr)).isTrue();
+        assertThat(Checks.isEmpty(nullStr)).isTrue();
     }
 
     @Test
     void nullOrEmpty_collection() {
-        assertThat(Checks.isNullOrEmpty(goodList)).isFalse();
-        assertThat(Checks.isNullOrEmpty(emptyList)).isTrue();
-        assertThat(Checks.isNullOrEmpty(nullList)).isTrue();
+        assertThat(Checks.isEmpty(goodList)).isFalse();
+        assertThat(Checks.isEmpty(emptyList)).isTrue();
+        assertThat(Checks.isEmpty(nullList)).isTrue();
     }
 
     @Test
     void nullOrEmpty_iterable() {
-        assertThat(Checks.isNullOrEmpty(goodIter)).isFalse();
-        assertThat(Checks.isNullOrEmpty(emptyIter)).isTrue();
-        assertThat(Checks.isNullOrEmpty(nullIter)).isTrue();
+        assertThat(Checks.isEmpty(goodIter)).isFalse();
+        assertThat(Checks.isEmpty(emptyIter)).isTrue();
+        assertThat(Checks.isEmpty(nullIter)).isTrue();
     }
 
     @Test
     void nullOrEmpty_map() {
-        assertThat(Checks.isNullOrEmpty(goodMap)).isFalse();
-        assertThat(Checks.isNullOrEmpty(emptyMap)).isTrue();
-        assertThat(Checks.isNullOrEmpty(nullMap)).isTrue();
+        assertThat(Checks.isEmpty(goodMap)).isFalse();
+        assertThat(Checks.isEmpty(emptyMap)).isTrue();
+        assertThat(Checks.isEmpty(nullMap)).isTrue();
     }
 
     @Test
     void nullOrEmpty_array() {
-        assertThat(Checks.isNullOrEmpty(goodArray)).isFalse();
-        assertThat(Checks.isNullOrEmpty(emptyArray)).isTrue();
-        assertThat(Checks.isNullOrEmpty(nullArray)).isTrue();
-        assertThat(Checks.isNullOrEmpty(goodPrimitiveArray)).isFalse();
-        assertThat(Checks.isNullOrEmpty(emptyPrimitiveArray)).isTrue();
-        assertThat(Checks.isNullOrEmpty(nullPrimitiveArray)).isTrue();
+        assertThat(Checks.isEmpty(goodArray)).isFalse();
+        assertThat(Checks.isEmpty(emptyArray)).isTrue();
+        assertThat(Checks.isEmpty(nullArray)).isTrue();
+        assertThat(Checks.isEmpty(goodPrimitiveArray)).isFalse();
+        assertThat(Checks.isEmpty(emptyPrimitiveArray)).isTrue();
+        assertThat(Checks.isEmpty(nullPrimitiveArray)).isTrue();
     }
 
     @Test
     void testIsGreaterThan() {
-        assertThat(isGreaterThan(0, 1)).isTrue();
-        assertThat(isGreaterThan(1, 1)).isFalse();
-        assertThat(isGreaterThan(2, 1)).isFalse();
-        assertThat(isGreaterThan(0L, 1L)).isTrue();
-        assertThat(isGreaterThan(1L, 1L)).isFalse();
-        assertThat(isGreaterThan(2L, 1L)).isFalse();
-        assertThat(isGreaterThan(0.0, 1.0)).isTrue();
-        assertThat(isGreaterThan(1.0, 1.0)).isFalse();
-        assertThat(isGreaterThan(2.0, 1.0)).isFalse();
-        assertThat(isGreaterThan(0.0f, 1.0f)).isTrue();
-        assertThat(isGreaterThan(1.0f, 1.0f)).isFalse();
-        assertThat(isGreaterThan(2.0f, 1.0f)).isFalse();
-        assertThat(isGreaterThan(oneMin, fiveMins)).isTrue();
-        assertThat(isGreaterThan(fiveMins, fiveMins)).isFalse();
-        assertThat(isGreaterThan(oneMin, nullDuration)).isFalse();
-        assertThat(isGreaterThan(nullDuration, nullDuration)).isFalse();
+        assertThat(greaterThan(0, 1)).isTrue();
+        assertThat(greaterThan(1, 1)).isFalse();
+        assertThat(greaterThan(2, 1)).isFalse();
+        assertThat(greaterThan(0L, 1L)).isTrue();
+        assertThat(greaterThan(1L, 1L)).isFalse();
+        assertThat(greaterThan(2L, 1L)).isFalse();
+        assertThat(greaterThan(0.0, 1.0)).isTrue();
+        assertThat(greaterThan(1.0, 1.0)).isFalse();
+        assertThat(greaterThan(2.0, 1.0)).isFalse();
+        assertThat(greaterThan(0.0f, 1.0f)).isTrue();
+        assertThat(greaterThan(1.0f, 1.0f)).isFalse();
+        assertThat(greaterThan(2.0f, 1.0f)).isFalse();
+        assertThat(greaterThan(oneMin, fiveMins)).isTrue();
+        assertThat(greaterThan(fiveMins, fiveMins)).isFalse();
+        assertThat(greaterThan(oneMin, nullDuration)).isFalse();
+        assertThat(greaterThan(nullDuration, nullDuration)).isFalse();
     }
 
     @Test
     void testIsGreaterOrEqualTo() {
-        assertThat(isGreaterOrEqualTo(0, 1)).isTrue();
-        assertThat(isGreaterOrEqualTo(1, 1)).isTrue();
-        assertThat(isGreaterOrEqualTo(2, 1)).isFalse();
-        assertThat(isGreaterOrEqualTo(0L, 1L)).isTrue();
-        assertThat(isGreaterOrEqualTo(1L, 1L)).isTrue();
-        assertThat(isGreaterOrEqualTo(2L, 1L)).isFalse();
-        assertThat(isGreaterOrEqualTo(0.0, 1.0)).isTrue();
-        assertThat(isGreaterOrEqualTo(1.0, 1.0)).isTrue();
-        assertThat(isGreaterOrEqualTo(2.0, 1.0)).isFalse();
-        assertThat(isGreaterOrEqualTo(0.0f, 1.0f)).isTrue();
-        assertThat(isGreaterOrEqualTo(1.0f, 1.0f)).isTrue();
-        assertThat(isGreaterOrEqualTo(2.0f, 1.0f)).isFalse();
-        assertThat(isGreaterOrEqualTo(oneMin, fiveMins)).isTrue();
-        assertThat(isGreaterOrEqualTo(fiveMins, fiveMins)).isTrue();
-        assertThat(isGreaterOrEqualTo(oneMin, nullDuration)).isFalse();
-        assertThat(isGreaterOrEqualTo(nullDuration, nullDuration)).isFalse();
+        assertThat(greaterOrEqualTo(0, 1)).isTrue();
+        assertThat(greaterOrEqualTo(1, 1)).isTrue();
+        assertThat(greaterOrEqualTo(2, 1)).isFalse();
+        assertThat(greaterOrEqualTo(0L, 1L)).isTrue();
+        assertThat(greaterOrEqualTo(1L, 1L)).isTrue();
+        assertThat(greaterOrEqualTo(2L, 1L)).isFalse();
+        assertThat(greaterOrEqualTo(0.0, 1.0)).isTrue();
+        assertThat(greaterOrEqualTo(1.0, 1.0)).isTrue();
+        assertThat(greaterOrEqualTo(2.0, 1.0)).isFalse();
+        assertThat(greaterOrEqualTo(0.0f, 1.0f)).isTrue();
+        assertThat(greaterOrEqualTo(1.0f, 1.0f)).isTrue();
+        assertThat(greaterOrEqualTo(2.0f, 1.0f)).isFalse();
+        assertThat(greaterOrEqualTo(oneMin, fiveMins)).isTrue();
+        assertThat(greaterOrEqualTo(fiveMins, fiveMins)).isTrue();
+        assertThat(greaterOrEqualTo(oneMin, nullDuration)).isFalse();
+        assertThat(greaterOrEqualTo(nullDuration, nullDuration)).isFalse();
     }
 
     @Test
     void testIsLessThan() {
-        assertThat(isLessThan(0, 1)).isFalse();
-        assertThat(isLessThan(1, 1)).isFalse();
-        assertThat(isLessThan(2, 1)).isTrue();
-        assertThat(isLessThan(0L, 1L)).isFalse();
-        assertThat(isLessThan(1L, 1L)).isFalse();
-        assertThat(isLessThan(2L, 1L)).isTrue();
-        assertThat(isLessThan(0.0, 1.0)).isFalse();
-        assertThat(isLessThan(1.0, 1.0)).isFalse();
-        assertThat(isLessThan(2.0, 1.0)).isTrue();
-        assertThat(isLessThan(0.0f, 1.0f)).isFalse();
-        assertThat(isLessThan(1.0f, 1.0f)).isFalse();
-        assertThat(isLessThan(2.0f, 1.0f)).isTrue();
-        assertThat(isLessThan(oneMin, fiveMins)).isFalse();
-        assertThat(isLessThan(fiveMins, fiveMins)).isFalse();
-        assertThat(isLessThan(oneMin, nullDuration)).isFalse();
-        assertThat(isLessThan(nullDuration, nullDuration)).isFalse();
+        assertThat(lessThan(0, 1)).isFalse();
+        assertThat(lessThan(1, 1)).isFalse();
+        assertThat(lessThan(2, 1)).isTrue();
+        assertThat(lessThan(0L, 1L)).isFalse();
+        assertThat(lessThan(1L, 1L)).isFalse();
+        assertThat(lessThan(2L, 1L)).isTrue();
+        assertThat(lessThan(0.0, 1.0)).isFalse();
+        assertThat(lessThan(1.0, 1.0)).isFalse();
+        assertThat(lessThan(2.0, 1.0)).isTrue();
+        assertThat(lessThan(0.0f, 1.0f)).isFalse();
+        assertThat(lessThan(1.0f, 1.0f)).isFalse();
+        assertThat(lessThan(2.0f, 1.0f)).isTrue();
+        assertThat(lessThan(oneMin, fiveMins)).isFalse();
+        assertThat(lessThan(fiveMins, fiveMins)).isFalse();
+        assertThat(lessThan(oneMin, nullDuration)).isFalse();
+        assertThat(lessThan(nullDuration, nullDuration)).isFalse();
     }
 
     @Test
     void testIsLessOrEqualTo() {
-        assertThat(isLessOrEqualTo(0, 1)).isFalse();
-        assertThat(isLessOrEqualTo(1, 1)).isTrue();
-        assertThat(isLessOrEqualTo(2, 1)).isTrue();
-        assertThat(isLessOrEqualTo(0L, 1L)).isFalse();
-        assertThat(isLessOrEqualTo(1L, 1L)).isTrue();
-        assertThat(isLessOrEqualTo(2L, 1L)).isTrue();
-        assertThat(isLessOrEqualTo(0.0, 1.0)).isFalse();
-        assertThat(isLessOrEqualTo(1.0, 1.0)).isTrue();
-        assertThat(isLessOrEqualTo(2.0, 1.0)).isTrue();
-        assertThat(isLessOrEqualTo(0.0f, 1.0f)).isFalse();
-        assertThat(isLessOrEqualTo(1.0f, 1.0f)).isTrue();
-        assertThat(isLessOrEqualTo(2.0f, 1.0f)).isTrue();
-        assertThat(isLessOrEqualTo(oneMin, fiveMins)).isFalse();
-        assertThat(isLessOrEqualTo(fiveMins, fiveMins)).isTrue();
-        assertThat(isLessOrEqualTo(oneMin, nullDuration)).isFalse();
-        assertThat(isLessOrEqualTo(nullDuration, nullDuration)).isFalse();
+        assertThat(lessOrEqualTo(0, 1)).isFalse();
+        assertThat(lessOrEqualTo(1, 1)).isTrue();
+        assertThat(lessOrEqualTo(2, 1)).isTrue();
+        assertThat(lessOrEqualTo(0L, 1L)).isFalse();
+        assertThat(lessOrEqualTo(1L, 1L)).isTrue();
+        assertThat(lessOrEqualTo(2L, 1L)).isTrue();
+        assertThat(lessOrEqualTo(0.0, 1.0)).isFalse();
+        assertThat(lessOrEqualTo(1.0, 1.0)).isTrue();
+        assertThat(lessOrEqualTo(2.0, 1.0)).isTrue();
+        assertThat(lessOrEqualTo(0.0f, 1.0f)).isFalse();
+        assertThat(lessOrEqualTo(1.0f, 1.0f)).isTrue();
+        assertThat(lessOrEqualTo(2.0f, 1.0f)).isTrue();
+        assertThat(lessOrEqualTo(oneMin, fiveMins)).isFalse();
+        assertThat(lessOrEqualTo(fiveMins, fiveMins)).isTrue();
+        assertThat(lessOrEqualTo(oneMin, nullDuration)).isFalse();
+        assertThat(lessOrEqualTo(nullDuration, nullDuration)).isFalse();
     }
 
     @Test
@@ -386,31 +415,123 @@ class ChecksTest {
     }
 
     @Test
+    void greaterThan_duration() {
+        assertThat(Checks.greaterThanNanos(1, oneNs)).isFalse();
+        assertThat(Checks.greaterThanNanos(1, fiveNs)).isTrue();
+        assertThat(Checks.greaterThanNanos(1, oneMs)).isTrue();
+        assertThat(Checks.greaterThanMillis(1, oneMs)).isFalse();
+        assertThat(Checks.greaterThanMillis(1, fiveMs)).isTrue();
+        assertThat(Checks.greaterThanMillis(1, oneSec)).isTrue();
+        assertThat(Checks.greaterThanSecs(1, oneSec)).isFalse();
+        assertThat(Checks.greaterThanSecs(1, fiveSecs)).isTrue();
+        assertThat(Checks.greaterThanSecs(1, oneMin)).isTrue();
+        assertThat(Checks.greaterThanMins(1, oneMin)).isFalse();
+        assertThat(Checks.greaterThanMins(1, fiveMins)).isTrue();
+        assertThat(Checks.greaterThanMins(1, oneHour)).isTrue();
+        assertThat(Checks.greaterThanHours(1, oneHour)).isFalse();
+        assertThat(Checks.greaterThanHours(1, fiveHours)).isTrue();
+        assertThat(Checks.greaterThanHours(1, oneDay)).isTrue();
+        assertThat(Checks.greaterThanDays(1, oneDay)).isFalse();
+        assertThat(Checks.greaterThanDays(1, fiveDays)).isTrue();
+    }
+
+    @Test
+    void greaterOrEqualTo_duration() {
+        assertThat(Checks.greaterOrEqualToNanos(1, oneNs)).isTrue();
+        assertThat(Checks.greaterOrEqualToNanos(10, fiveNs)).isFalse();
+        assertThat(Checks.greaterOrEqualToNanos(1, oneMs)).isTrue();
+        assertThat(Checks.greaterOrEqualToMillis(1, oneMs)).isTrue();
+        assertThat(Checks.greaterOrEqualToMillis(10, fiveMs)).isFalse();
+        assertThat(Checks.greaterOrEqualToMillis(1, oneSec)).isTrue();
+        assertThat(Checks.greaterOrEqualToSecs(1, oneSec)).isTrue();
+        assertThat(Checks.greaterOrEqualToSecs(10, fiveSecs)).isFalse();
+        assertThat(Checks.greaterOrEqualToSecs(1, oneMin)).isTrue();
+        assertThat(Checks.greaterOrEqualToMins(1, oneMin)).isTrue();
+        assertThat(Checks.greaterOrEqualToMins(10, fiveMins)).isFalse();
+        assertThat(Checks.greaterOrEqualToMins(1, oneHour)).isTrue();
+        assertThat(Checks.greaterOrEqualToHours(1, oneHour)).isTrue();
+        assertThat(Checks.greaterOrEqualToHours(10, fiveHours)).isFalse();
+        assertThat(Checks.greaterOrEqualToHours(1, oneDay)).isTrue();
+        assertThat(Checks.greaterOrEqualToDays(1, oneDay)).isTrue();
+        assertThat(Checks.greaterOrEqualToDays(10, fiveDays)).isFalse();
+    }
+
+    @Test
+    void lessThan_duration() {
+        assertThat(Checks.lessThanNanos(1, oneNs)).isFalse();
+        assertThat(Checks.lessThanNanos(1, fiveNs)).isFalse();
+        assertThat(Checks.lessThanNanos(1, oneMs)).isFalse();
+        assertThat(Checks.lessThanMillis(1, oneMs)).isFalse();
+        assertThat(Checks.lessThanMillis(1, fiveMs)).isFalse();
+        assertThat(Checks.lessThanMillis(1, oneSec)).isFalse();
+        assertThat(Checks.lessThanSecs(1, oneSec)).isFalse();
+        assertThat(Checks.lessThanSecs(1, fiveSecs)).isFalse();
+        assertThat(Checks.lessThanSecs(1, oneMin)).isFalse();
+        assertThat(Checks.lessThanMins(1, oneMin)).isFalse();
+        assertThat(Checks.lessThanMins(1, fiveMins)).isFalse();
+        assertThat(Checks.lessThanMins(1, oneHour)).isFalse();
+        assertThat(Checks.lessThanHours(1, oneHour)).isFalse();
+        assertThat(Checks.lessThanHours(1, fiveHours)).isFalse();
+        assertThat(Checks.lessThanHours(1, oneDay)).isFalse();
+        assertThat(Checks.lessThanDays(1, oneDay)).isFalse();
+        assertThat(Checks.lessThanDays(1, fiveDays)).isFalse();
+    }
+
+    @Test
+    void lessOrEqualTo_duration() {
+        assertThat(Checks.lessOrEqualToNanos(1, oneNs)).isTrue();
+        assertThat(Checks.lessOrEqualToNanos(10, fiveNs)).isTrue();
+        assertThat(Checks.lessOrEqualToMillis(1, oneMs)).isTrue();
+        assertThat(Checks.lessOrEqualToMillis(10, fiveMs)).isTrue();
+        assertThat(Checks.lessOrEqualToMillis(1, oneNs)).isTrue();
+        assertThat(Checks.lessOrEqualToSecs(1, oneSec)).isTrue();
+        assertThat(Checks.lessOrEqualToSecs(10, fiveSecs)).isTrue();
+        assertThat(Checks.lessOrEqualToSecs(1, oneMs)).isTrue();
+        assertThat(Checks.lessOrEqualToMins(1, oneMin)).isTrue();
+        assertThat(Checks.lessOrEqualToMins(10, fiveMins)).isTrue();
+        assertThat(Checks.lessOrEqualToMins(1, oneSec)).isTrue();
+        assertThat(Checks.lessOrEqualToHours(1, oneHour)).isTrue();
+        assertThat(Checks.lessOrEqualToHours(10, fiveHours)).isTrue();
+        assertThat(Checks.lessOrEqualToHours(1, oneMin)).isTrue();
+        assertThat(Checks.lessOrEqualToDays(1, oneDay)).isTrue();
+        assertThat(Checks.lessOrEqualToDays(10, fiveDays)).isTrue();
+        assertThat(Checks.lessOrEqualToDays(1, oneHour)).isTrue();
+    }
+
+    @Test
+    void isBetween_duration() {
+        assertThat(Checks.isBetweenNanos(1, 2, oneNs)).isTrue();
+        assertThat(Checks.isBetweenNanos(2, 3, oneNs)).isFalse();
+        assertThat(Checks.isBetweenMillis(1, 2, oneMs)).isTrue();
+        assertThat(Checks.isBetweenMillis(2, 3, oneMs)).isFalse();
+        assertThat(Checks.isBetweenSecs(1, 2, oneSec)).isTrue();
+        assertThat(Checks.isBetweenSecs(2, 3, oneSec)).isFalse();
+        assertThat(Checks.isBetweenMins(1, 2, oneMin)).isTrue();
+        assertThat(Checks.isBetweenMins(2, 3, oneMin)).isFalse();
+        assertThat(Checks.isBetweenHours(1, 2, oneHour)).isTrue();
+        assertThat(Checks.isBetweenHours(2, 3, oneHour)).isFalse();
+        assertThat(Checks.isBetweenDays(1, 2, oneDay)).isTrue();
+        assertThat(Checks.isBetweenDays(2, 3, oneDay)).isFalse();
+    }
+
+    @Test
     void isBlank_string() {
         assertThat(isBlank(goodStr)).isFalse();
         assertThat(isBlank(blankStr)).isTrue();
         assertThat(isBlank(emptyStr)).isTrue();
-        assertThat(isBlank(nullStr)).isFalse(); // a null cannot be blank
-    }
-
-    @Test
-    void nullOrBlank_string() {
-        assertThat(isNullOrBlank(goodStr)).isFalse();
-        assertThat(isNullOrBlank(blankStr)).isTrue();
-        assertThat(isNullOrBlank(emptyStr)).isTrue();
-        assertThat(isNullOrBlank(nullStr)).isTrue();
+        assertThat(isBlank(nullStr)).isTrue();
     }
 
     @Test
     void notBlank_string() {
-        assertThat(isNotBlank(goodStr)).isTrue();
-        assertThat(isNotBlank(blankStr)).isFalse();
-        assertThat(isNotBlank(emptyStr)).isFalse();
-        assertThat(isNotBlank(nullStr)).isFalse();
+        assertThat(notBlank(goodStr)).isTrue();
+        assertThat(notBlank(blankStr)).isFalse();
+        assertThat(notBlank(emptyStr)).isFalse();
+        assertThat(notBlank(nullStr)).isFalse();
     }
 
     @Test
-    void hasLength_string() {
+    void isLength_string() {
 
         assertThat(Checks.isLength(goodStr.length(), goodStr)).isTrue();
         assertThat(Checks.isLength(goodStr.length() + 1, goodStr)).isFalse();
@@ -564,103 +685,103 @@ class ChecksTest {
     @Test
     void hasSize_collection() {
 
-        assertThat(Checks.isSize(goodList.size(), goodList)).isTrue();
-        assertThat(Checks.isSize(goodList.size() + 1, goodList)).isFalse();
-        assertThat(Checks.isSize(goodList.size() - 1, goodList)).isFalse();
-        assertThat(Checks.isSize(0, emptyList)).isTrue();
-        assertThat(Checks.isSize(1, emptyList)).isFalse();
-        assertThat(Checks.isSize(1, nullList)).isFalse();
-        assertThat(Checks.isSize(0, nullList)).isFalse(); // null has no size, it is null
+        assertThat(isSize(goodList.size(), goodList)).isTrue();
+        assertThat(isSize(goodList.size() + 1, goodList)).isFalse();
+        assertThat(isSize(goodList.size() - 1, goodList)).isFalse();
+        assertThat(isSize(0, emptyList)).isTrue();
+        assertThat(isSize(1, emptyList)).isFalse();
+        assertThat(isSize(1, nullList)).isFalse();
+        assertThat(isSize(0, nullList)).isFalse(); // null has no size, it is null
 
-        assertThat(Checks.isSizeGreaterThan(goodList.size() - 1, goodList)).isTrue();
-        assertThat(Checks.isSizeGreaterThan(goodList.size(), goodList)).isFalse();
-        assertThat(Checks.isSizeGreaterThan(goodList.size() + 1, goodList)).isFalse();
-        assertThat(Checks.isSizeGreaterThan(1, emptyList)).isFalse();
-        assertThat(Checks.isSizeGreaterThan(1, nullList)).isFalse();
-        assertThat(Checks.isSizeGreaterThan(0, nullList)).isFalse(); // null has no size, it is null
+        assertThat(isSizeGreaterThan(goodList.size() - 1, goodList)).isTrue();
+        assertThat(isSizeGreaterThan(goodList.size(), goodList)).isFalse();
+        assertThat(isSizeGreaterThan(goodList.size() + 1, goodList)).isFalse();
+        assertThat(isSizeGreaterThan(1, emptyList)).isFalse();
+        assertThat(isSizeGreaterThan(1, nullList)).isFalse();
+        assertThat(isSizeGreaterThan(0, nullList)).isFalse(); // null has no size, it is null
 
-        assertThat(Checks.isSizeGreaterOrEqualTo(goodList.size(), goodList)).isTrue();
-        assertThat(Checks.isSizeGreaterOrEqualTo(goodList.size() + 1, goodList)).isFalse();
-        assertThat(Checks.isSizeGreaterOrEqualTo(goodList.size() - 1, goodList)).isTrue();
-        assertThat(Checks.isSizeGreaterOrEqualTo(1, goodList)).isTrue();
-        assertThat(Checks.isSizeGreaterOrEqualTo(1, emptyList)).isFalse();
-        assertThat(Checks.isSizeGreaterOrEqualTo(0, emptyList)).isTrue();
-        assertThat(Checks.isSizeGreaterOrEqualTo(1, nullList)).isFalse();
-        assertThat(Checks.isSizeGreaterOrEqualTo(0, nullList)).isFalse(); // null has no size, it is null
+        assertThat(isSizeGreaterOrEqualTo(goodList.size(), goodList)).isTrue();
+        assertThat(isSizeGreaterOrEqualTo(goodList.size() + 1, goodList)).isFalse();
+        assertThat(isSizeGreaterOrEqualTo(goodList.size() - 1, goodList)).isTrue();
+        assertThat(isSizeGreaterOrEqualTo(1, goodList)).isTrue();
+        assertThat(isSizeGreaterOrEqualTo(1, emptyList)).isFalse();
+        assertThat(isSizeGreaterOrEqualTo(0, emptyList)).isTrue();
+        assertThat(isSizeGreaterOrEqualTo(1, nullList)).isFalse();
+        assertThat(isSizeGreaterOrEqualTo(0, nullList)).isFalse(); // null has no size, it is null
 
-        assertThat(Checks.isSizeLessThan(goodList.size() + 1, goodList)).isTrue();
-        assertThat(Checks.isSizeLessThan(goodList.size(), goodList)).isFalse();
-        assertThat(Checks.isSizeLessThan(goodList.size() - 1, goodList)).isFalse();
-        assertThat(Checks.isSizeLessThan(1, emptyList)).isTrue();
-        assertThat(Checks.isSizeLessThan(1, nullList)).isFalse();
-        assertThat(Checks.isSizeLessThan(0, nullList)).isFalse(); // null has no size, it is null
+        assertThat(isSizeLessThan(goodList.size() + 1, goodList)).isTrue();
+        assertThat(isSizeLessThan(goodList.size(), goodList)).isFalse();
+        assertThat(isSizeLessThan(goodList.size() - 1, goodList)).isFalse();
+        assertThat(isSizeLessThan(1, emptyList)).isTrue();
+        assertThat(isSizeLessThan(1, nullList)).isFalse();
+        assertThat(isSizeLessThan(0, nullList)).isFalse(); // null has no size, it is null
 
-        assertThat(Checks.isSizeLessOrEqualTo(goodList.size(), goodList)).isTrue();
-        assertThat(Checks.isSizeLessOrEqualTo(goodList.size() + 1, goodList)).isTrue();
-        assertThat(Checks.isSizeLessOrEqualTo(goodList.size() - 1, goodList)).isFalse();
-        assertThat(Checks.isSizeLessOrEqualTo(1, emptyList)).isTrue();
-        assertThat(Checks.isSizeLessOrEqualTo(1, nullList)).isFalse();
-        assertThat(Checks.isSizeLessOrEqualTo(0, nullList)).isFalse(); // null has no size, it is null
+        assertThat(isSizeLessOrEqualTo(goodList.size(), goodList)).isTrue();
+        assertThat(isSizeLessOrEqualTo(goodList.size() + 1, goodList)).isTrue();
+        assertThat(isSizeLessOrEqualTo(goodList.size() - 1, goodList)).isFalse();
+        assertThat(isSizeLessOrEqualTo(1, emptyList)).isTrue();
+        assertThat(isSizeLessOrEqualTo(1, nullList)).isFalse();
+        assertThat(isSizeLessOrEqualTo(0, nullList)).isFalse(); // null has no size, it is null
 
-        assertThat(Checks.isSizeBetween(goodList.size(), goodList.size(), goodList)).isTrue();
-        assertThat(Checks.isSizeBetween(0, goodList.size(), goodList)).isTrue();
-        assertThat(Checks.isSizeBetween(goodList.size(), goodList.size() + 1, goodList)).isTrue();
-        assertThat(Checks.isSizeBetween(goodList.size() + 1, goodList.size(), goodList)).isFalse();
-        assertThat(Checks.isSizeBetween(1, goodList.size() - 1, goodList)).isFalse();
-        assertThat(Checks.isSizeBetween(0, 0, emptyList)).isTrue();
-        assertThat(Checks.isSizeBetween(1, 1, emptyList)).isFalse();
-        assertThat(Checks.isSizeBetween(0, 0, nullList)).isFalse(); // null has no size, it is null
+        assertThat(isSizeBetween(goodList.size(), goodList.size(), goodList)).isTrue();
+        assertThat(isSizeBetween(0, goodList.size(), goodList)).isTrue();
+        assertThat(isSizeBetween(goodList.size(), goodList.size() + 1, goodList)).isTrue();
+        assertThat(isSizeBetween(goodList.size() + 1, goodList.size(), goodList)).isFalse();
+        assertThat(isSizeBetween(1, goodList.size() - 1, goodList)).isFalse();
+        assertThat(isSizeBetween(0, 0, emptyList)).isTrue();
+        assertThat(isSizeBetween(1, 1, emptyList)).isFalse();
+        assertThat(isSizeBetween(0, 0, nullList)).isFalse(); // null has no size, it is null
     }
 
     @Test
     void hasSize_iterable() {
 
-        assertThat(Checks.isSize(goodList.size(), goodIter)).isTrue();
-        assertThat(Checks.isSize(goodList.size() + 1, goodIter)).isFalse();
-        assertThat(Checks.isSize(goodList.size() - 1, goodIter)).isFalse();
-        assertThat(Checks.isSize(0, emptyIter)).isTrue();
-        assertThat(Checks.isSize(1, emptyIter)).isFalse();
-        assertThat(Checks.isSize(1, nullIter)).isFalse();
-        assertThat(Checks.isSize(0, nullIter)).isFalse(); // null has no size, it is null
+        assertThat(isSize(goodList.size(), goodIter)).isTrue();
+        assertThat(isSize(goodList.size() + 1, goodIter)).isFalse();
+        assertThat(isSize(goodList.size() - 1, goodIter)).isFalse();
+        assertThat(isSize(0, emptyIter)).isTrue();
+        assertThat(isSize(1, emptyIter)).isFalse();
+        assertThat(isSize(1, nullIter)).isFalse();
+        assertThat(isSize(0, nullIter)).isFalse(); // null has no size, it is null
 
-        assertThat(Checks.isSizeGreaterThan(goodList.size() - 1, goodIter)).isTrue();
-        assertThat(Checks.isSizeGreaterThan(goodList.size(), goodIter)).isFalse();
-        assertThat(Checks.isSizeGreaterThan(goodList.size() + 1, goodIter)).isFalse();
-        assertThat(Checks.isSizeGreaterThan(1, emptyIter)).isFalse();
-        assertThat(Checks.isSizeGreaterThan(1, nullIter)).isFalse();
-        assertThat(Checks.isSizeGreaterThan(0, nullIter)).isFalse(); // null has no size, it is null
+        assertThat(isSizeGreaterThan(goodList.size() - 1, goodIter)).isTrue();
+        assertThat(isSizeGreaterThan(goodList.size(), goodIter)).isFalse();
+        assertThat(isSizeGreaterThan(goodList.size() + 1, goodIter)).isFalse();
+        assertThat(isSizeGreaterThan(1, emptyIter)).isFalse();
+        assertThat(isSizeGreaterThan(1, nullIter)).isFalse();
+        assertThat(isSizeGreaterThan(0, nullIter)).isFalse(); // null has no size, it is null
 
-        assertThat(Checks.isSizeGreaterOrEqualTo(goodList.size(), goodIter)).isTrue();
-        assertThat(Checks.isSizeGreaterOrEqualTo(goodList.size() + 1, goodIter)).isFalse();
-        assertThat(Checks.isSizeGreaterOrEqualTo(goodList.size() - 1, goodIter)).isTrue();
-        assertThat(Checks.isSizeGreaterOrEqualTo(1, goodIter)).isTrue();
-        assertThat(Checks.isSizeGreaterOrEqualTo(1, emptyIter)).isFalse();
-        assertThat(Checks.isSizeGreaterOrEqualTo(0, emptyIter)).isTrue();
-        assertThat(Checks.isSizeGreaterOrEqualTo(1, nullIter)).isFalse();
-        assertThat(Checks.isSizeGreaterOrEqualTo(0, nullIter)).isFalse(); // null has no size, it is null
+        assertThat(isSizeGreaterOrEqualTo(goodList.size(), goodIter)).isTrue();
+        assertThat(isSizeGreaterOrEqualTo(goodList.size() + 1, goodIter)).isFalse();
+        assertThat(isSizeGreaterOrEqualTo(goodList.size() - 1, goodIter)).isTrue();
+        assertThat(isSizeGreaterOrEqualTo(1, goodIter)).isTrue();
+        assertThat(isSizeGreaterOrEqualTo(1, emptyIter)).isFalse();
+        assertThat(isSizeGreaterOrEqualTo(0, emptyIter)).isTrue();
+        assertThat(isSizeGreaterOrEqualTo(1, nullIter)).isFalse();
+        assertThat(isSizeGreaterOrEqualTo(0, nullIter)).isFalse(); // null has no size, it is null
 
-        assertThat(Checks.isSizeLessThan(goodList.size() + 1, goodIter)).isTrue();
-        assertThat(Checks.isSizeLessThan(goodList.size(), goodIter)).isFalse();
-        assertThat(Checks.isSizeLessThan(goodList.size() - 1, goodIter)).isFalse();
-        assertThat(Checks.isSizeLessThan(1, emptyIter)).isTrue();
-        assertThat(Checks.isSizeLessThan(1, nullIter)).isFalse();
-        assertThat(Checks.isSizeLessThan(0, nullIter)).isFalse(); // null has no size, it is null
+        assertThat(isSizeLessThan(goodList.size() + 1, goodIter)).isTrue();
+        assertThat(isSizeLessThan(goodList.size(), goodIter)).isFalse();
+        assertThat(isSizeLessThan(goodList.size() - 1, goodIter)).isFalse();
+        assertThat(isSizeLessThan(1, emptyIter)).isTrue();
+        assertThat(isSizeLessThan(1, nullIter)).isFalse();
+        assertThat(isSizeLessThan(0, nullIter)).isFalse(); // null has no size, it is null
 
-        assertThat(Checks.isSizeLessOrEqualTo(goodList.size(), goodIter)).isTrue();
-        assertThat(Checks.isSizeLessOrEqualTo(goodList.size() + 1, goodIter)).isTrue();
-        assertThat(Checks.isSizeLessOrEqualTo(goodList.size() - 1, goodIter)).isFalse();
-        assertThat(Checks.isSizeLessOrEqualTo(1, emptyIter)).isTrue();
-        assertThat(Checks.isSizeLessOrEqualTo(1, nullIter)).isFalse();
-        assertThat(Checks.isSizeLessOrEqualTo(0, nullIter)).isFalse(); // null has no size, it is null
+        assertThat(isSizeLessOrEqualTo(goodList.size(), goodIter)).isTrue();
+        assertThat(isSizeLessOrEqualTo(goodList.size() + 1, goodIter)).isTrue();
+        assertThat(isSizeLessOrEqualTo(goodList.size() - 1, goodIter)).isFalse();
+        assertThat(isSizeLessOrEqualTo(1, emptyIter)).isTrue();
+        assertThat(isSizeLessOrEqualTo(1, nullIter)).isFalse();
+        assertThat(isSizeLessOrEqualTo(0, nullIter)).isFalse(); // null has no size, it is null
 
-        assertThat(Checks.isSizeBetween(goodList.size(), goodList.size(), goodIter)).isTrue();
-        assertThat(Checks.isSizeBetween(0, goodList.size(), goodIter)).isTrue();
-        assertThat(Checks.isSizeBetween(goodList.size(), goodList.size() + 1, goodIter)).isTrue();
-        assertThat(Checks.isSizeBetween(goodList.size() + 1, goodList.size(), goodIter)).isFalse();
-        assertThat(Checks.isSizeBetween(1, goodList.size() - 1, goodIter)).isFalse();
-        assertThat(Checks.isSizeBetween(0, 0, emptyIter)).isTrue();
-        assertThat(Checks.isSizeBetween(1, 1, emptyIter)).isFalse();
-        assertThat(Checks.isSizeBetween(0, 0, nullIter)).isFalse(); // null has no size, it is null
+        assertThat(isSizeBetween(goodList.size(), goodList.size(), goodIter)).isTrue();
+        assertThat(isSizeBetween(0, goodList.size(), goodIter)).isTrue();
+        assertThat(isSizeBetween(goodList.size(), goodList.size() + 1, goodIter)).isTrue();
+        assertThat(isSizeBetween(goodList.size() + 1, goodList.size(), goodIter)).isFalse();
+        assertThat(isSizeBetween(1, goodList.size() - 1, goodIter)).isFalse();
+        assertThat(isSizeBetween(0, 0, emptyIter)).isTrue();
+        assertThat(isSizeBetween(1, 1, emptyIter)).isFalse();
+        assertThat(isSizeBetween(0, 0, nullIter)).isFalse(); // null has no size, it is null
     }
 
     @Test
@@ -816,9 +937,9 @@ class ChecksTest {
         assertThat(isFuture(zdtFuture)).isTrue();
         assertThat(isFuture(zdtPast)).isFalse();
         assertThat(isFuture(zdtNull)).isFalse();
-        assertThat(Checks.isNowOrFuture(zdtFuture)).isTrue();
-        assertThat(Checks.isNowOrFuture(zdtPast)).isFalse();
-        assertThat(Checks.isNowOrFuture(zdtNull)).isFalse();
+        assertThat(isNowOrFuture(zdtFuture)).isTrue();
+        assertThat(isNowOrFuture(zdtPast)).isFalse();
+        assertThat(isNowOrFuture(zdtNull)).isFalse();
     }
 
     @Test
@@ -826,9 +947,9 @@ class ChecksTest {
         assertThat(isFuture(odtFuture)).isTrue();
         assertThat(isFuture(odtPast)).isFalse();
         assertThat(isFuture(odtNull)).isFalse();
-        assertThat(Checks.isNowOrFuture(odtFuture)).isTrue();
-        assertThat(Checks.isNowOrFuture(odtPast)).isFalse();
-        assertThat(Checks.isNowOrFuture(odtNull)).isFalse();
+        assertThat(isNowOrFuture(odtFuture)).isTrue();
+        assertThat(isNowOrFuture(odtPast)).isFalse();
+        assertThat(isNowOrFuture(odtNull)).isFalse();
     }
 
     @Test
@@ -836,9 +957,9 @@ class ChecksTest {
         assertThat(isFuture(ldtFuture)).isTrue();
         assertThat(isFuture(ldtPast)).isFalse();
         assertThat(isFuture(ldtNull)).isFalse();
-        assertThat(Checks.isNowOrFuture(ldtFuture)).isTrue();
-        assertThat(Checks.isNowOrFuture(ldtPast)).isFalse();
-        assertThat(Checks.isNowOrFuture(ldtNull)).isFalse();
+        assertThat(isNowOrFuture(ldtFuture)).isTrue();
+        assertThat(isNowOrFuture(ldtPast)).isFalse();
+        assertThat(isNowOrFuture(ldtNull)).isFalse();
     }
 
     @Test
@@ -846,9 +967,9 @@ class ChecksTest {
         assertThat(isFuture(ldFuture)).isTrue();
         assertThat(isFuture(ldPast)).isFalse();
         assertThat(isFuture(ldNull)).isFalse();
-        assertThat(Checks.isNowOrFuture(ldFuture)).isTrue();
-        assertThat(Checks.isNowOrFuture(ldPast)).isFalse();
-        assertThat(Checks.isNowOrFuture(ldNull)).isFalse();
+        assertThat(isNowOrFuture(ldFuture)).isTrue();
+        assertThat(isNowOrFuture(ldPast)).isFalse();
+        assertThat(isNowOrFuture(ldNull)).isFalse();
     }
 
     @Test
@@ -866,9 +987,9 @@ class ChecksTest {
         assertThat(isPast(zdtFuture)).isFalse();
         assertThat(isPast(zdtPast)).isTrue();
         assertThat(isPast(zdtNull)).isFalse();
-        assertThat(Checks.isNowOrPast(zdtFuture)).isFalse();
-        assertThat(Checks.isNowOrPast(zdtPast)).isTrue();
-        assertThat(Checks.isNowOrPast(zdtNull)).isFalse();
+        assertThat(isNowOrPast(zdtFuture)).isFalse();
+        assertThat(isNowOrPast(zdtPast)).isTrue();
+        assertThat(isNowOrPast(zdtNull)).isFalse();
     }
 
     @Test
@@ -876,9 +997,9 @@ class ChecksTest {
         assertThat(isPast(odtFuture)).isFalse();
         assertThat(isPast(odtPast)).isTrue();
         assertThat(isPast(odtNull)).isFalse();
-        assertThat(Checks.isNowOrPast(odtFuture)).isFalse();
-        assertThat(Checks.isNowOrPast(odtPast)).isTrue();
-        assertThat(Checks.isNowOrPast(odtNull)).isFalse();
+        assertThat(isNowOrPast(odtFuture)).isFalse();
+        assertThat(isNowOrPast(odtPast)).isTrue();
+        assertThat(isNowOrPast(odtNull)).isFalse();
     }
 
     @Test
@@ -886,9 +1007,9 @@ class ChecksTest {
         assertThat(isPast(ldtFuture)).isFalse();
         assertThat(isPast(ldtPast)).isTrue();
         assertThat(isPast(ldtNull)).isFalse();
-        assertThat(Checks.isNowOrPast(ldtFuture)).isFalse();
-        assertThat(Checks.isNowOrPast(ldtPast)).isTrue();
-        assertThat(Checks.isNowOrPast(ldtNull)).isFalse();
+        assertThat(isNowOrPast(ldtFuture)).isFalse();
+        assertThat(isNowOrPast(ldtPast)).isTrue();
+        assertThat(isNowOrPast(ldtNull)).isFalse();
     }
 
     @Test
@@ -896,9 +1017,9 @@ class ChecksTest {
         assertThat(isPast(ldFuture)).isFalse();
         assertThat(isPast(ldPast)).isTrue();
         assertThat(isPast(ldNull)).isFalse();
-        assertThat(Checks.isNowOrPast(ldFuture)).isFalse();
-        assertThat(Checks.isNowOrPast(ldPast)).isTrue();
-        assertThat(Checks.isNowOrPast(ldNull)).isFalse();
+        assertThat(isNowOrPast(ldFuture)).isFalse();
+        assertThat(isNowOrPast(ldPast)).isTrue();
+        assertThat(isNowOrPast(ldNull)).isFalse();
     }
 
     @Test
@@ -936,8 +1057,8 @@ class ChecksTest {
 
     @Test
     void notInstanceOf() {
-        assertThat(Checks.isNotInstanceOf(CharSequence.class, goodStr)).isFalse();
-        assertThat(Checks.isNotInstanceOf(Map.class, goodStr)).isTrue();
+        assertThat(Checks.notInstanceOf(CharSequence.class, goodStr)).isFalse();
+        assertThat(Checks.notInstanceOf(Map.class, goodStr)).isTrue();
     }
 
     @Test
@@ -972,5 +1093,150 @@ class ChecksTest {
         assertThat(matchesRegex("", goodStr)).isFalse();
         assertThat(matchesRegex("", emptyStr)).isTrue(); // Interesting — empty str matches empty regex
         assertThat(matchesRegex("", nullStr)).isFalse();
+    }
+
+    @Test
+    void contains_map() {
+        assertThat(containsKey("a", goodMap)).isTrue();
+        assertThat(containsKey("x", goodMap)).isFalse();
+        assertThat(containsKey("x", nullMap)).isFalse();
+        assertThat(containsKey(null, goodMap)).isFalse();
+        assertThat(containsValue(1, goodMap)).isTrue();
+        assertThat(containsValue(9, goodMap)).isFalse();
+        assertThat(containsValue(9, nullMap)).isFalse();
+    }
+
+    @Test
+    void testContainsUniqueElements() {
+        assertThat(containsUniqueElements(Arrays.asList(1, 2, 3))).isTrue();
+        assertThat(containsUniqueElements(Arrays.asList(1, 2, 3, 1))).isFalse();
+        assertThat(containsUniqueElements(Arrays.asList(null, 2, 3, null))).isFalse();
+        assertThat(containsUniqueElements(nullList)).isFalse();
+    }
+
+    @Test
+    void testContainsNull_collection() {
+        assertThat(containsNull(Arrays.asList(1, 2, 3))).isFalse();
+        assertThat(containsNull(Arrays.asList(1, 2, 3, null))).isTrue();
+        assertThat(containsNull(nullList)).isFalse();
+    }
+
+    @Test
+    void containsNull_iterable() {
+        assertThat(containsNull((Iterable<?>) Arrays.asList(1, 2, 3))).isFalse();
+        assertThat(containsNull((Iterable<?>) Arrays.asList(1, 2, 3, null))).isTrue();
+        assertThat(containsNull((Iterable<?>) nullList)).isFalse();
+    }
+
+    @Test
+    void containsNull_array() {
+        assertThat(containsNull(new Integer[] {1, 2, 3})).isFalse();
+        assertThat(containsNull(new Integer[] {1, 2, 3, null})).isTrue();
+        assertThat(containsNull(nullArray)).isFalse();
+    }
+
+    @Test
+    void containsNull_map() {
+        assertThat(containsNull(nullInsideMapKey)).isTrue();
+        assertThat(containsNull(goodMap)).isFalse();
+        assertThat(containsNull(nullInsideMapValue)).isTrue();
+        assertThat(containsNull(nullMap)).isFalse();
+    }
+
+    @Test
+    void notContainsNull_collection() {
+        assertThat(notContainsNull(Arrays.asList(1, 2, 3))).isTrue();
+        assertThat(notContainsNull(Arrays.asList(1, 2, 3, null))).isFalse();
+        assertThat(notContainsNull(nullList)).isFalse();
+    }
+
+    @Test
+    void notContainsNull_iterable() {
+        assertThat(notContainsNull((Iterable<?>) Arrays.asList(1, 2, 3))).isTrue();
+        assertThat(notContainsNull((Iterable<?>) Arrays.asList(1, 2, 3, null))).isFalse();
+        assertThat(notContainsNull((Iterable<?>) nullList)).isFalse();
+    }
+
+    @Test
+    void notContainsNull_array() {
+        assertThat(notContainsNull(new Integer[] {1, 2, 3})).isTrue();
+        assertThat(notContainsNull(new Integer[] {1, 2, 3, null})).isFalse();
+        assertThat(notContainsNull(nullArray)).isFalse();
+    }
+
+    @Test
+    void notContainsNull_map() {
+        assertThat(notContainsNull(nullInsideMapKey)).isFalse();
+        assertThat(notContainsNull(goodMap)).isTrue();
+        assertThat(notContainsNull(nullInsideMapValue)).isFalse();
+        assertThat(notContainsNull(nullMap)).isFalse();
+    }
+
+    @Test
+    void testIsEmail() {
+        assertThat(isEmail("x")).isFalse();
+        assertThat(isEmail("x@")).isFalse();
+        assertThat(isEmail("x@y")).isFalse();
+        assertThat(isEmail("hello@@world.com")).isFalse();
+        assertThat(isEmail("hello@world..com")).isFalse();
+        assertThat(isEmail("hello@world.com")).isTrue();
+        assertThat(isEmail("hello@world.co.uk")).isTrue();
+    }
+
+    @Test
+    void testIsUrl() {
+        assertThat(isUrl("www.google.com")).isFalse();
+        assertThat(isUrl("http://")).isFalse();
+        assertThat(isUrl("ttp://www.google.com")).isFalse();
+        assertThat(isUrl("http://www.google.com")).isTrue();
+        assertThat(isUrl("https://www.google.com")).isTrue();
+    }
+
+    @Test
+    void testIsIpAddress() {
+        assertThat(isIpAddress("0.0.0.0")).isTrue();
+        assertThat(isIpAddress("255.255.255.255")).isTrue();
+        assertThat(isIpAddress("0.0.0.")).isFalse();
+        assertThat(isIpAddress("255.255.255.")).isFalse();
+    }
+
+    @Test
+    void testIsIpv6Address() {
+        assertThat(isIPv6Address("2001:0db8:85a3:0000:0000:8a2e:0370:7334")).isTrue();
+        assertThat(isIPv6Address("2001:db8:85a3:0:0:8a2e:370:7334")).isTrue();
+        assertThat(isIPv6Address("2001:db8:85a3::8a2e:370:7334")).isTrue();
+        assertThat(isIPv6Address("2001:db8:85a3::8a2e:370.7334")).isFalse();
+        assertThat(isIPv6Address("2001:db8:85a3::8a2e:370:")).isFalse();
+    }
+
+    @Test
+    void testIsJson() {
+        assertThat(isJson("")).isFalse();
+        assertThat(isJson(" ")).isFalse();
+        assertThat(isJson("x")).isFalse();
+        assertThat(isJson("[]")).isTrue();
+        assertThat(isJson("{}")).isTrue();
+        assertThat(isJson("[1,2,3]")).isTrue();
+        assertThat(isJson("{\"a\":1,\"b\":2}")).isTrue();
+    }
+
+    @Test
+    void testIsXml() {
+        assertThat(isXml("")).isFalse();
+        assertThat(isXml(" ")).isFalse();
+        assertThat(isXml("x")).isFalse();
+        assertThat(isXml("<a></a>")).isTrue();
+        assertThat(isXml("<a><b></b></a>")).isTrue();
+    }
+
+    @Test
+    void testIsUUID() {
+        assertThat(isUUID("")).isFalse();
+        assertThat(isUUID(" ")).isFalse();
+        assertThat(isUUID("x")).isFalse();
+        assertThat(isUUID("00000000-0000-0000-0000-000000000000")).isTrue();
+        assertThat(isUUID("00000000-0000-0000-0000-00000000000")).isFalse();
+        assertThat(isUUID("00000000-0000-0000-0000-0000000000000")).isFalse();
+        assertThat(isUUID("00000000-0000-0000-0000-00000000000x")).isFalse();
     }
 }

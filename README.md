@@ -262,3 +262,13 @@ private static Map<String, Object> getSettingsMap(Path settingsFile) {
     return YamlMapper.yaml2Map(readFile(requireRegularFile(settingsFile)));
 }
 ```
+
+```java
+if (isEmpty(users)) { ... }
+
+this.users = requireNotEmpty(users, "users");
+
+return ifNotEmpty(users)
+    .map(u -> u.size())
+    .orElse(0);
+```

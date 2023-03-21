@@ -4,11 +4,14 @@ import javax.annotation.Nullable;
 import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.File;
+import java.io.StringReader;
 import java.nio.file.InvalidPathException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Iterator;
 import java.util.Optional;
+
+import org.xml.sax.InputSource;
 
 /**
  * RequireUtils class.
@@ -134,7 +137,11 @@ final class RequireUtils {
 
         try {
 
-            getDocumentBuilderFactory().newDocumentBuilder().parse(xml);
+            getDocumentBuilderFactory()
+                .newDocumentBuilder()
+                .parse(new InputSource(new StringReader(xml)));
+
+            // Didn't throw!
             return true;
 
         } catch (Exception ignore) {
