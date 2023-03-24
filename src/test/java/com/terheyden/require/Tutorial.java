@@ -9,7 +9,6 @@ import java.util.UUID;
 
 import static com.terheyden.require.Check.checkNotBlank;
 import static com.terheyden.require.Check.checkNotNull;
-import static com.terheyden.require.Require.require;
 import static com.terheyden.require.Require.requireFuture;
 import static com.terheyden.require.Require.requireNotBlank;
 import static com.terheyden.require.Require.requireNotEmpty;
@@ -41,7 +40,7 @@ class Tutorial {
         requireNotEmpty(data, "Data");
 
         // You can perform custom checks:
-        require(age >= 18, "You must be 18 or older to use this app."); // Throws IllegalArgumentException
+        Require.requireTrue(age >= 18, "You must be 18 or older to use this app."); // Throws IllegalArgumentException
         requireState(data.containsKey("email"));                        // Throws IllegalStateException
 
         // For providing simple default values, use the 'First' class:

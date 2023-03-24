@@ -23,17 +23,16 @@ import static com.terheyden.require.Checks.containsNull;
 import static com.terheyden.require.Checks.containsRegex;
 import static com.terheyden.require.Checks.containsUniqueElements;
 import static com.terheyden.require.Checks.containsValue;
+import static com.terheyden.require.Checks.exists;
 import static com.terheyden.require.Checks.greaterOrEqualTo;
 import static com.terheyden.require.Checks.greaterThan;
 import static com.terheyden.require.Checks.isBetween;
-import static com.terheyden.require.Checks.isBlank;
 import static com.terheyden.require.Checks.isEmail;
 import static com.terheyden.require.Checks.isFuture;
 import static com.terheyden.require.Checks.isIPv6Address;
 import static com.terheyden.require.Checks.isIpAddress;
 import static com.terheyden.require.Checks.isJson;
-import static com.terheyden.require.Checks.isNowOrFuture;
-import static com.terheyden.require.Checks.isNowOrPast;
+import static com.terheyden.require.Checks.isNullOrBlank;
 import static com.terheyden.require.Checks.isPast;
 import static com.terheyden.require.Checks.isSize;
 import static com.terheyden.require.Checks.isSizeBetween;
@@ -49,8 +48,7 @@ import static com.terheyden.require.Checks.lessThan;
 import static com.terheyden.require.Checks.matchesRegex;
 import static com.terheyden.require.Checks.notBlank;
 import static com.terheyden.require.Checks.notContainsNull;
-import static com.terheyden.require.Checks.pathExists;
-import static com.terheyden.require.Checks.pathNotExists;
+import static com.terheyden.require.Checks.notExists;
 import static java.util.Collections.emptyList;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -164,18 +162,18 @@ class ChecksTest {
 
     @Test
     void testIsDigitsOnly() {
-        assertThat(Checks.digitsOnly("123")).isTrue();
-        assertThat(Checks.digitsOnly("123.")).isFalse();
-        assertThat(Checks.digitsOnly("")).isTrue();
-        assertThat(Checks.digitsOnly(null)).isFalse();
+        assertThat(Checks.numbersOnly("123")).isTrue();
+        assertThat(Checks.numbersOnly("123.")).isFalse();
+        assertThat(Checks.numbersOnly("")).isTrue();
+        assertThat(Checks.numbersOnly(null)).isFalse();
     }
 
     @Test
     void testIsAlphaOnly() {
-        assertThat(Checks.alphaOnly("abc")).isTrue();
-        assertThat(Checks.alphaOnly("abc123")).isFalse();
-        assertThat(Checks.alphaOnly("")).isTrue();
-        assertThat(Checks.alphaOnly(null)).isFalse();
+        assertThat(Checks.alphasOnly("abc")).isTrue();
+        assertThat(Checks.alphasOnly("abc123")).isFalse();
+        assertThat(Checks.alphasOnly("")).isTrue();
+        assertThat(Checks.alphasOnly(null)).isFalse();
     }
 
     @Test
@@ -190,41 +188,41 @@ class ChecksTest {
 
     @Test
     void isEmpty_string() {
-        assertThat(Checks.isEmpty(goodStr)).isFalse();
-        assertThat(Checks.isEmpty(blankStr)).isFalse();
-        assertThat(Checks.isEmpty(emptyStr)).isTrue();
-        assertThat(Checks.isEmpty(nullStr)).isTrue();
+        assertThat(Checks.isNullOrEmpty(goodStr)).isFalse();
+        assertThat(Checks.isNullOrEmpty(blankStr)).isFalse();
+        assertThat(Checks.isNullOrEmpty(emptyStr)).isTrue();
+        assertThat(Checks.isNullOrEmpty(nullStr)).isTrue();
     }
 
     @Test
     void isEmpty_collection() {
-        assertThat(Checks.isEmpty(goodList)).isFalse();
-        assertThat(Checks.isEmpty(emptyList)).isTrue();
-        assertThat(Checks.isEmpty(nullList)).isTrue();
+        assertThat(Checks.isNullOrEmpty(goodList)).isFalse();
+        assertThat(Checks.isNullOrEmpty(emptyList)).isTrue();
+        assertThat(Checks.isNullOrEmpty(nullList)).isTrue();
     }
 
     @Test
     void isEmpty_iterable() {
-        assertThat(Checks.isEmpty(goodIter)).isFalse();
-        assertThat(Checks.isEmpty(emptyIter)).isTrue();
-        assertThat(Checks.isEmpty(nullIter)).isTrue();
+        assertThat(Checks.isNullOrEmpty(goodIter)).isFalse();
+        assertThat(Checks.isNullOrEmpty(emptyIter)).isTrue();
+        assertThat(Checks.isNullOrEmpty(nullIter)).isTrue();
     }
 
     @Test
     void isEmpty_map() {
-        assertThat(Checks.isEmpty(goodMap)).isFalse();
-        assertThat(Checks.isEmpty(emptyMap)).isTrue();
-        assertThat(Checks.isEmpty(nullMap)).isTrue();
+        assertThat(Checks.isNullOrEmpty(goodMap)).isFalse();
+        assertThat(Checks.isNullOrEmpty(emptyMap)).isTrue();
+        assertThat(Checks.isNullOrEmpty(nullMap)).isTrue();
     }
 
     @Test
     void isEmpty_array() {
-        assertThat(Checks.isEmpty(goodArray)).isFalse();
-        assertThat(Checks.isEmpty(emptyArray)).isTrue();
-        assertThat(Checks.isEmpty(nullArray)).isTrue();
-        assertThat(Checks.isEmpty(goodPrimitiveArray)).isFalse();
-        assertThat(Checks.isEmpty(emptyPrimitiveArray)).isTrue();
-        assertThat(Checks.isEmpty(nullPrimitiveArray)).isTrue();
+        assertThat(Checks.isNullOrEmpty(goodArray)).isFalse();
+        assertThat(Checks.isNullOrEmpty(emptyArray)).isTrue();
+        assertThat(Checks.isNullOrEmpty(nullArray)).isTrue();
+        assertThat(Checks.isNullOrEmpty(goodPrimitiveArray)).isFalse();
+        assertThat(Checks.isNullOrEmpty(emptyPrimitiveArray)).isTrue();
+        assertThat(Checks.isNullOrEmpty(nullPrimitiveArray)).isTrue();
     }
 
     @Test
@@ -268,57 +266,45 @@ class ChecksTest {
 
     @Test
     void nullOrEmpty_string() {
-        assertThat(Checks.isEmpty(goodStr)).isFalse();
-        assertThat(Checks.isEmpty(blankStr)).isFalse();
-        assertThat(Checks.isEmpty(emptyStr)).isTrue();
-        assertThat(Checks.isEmpty(nullStr)).isTrue();
+        assertThat(Checks.isNullOrEmpty(goodStr)).isFalse();
+        assertThat(Checks.isNullOrEmpty(blankStr)).isFalse();
+        assertThat(Checks.isNullOrEmpty(emptyStr)).isTrue();
+        assertThat(Checks.isNullOrEmpty(nullStr)).isTrue();
     }
 
     @Test
     void nullOrEmpty_collection() {
-        assertThat(Checks.isEmpty(goodList)).isFalse();
-        assertThat(Checks.isEmpty(emptyList)).isTrue();
-        assertThat(Checks.isEmpty(nullList)).isTrue();
+        assertThat(Checks.isNullOrEmpty(goodList)).isFalse();
+        assertThat(Checks.isNullOrEmpty(emptyList)).isTrue();
+        assertThat(Checks.isNullOrEmpty(nullList)).isTrue();
     }
 
     @Test
     void nullOrEmpty_iterable() {
-        assertThat(Checks.isEmpty(goodIter)).isFalse();
-        assertThat(Checks.isEmpty(emptyIter)).isTrue();
-        assertThat(Checks.isEmpty(nullIter)).isTrue();
+        assertThat(Checks.isNullOrEmpty(goodIter)).isFalse();
+        assertThat(Checks.isNullOrEmpty(emptyIter)).isTrue();
+        assertThat(Checks.isNullOrEmpty(nullIter)).isTrue();
     }
 
     @Test
     void nullOrEmpty_map() {
-        assertThat(Checks.isEmpty(goodMap)).isFalse();
-        assertThat(Checks.isEmpty(emptyMap)).isTrue();
-        assertThat(Checks.isEmpty(nullMap)).isTrue();
+        assertThat(Checks.isNullOrEmpty(goodMap)).isFalse();
+        assertThat(Checks.isNullOrEmpty(emptyMap)).isTrue();
+        assertThat(Checks.isNullOrEmpty(nullMap)).isTrue();
     }
 
     @Test
     void nullOrEmpty_array() {
-        assertThat(Checks.isEmpty(goodArray)).isFalse();
-        assertThat(Checks.isEmpty(emptyArray)).isTrue();
-        assertThat(Checks.isEmpty(nullArray)).isTrue();
-        assertThat(Checks.isEmpty(goodPrimitiveArray)).isFalse();
-        assertThat(Checks.isEmpty(emptyPrimitiveArray)).isTrue();
-        assertThat(Checks.isEmpty(nullPrimitiveArray)).isTrue();
+        assertThat(Checks.isNullOrEmpty(goodArray)).isFalse();
+        assertThat(Checks.isNullOrEmpty(emptyArray)).isTrue();
+        assertThat(Checks.isNullOrEmpty(nullArray)).isTrue();
+        assertThat(Checks.isNullOrEmpty(goodPrimitiveArray)).isFalse();
+        assertThat(Checks.isNullOrEmpty(emptyPrimitiveArray)).isTrue();
+        assertThat(Checks.isNullOrEmpty(nullPrimitiveArray)).isTrue();
     }
 
     @Test
     void testIsGreaterThan() {
-        assertThat(greaterThan(0, 1)).isTrue();
-        assertThat(greaterThan(1, 1)).isFalse();
-        assertThat(greaterThan(2, 1)).isFalse();
-        assertThat(greaterThan(0L, 1L)).isTrue();
-        assertThat(greaterThan(1L, 1L)).isFalse();
-        assertThat(greaterThan(2L, 1L)).isFalse();
-        assertThat(greaterThan(0.0, 1.0)).isTrue();
-        assertThat(greaterThan(1.0, 1.0)).isFalse();
-        assertThat(greaterThan(2.0, 1.0)).isFalse();
-        assertThat(greaterThan(0.0f, 1.0f)).isTrue();
-        assertThat(greaterThan(1.0f, 1.0f)).isFalse();
-        assertThat(greaterThan(2.0f, 1.0f)).isFalse();
         assertThat(greaterThan(oneMin, fiveMins)).isTrue();
         assertThat(greaterThan(fiveMins, fiveMins)).isFalse();
         assertThat(greaterThan(oneMin, nullDuration)).isFalse();
@@ -327,18 +313,6 @@ class ChecksTest {
 
     @Test
     void testIsGreaterOrEqualTo() {
-        assertThat(greaterOrEqualTo(0, 1)).isTrue();
-        assertThat(greaterOrEqualTo(1, 1)).isTrue();
-        assertThat(greaterOrEqualTo(2, 1)).isFalse();
-        assertThat(greaterOrEqualTo(0L, 1L)).isTrue();
-        assertThat(greaterOrEqualTo(1L, 1L)).isTrue();
-        assertThat(greaterOrEqualTo(2L, 1L)).isFalse();
-        assertThat(greaterOrEqualTo(0.0, 1.0)).isTrue();
-        assertThat(greaterOrEqualTo(1.0, 1.0)).isTrue();
-        assertThat(greaterOrEqualTo(2.0, 1.0)).isFalse();
-        assertThat(greaterOrEqualTo(0.0f, 1.0f)).isTrue();
-        assertThat(greaterOrEqualTo(1.0f, 1.0f)).isTrue();
-        assertThat(greaterOrEqualTo(2.0f, 1.0f)).isFalse();
         assertThat(greaterOrEqualTo(oneMin, fiveMins)).isTrue();
         assertThat(greaterOrEqualTo(fiveMins, fiveMins)).isTrue();
         assertThat(greaterOrEqualTo(oneMin, nullDuration)).isFalse();
@@ -347,18 +321,6 @@ class ChecksTest {
 
     @Test
     void testIsLessThan() {
-        assertThat(lessThan(0, 1)).isFalse();
-        assertThat(lessThan(1, 1)).isFalse();
-        assertThat(lessThan(2, 1)).isTrue();
-        assertThat(lessThan(0L, 1L)).isFalse();
-        assertThat(lessThan(1L, 1L)).isFalse();
-        assertThat(lessThan(2L, 1L)).isTrue();
-        assertThat(lessThan(0.0, 1.0)).isFalse();
-        assertThat(lessThan(1.0, 1.0)).isFalse();
-        assertThat(lessThan(2.0, 1.0)).isTrue();
-        assertThat(lessThan(0.0f, 1.0f)).isFalse();
-        assertThat(lessThan(1.0f, 1.0f)).isFalse();
-        assertThat(lessThan(2.0f, 1.0f)).isTrue();
         assertThat(lessThan(oneMin, fiveMins)).isFalse();
         assertThat(lessThan(fiveMins, fiveMins)).isFalse();
         assertThat(lessThan(oneMin, nullDuration)).isFalse();
@@ -367,18 +329,6 @@ class ChecksTest {
 
     @Test
     void testIsLessOrEqualTo() {
-        assertThat(lessOrEqualTo(0, 1)).isFalse();
-        assertThat(lessOrEqualTo(1, 1)).isTrue();
-        assertThat(lessOrEqualTo(2, 1)).isTrue();
-        assertThat(lessOrEqualTo(0L, 1L)).isFalse();
-        assertThat(lessOrEqualTo(1L, 1L)).isTrue();
-        assertThat(lessOrEqualTo(2L, 1L)).isTrue();
-        assertThat(lessOrEqualTo(0.0, 1.0)).isFalse();
-        assertThat(lessOrEqualTo(1.0, 1.0)).isTrue();
-        assertThat(lessOrEqualTo(2.0, 1.0)).isTrue();
-        assertThat(lessOrEqualTo(0.0f, 1.0f)).isFalse();
-        assertThat(lessOrEqualTo(1.0f, 1.0f)).isTrue();
-        assertThat(lessOrEqualTo(2.0f, 1.0f)).isTrue();
         assertThat(lessOrEqualTo(oneMin, fiveMins)).isFalse();
         assertThat(lessOrEqualTo(fiveMins, fiveMins)).isTrue();
         assertThat(lessOrEqualTo(oneMin, nullDuration)).isFalse();
@@ -387,26 +337,6 @@ class ChecksTest {
 
     @Test
     void testIsBetween() {
-        assertThat(isBetween(1, 3, 1)).isTrue();
-        assertThat(isBetween(1, 3, 2)).isTrue();
-        assertThat(isBetween(1, 3, 3)).isTrue();
-        assertThat(isBetween(1, 3, 0)).isFalse();
-        assertThat(isBetween(1, 3, 4)).isFalse();
-        assertThat(isBetween(1L, 3L, 1L)).isTrue();
-        assertThat(isBetween(1L, 3L, 2L)).isTrue();
-        assertThat(isBetween(1L, 3L, 3L)).isTrue();
-        assertThat(isBetween(1L, 3L, 0L)).isFalse();
-        assertThat(isBetween(1L, 3L, 4L)).isFalse();
-        assertThat(isBetween(1.0, 3.0, 1.0)).isTrue();
-        assertThat(isBetween(1.0, 3.0, 2.0)).isTrue();
-        assertThat(isBetween(1.0, 3.0, 3.0)).isTrue();
-        assertThat(isBetween(1.0, 3.0, 0.0)).isFalse();
-        assertThat(isBetween(1.0, 3.0, 4.0)).isFalse();
-        assertThat(isBetween(1.0f, 3.0f, 1.0f)).isTrue();
-        assertThat(isBetween(1.0f, 3.0f, 2.0f)).isTrue();
-        assertThat(isBetween(1.0f, 3.0f, 3.0f)).isTrue();
-        assertThat(isBetween(1.0f, 3.0f, 0.0f)).isFalse();
-        assertThat(isBetween(1.0f, 3.0f, 4.0f)).isFalse();
         assertThat(isBetween(oneMin, fiveMins, oneMin)).isTrue();
         assertThat(isBetween(oneMin, fiveMins, fiveMins)).isTrue();
         assertThat(isBetween(oneMin, fiveMins, nullDuration)).isFalse();
@@ -516,10 +446,10 @@ class ChecksTest {
 
     @Test
     void isBlank_string() {
-        assertThat(isBlank(goodStr)).isFalse();
-        assertThat(isBlank(blankStr)).isTrue();
-        assertThat(isBlank(emptyStr)).isTrue();
-        assertThat(isBlank(nullStr)).isTrue();
+        assertThat(isNullOrBlank(goodStr)).isFalse();
+        assertThat(isNullOrBlank(blankStr)).isTrue();
+        assertThat(isNullOrBlank(emptyStr)).isTrue();
+        assertThat(isNullOrBlank(nullStr)).isTrue();
     }
 
     @Test
@@ -838,50 +768,50 @@ class ChecksTest {
 
     @Test
     void pathExists_path() {
-        assertThat(pathExists(goodPathFile)).isTrue();
-        assertThat(pathExists(goodPathDir)).isTrue();
-        assertThat(pathExists(badPathFile)).isFalse();
-        assertThat(pathExists(nullPath)).isFalse();
+        assertThat(exists(goodPathFile)).isTrue();
+        assertThat(exists(goodPathDir)).isTrue();
+        assertThat(exists(badPathFile)).isFalse();
+        assertThat(exists(nullPath)).isFalse();
     }
 
     @Test
     void pathExists_file() {
-        assertThat(pathExists(goodFileFile)).isTrue();
-        assertThat(pathExists(goodFileDir)).isTrue();
-        assertThat(pathExists(badFileFile)).isFalse();
-        assertThat(pathExists(nullFile)).isFalse();
+        assertThat(exists(goodFileFile)).isTrue();
+        assertThat(exists(goodFileDir)).isTrue();
+        assertThat(exists(badFileFile)).isFalse();
+        assertThat(exists(nullFile)).isFalse();
     }
 
     @Test
     void pathExists_string() {
-        assertThat(pathExists(GOOD_FILE_STR)).isTrue();
-        assertThat(pathExists(GOOD_DIR_STR)).isTrue();
-        assertThat(pathExists(BAD)).isFalse();
-        assertThat(pathExists(nullStr)).isFalse();
+        assertThat(exists(GOOD_FILE_STR)).isTrue();
+        assertThat(exists(GOOD_DIR_STR)).isTrue();
+        assertThat(exists(BAD)).isFalse();
+        assertThat(exists(nullStr)).isFalse();
     }
 
     @Test
     void pathNotExists_path() {
-        assertThat(pathNotExists(goodPathFile)).isFalse();
-        assertThat(pathNotExists(goodPathDir)).isFalse();
-        assertThat(pathNotExists(badPathFile)).isTrue();
-        assertThat(pathNotExists(nullPath)).isFalse(); // null cannot be tested so we return false
+        assertThat(notExists(goodPathFile)).isFalse();
+        assertThat(notExists(goodPathDir)).isFalse();
+        assertThat(notExists(badPathFile)).isTrue();
+        assertThat(notExists(nullPath)).isTrue();
     }
 
     @Test
     void pathNotExists_file() {
-        assertThat(pathNotExists(goodFileFile)).isFalse();
-        assertThat(pathNotExists(goodFileDir)).isFalse();
-        assertThat(pathNotExists(badFileFile)).isTrue();
-        assertThat(pathNotExists(nullFile)).isFalse(); // null cannot be tested so we return false
+        assertThat(notExists(goodFileFile)).isFalse();
+        assertThat(notExists(goodFileDir)).isFalse();
+        assertThat(notExists(badFileFile)).isTrue();
+        assertThat(notExists(nullFile)).isTrue();
     }
 
     @Test
     void pathNotExists_string() {
-        assertThat(pathNotExists(GOOD_FILE_STR)).isFalse();
-        assertThat(pathNotExists(GOOD_DIR_STR)).isFalse();
-        assertThat(pathNotExists(BAD)).isTrue();
-        assertThat(pathNotExists(nullStr)).isFalse(); // null cannot be tested so we return false
+        assertThat(notExists(GOOD_FILE_STR)).isFalse();
+        assertThat(notExists(GOOD_DIR_STR)).isFalse();
+        assertThat(notExists(BAD)).isTrue();
+        assertThat(notExists(nullStr)).isTrue();
     }
 
     @Test
@@ -937,9 +867,6 @@ class ChecksTest {
         assertThat(isFuture(zdtFuture)).isTrue();
         assertThat(isFuture(zdtPast)).isFalse();
         assertThat(isFuture(zdtNull)).isFalse();
-        assertThat(isNowOrFuture(zdtFuture)).isTrue();
-        assertThat(isNowOrFuture(zdtPast)).isFalse();
-        assertThat(isNowOrFuture(zdtNull)).isFalse();
     }
 
     @Test
@@ -947,9 +874,6 @@ class ChecksTest {
         assertThat(isFuture(odtFuture)).isTrue();
         assertThat(isFuture(odtPast)).isFalse();
         assertThat(isFuture(odtNull)).isFalse();
-        assertThat(isNowOrFuture(odtFuture)).isTrue();
-        assertThat(isNowOrFuture(odtPast)).isFalse();
-        assertThat(isNowOrFuture(odtNull)).isFalse();
     }
 
     @Test
@@ -957,9 +881,6 @@ class ChecksTest {
         assertThat(isFuture(ldtFuture)).isTrue();
         assertThat(isFuture(ldtPast)).isFalse();
         assertThat(isFuture(ldtNull)).isFalse();
-        assertThat(isNowOrFuture(ldtFuture)).isTrue();
-        assertThat(isNowOrFuture(ldtPast)).isFalse();
-        assertThat(isNowOrFuture(ldtNull)).isFalse();
     }
 
     @Test
@@ -967,9 +888,6 @@ class ChecksTest {
         assertThat(isFuture(ldFuture)).isTrue();
         assertThat(isFuture(ldPast)).isFalse();
         assertThat(isFuture(ldNull)).isFalse();
-        assertThat(isNowOrFuture(ldFuture)).isTrue();
-        assertThat(isNowOrFuture(ldPast)).isFalse();
-        assertThat(isNowOrFuture(ldNull)).isFalse();
     }
 
     @Test
@@ -977,9 +895,6 @@ class ChecksTest {
         assertThat(isFuture(ltFuture)).isTrue();
         assertThat(isFuture(ltPast)).isFalse();
         assertThat(isFuture(ltNull)).isFalse();
-        assertThat(isNowOrFuture(ltFuture)).isTrue();
-        assertThat(isNowOrFuture(ltPast)).isFalse();
-        assertThat(isNowOrFuture(ltNull)).isFalse();
     }
 
     @Test
@@ -987,9 +902,6 @@ class ChecksTest {
         assertThat(isPast(zdtFuture)).isFalse();
         assertThat(isPast(zdtPast)).isTrue();
         assertThat(isPast(zdtNull)).isFalse();
-        assertThat(isNowOrPast(zdtFuture)).isFalse();
-        assertThat(isNowOrPast(zdtPast)).isTrue();
-        assertThat(isNowOrPast(zdtNull)).isFalse();
     }
 
     @Test
@@ -997,9 +909,6 @@ class ChecksTest {
         assertThat(isPast(odtFuture)).isFalse();
         assertThat(isPast(odtPast)).isTrue();
         assertThat(isPast(odtNull)).isFalse();
-        assertThat(isNowOrPast(odtFuture)).isFalse();
-        assertThat(isNowOrPast(odtPast)).isTrue();
-        assertThat(isNowOrPast(odtNull)).isFalse();
     }
 
     @Test
@@ -1007,9 +916,6 @@ class ChecksTest {
         assertThat(isPast(ldtFuture)).isFalse();
         assertThat(isPast(ldtPast)).isTrue();
         assertThat(isPast(ldtNull)).isFalse();
-        assertThat(isNowOrPast(ldtFuture)).isFalse();
-        assertThat(isNowOrPast(ldtPast)).isTrue();
-        assertThat(isNowOrPast(ldtNull)).isFalse();
     }
 
     @Test
@@ -1017,9 +923,6 @@ class ChecksTest {
         assertThat(isPast(ldFuture)).isFalse();
         assertThat(isPast(ldPast)).isTrue();
         assertThat(isPast(ldNull)).isFalse();
-        assertThat(isNowOrPast(ldFuture)).isFalse();
-        assertThat(isNowOrPast(ldPast)).isTrue();
-        assertThat(isNowOrPast(ldNull)).isFalse();
     }
 
     @Test
@@ -1027,9 +930,6 @@ class ChecksTest {
         assertThat(isPast(ltFuture)).isFalse();
         assertThat(isPast(ltPast)).isTrue();
         assertThat(isPast(ltNull)).isFalse();
-        assertThat(isNowOrPast(ltFuture)).isFalse();
-        assertThat(isNowOrPast(ltPast)).isTrue();
-        assertThat(isNowOrPast(ltNull)).isFalse();
     }
 
     @Test
@@ -1070,6 +970,13 @@ class ChecksTest {
         assertThat(contains("x", goodStr)).isFalse();
         assertThat(contains("", emptyStr)).isTrue();
         assertThat(contains("", nullStr)).isFalse();
+    }
+
+    @Test
+    void testContainsAnyMatch() {
+        assertThat(Checks.containsElement(elem -> elem.equals("a"), goodList)).isTrue();
+        assertThat(Checks.containsElement(elem -> elem.equals("BAD"), goodList)).isFalse();
+        assertThat(Checks.containsElement(elem -> elem.equals("a"), nullList)).isFalse();
     }
 
     @Test
