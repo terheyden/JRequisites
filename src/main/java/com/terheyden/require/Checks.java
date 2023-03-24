@@ -14,9 +14,7 @@ import java.time.ZonedDateTime;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Map;
-import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.regex.Pattern;
 import java.util.stream.IntStream;
@@ -110,73 +108,33 @@ public final class Checks {
      * True if the given string is null or empty (has length of 0). Examples:
      * <pre>
      * {@code
-     *     isNullOrEmpty("");    // true
-     *     isNullOrEmpty("  ");  // false
-     *     isNullOrEmpty(null);  // true
+     *     isEmpty("");    // true
+     *     isEmpty("  ");  // false
+     *     isEmpty(null);  // true
      * }
      * </pre>
      */
     @Contract("null -> true")
-    public static boolean isNullOrEmpty(@Nullable CharSequence str) {
+    public static boolean isEmpty(@Nullable CharSequence str) {
         return isNull(str) || str.length() == 0;
     }
 
-    public static boolean isNullOrEmpty(@Nullable Collection<?> collection) {
+    public static boolean isEmpty(@Nullable Collection<?> collection) {
         return isNull(collection) || collection.isEmpty();
     }
 
     @Contract("null -> true")
-    public static boolean isNullOrEmpty(@Nullable Iterable<?> iterable) {
+    public static boolean isEmpty(@Nullable Iterable<?> iterable) {
         return isNull(iterable) || !iterable.iterator().hasNext();
     }
 
     @Contract("null -> true")
-    public static boolean isNullOrEmpty(@Nullable Map<?, ?> map) {
+    public static boolean isEmpty(@Nullable Map<?, ?> map) {
         return isNull(map) || map.isEmpty();
     }
 
     @Contract("null -> true")
-    public static boolean isNullOrEmpty(@Nullable Object[] array) {
-        return isNull(array) || array.length == 0;
-    }
-
-    @Contract("null -> true")
-    public static boolean isNullOrEmpty(@Nullable int[] array) {
-        return isNull(array) || array.length == 0;
-    }
-
-    @Contract("null -> true")
-    public static boolean isNullOrEmpty(@Nullable byte[] array) {
-        return isNull(array) || array.length == 0;
-    }
-
-    @Contract("null -> true")
-    public static boolean isNullOrEmpty(@Nullable short[] array) {
-        return isNull(array) || array.length == 0;
-    }
-
-    @Contract("null -> true")
-    public static boolean isNullOrEmpty(@Nullable long[] array) {
-        return isNull(array) || array.length == 0;
-    }
-
-    @Contract("null -> true")
-    public static boolean isNullOrEmpty(@Nullable float[] array) {
-        return isNull(array) || array.length == 0;
-    }
-
-    @Contract("null -> true")
-    public static boolean isNullOrEmpty(@Nullable double[] array) {
-        return isNull(array) || array.length == 0;
-    }
-
-    @Contract("null -> true")
-    public static boolean isNullOrEmpty(@Nullable boolean[] array) {
-        return isNull(array) || array.length == 0;
-    }
-
-    @Contract("null -> true")
-    public static boolean isNullOrEmpty(@Nullable char[] array) {
+    public static boolean isEmpty(@Nullable Object[] array) {
         return isNull(array) || array.length == 0;
     }
 
@@ -223,52 +181,20 @@ public final class Checks {
         return notNull(array) && array.length > 0;
     }
 
-    public static boolean notEmpty(@Nullable int[] array) {
-        return notNull(array) && array.length > 0;
-    }
-
-    public static boolean notEmpty(@Nullable byte[] array) {
-        return notNull(array) && array.length > 0;
-    }
-
-    public static boolean notEmpty(@Nullable short[] array) {
-        return notNull(array) && array.length > 0;
-    }
-
-    public static boolean notEmpty(@Nullable long[] array) {
-        return notNull(array) && array.length > 0;
-    }
-
-    public static boolean notEmpty(@Nullable float[] array) {
-        return notNull(array) && array.length > 0;
-    }
-
-    public static boolean notEmpty(@Nullable double[] array) {
-        return notNull(array) && array.length > 0;
-    }
-
-    public static boolean notEmpty(@Nullable boolean[] array) {
-        return notNull(array) && array.length > 0;
-    }
-
-    public static boolean notEmpty(@Nullable char[] array) {
-        return notNull(array) && array.length > 0;
-    }
-
     /**
      * True if the string is null or blank (empty or containing only whitespace). Examples:
      * <pre>
      * {@code
-     *     isNullOrBlank(null); // true
-     *     isNullOrBlank("");   // true
-     *     isNullOrBlank("  "); // true
-     *     isNullOrBlank("hi"); // false
+     *     isBlank(null); // true
+     *     isBlank("");   // true
+     *     isBlank("  "); // true
+     *     isBlank("hi"); // false
      * }
      * </pre>
      */
     @Contract("null -> true")
-    public static boolean isNullOrBlank(@Nullable CharSequence str) {
-        return isNullOrEmpty(str) || str.toString().trim().length() == 0;
+    public static boolean isBlank(@Nullable CharSequence str) {
+        return isEmpty(str) || str.toString().trim().length() == 0;
     }
 
     /**
@@ -283,7 +209,7 @@ public final class Checks {
      * </pre>
      */
     public static boolean notBlank(@Nullable CharSequence str) {
-        return !isNullOrBlank(str);
+        return !isBlank(str);
     }
 
     public static boolean isLength(int length, @Nullable CharSequence str) {
@@ -294,36 +220,12 @@ public final class Checks {
         return notNull(array) && array.length == length;
     }
 
-    public static boolean isLength(int length, @Nullable int[] array) {
-        return notNull(array) && array.length == length;
+    public static boolean notLength(int length, @Nullable CharSequence str) {
+        return notNull(str) && str.length() != length;
     }
 
-    public static boolean isLength(int length, @Nullable byte[] array) {
-        return notNull(array) && array.length == length;
-    }
-
-    public static boolean isLength(int length, @Nullable short[] array) {
-        return notNull(array) && array.length == length;
-    }
-
-    public static boolean isLength(int length, @Nullable long[] array) {
-        return notNull(array) && array.length == length;
-    }
-
-    public static boolean isLength(int length, @Nullable float[] array) {
-        return notNull(array) && array.length == length;
-    }
-
-    public static boolean isLength(int length, @Nullable double[] array) {
-        return notNull(array) && array.length == length;
-    }
-
-    public static boolean isLength(int length, @Nullable boolean[] array) {
-        return notNull(array) && array.length == length;
-    }
-
-    public static boolean isLength(int length, @Nullable char[] array) {
-        return notNull(array) && array.length == length;
+    public static boolean notLength(int length, @Nullable Object[] array) {
+        return notNull(array) && array.length != length;
     }
 
     public static boolean isLengthGreaterThan(int lowValue, @Nullable CharSequence str) {
@@ -331,38 +233,6 @@ public final class Checks {
     }
 
     public static boolean isLengthGreaterThan(int lowValue, @Nullable Object[] array) {
-        return notNull(array) && array.length > lowValue;
-    }
-
-    public static boolean isLengthGreaterThan(int lowValue, @Nullable int[] array) {
-        return notNull(array) && array.length > lowValue;
-    }
-
-    public static boolean isLengthGreaterThan(int lowValue, @Nullable byte[] array) {
-        return notNull(array) && array.length > lowValue;
-    }
-
-    public static boolean isLengthGreaterThan(int lowValue, @Nullable short[] array) {
-        return notNull(array) && array.length > lowValue;
-    }
-
-    public static boolean isLengthGreaterThan(int lowValue, @Nullable long[] array) {
-        return notNull(array) && array.length > lowValue;
-    }
-
-    public static boolean isLengthGreaterThan(int lowValue, @Nullable float[] array) {
-        return notNull(array) && array.length > lowValue;
-    }
-
-    public static boolean isLengthGreaterThan(int lowValue, @Nullable double[] array) {
-        return notNull(array) && array.length > lowValue;
-    }
-
-    public static boolean isLengthGreaterThan(int lowValue, @Nullable boolean[] array) {
-        return notNull(array) && array.length > lowValue;
-    }
-
-    public static boolean isLengthGreaterThan(int lowValue, @Nullable char[] array) {
         return notNull(array) && array.length > lowValue;
     }
 
@@ -374,75 +244,11 @@ public final class Checks {
         return notNull(array) && array.length >= minLength;
     }
 
-    public static boolean isLengthGreaterOrEqualTo(int minLength, @Nullable int[] array) {
-        return notNull(array) && array.length >= minLength;
-    }
-
-    public static boolean isLengthGreaterOrEqualTo(int minLength, @Nullable byte[] array) {
-        return notNull(array) && array.length >= minLength;
-    }
-
-    public static boolean isLengthGreaterOrEqualTo(int minLength, @Nullable short[] array) {
-        return notNull(array) && array.length >= minLength;
-    }
-
-    public static boolean isLengthGreaterOrEqualTo(int minLength, @Nullable long[] array) {
-        return notNull(array) && array.length >= minLength;
-    }
-
-    public static boolean isLengthGreaterOrEqualTo(int minLength, @Nullable float[] array) {
-        return notNull(array) && array.length >= minLength;
-    }
-
-    public static boolean isLengthGreaterOrEqualTo(int minLength, @Nullable double[] array) {
-        return notNull(array) && array.length >= minLength;
-    }
-
-    public static boolean isLengthGreaterOrEqualTo(int minLength, @Nullable boolean[] array) {
-        return notNull(array) && array.length >= minLength;
-    }
-
-    public static boolean isLengthGreaterOrEqualTo(int minLength, @Nullable char[] array) {
-        return notNull(array) && array.length >= minLength;
-    }
-
     public static boolean isLengthLessThan(int highValue, @Nullable CharSequence str) {
         return notNull(str) && str.length() < highValue;
     }
 
     public static boolean isLengthLessThan(int highValue, @Nullable Object[] array) {
-        return notNull(array) && array.length < highValue;
-    }
-
-    public static boolean isLengthLessThan(int highValue, @Nullable int[] array) {
-        return notNull(array) && array.length < highValue;
-    }
-
-    public static boolean isLengthLessThan(int highValue, @Nullable byte[] array) {
-        return notNull(array) && array.length < highValue;
-    }
-
-    public static boolean isLengthLessThan(int highValue, @Nullable short[] array) {
-        return notNull(array) && array.length < highValue;
-    }
-
-    public static boolean isLengthLessThan(int highValue, @Nullable long[] array) {
-        return notNull(array) && array.length < highValue;
-    }
-
-    public static boolean isLengthLessThan(int highValue, @Nullable float[] array) {
-        return notNull(array) && array.length < highValue;
-    }
-
-    public static boolean isLengthLessThan(int highValue, @Nullable double[] array) {
-        return notNull(array) && array.length < highValue;
-    }
-
-    public static boolean isLengthLessThan(int highValue, @Nullable boolean[] array) {
-        return notNull(array) && array.length < highValue;
-    }
-
-    public static boolean isLengthLessThan(int highValue, @Nullable char[] array) {
         return notNull(array) && array.length < highValue;
     }
 
@@ -452,78 +258,6 @@ public final class Checks {
 
     public static boolean isLengthLessOrEqualTo(int maxLength, @Nullable Object[] array) {
         return notNull(array) && array.length <= maxLength;
-    }
-
-    public static boolean isLengthLessOrEqualTo(int maxLength, @Nullable int[] array) {
-        return notNull(array) && array.length <= maxLength;
-    }
-
-    public static boolean isLengthLessOrEqualTo(int maxLength, @Nullable byte[] array) {
-        return notNull(array) && array.length <= maxLength;
-    }
-
-    public static boolean isLengthLessOrEqualTo(int maxLength, @Nullable short[] array) {
-        return notNull(array) && array.length <= maxLength;
-    }
-
-    public static boolean isLengthLessOrEqualTo(int maxLength, @Nullable long[] array) {
-        return notNull(array) && array.length <= maxLength;
-    }
-
-    public static boolean isLengthLessOrEqualTo(int maxLength, @Nullable float[] array) {
-        return notNull(array) && array.length <= maxLength;
-    }
-
-    public static boolean isLengthLessOrEqualTo(int maxLength, @Nullable double[] array) {
-        return notNull(array) && array.length <= maxLength;
-    }
-
-    public static boolean isLengthLessOrEqualTo(int maxLength, @Nullable boolean[] array) {
-        return notNull(array) && array.length <= maxLength;
-    }
-
-    public static boolean isLengthLessOrEqualTo(int maxLength, @Nullable char[] array) {
-        return notNull(array) && array.length <= maxLength;
-    }
-
-    public static boolean isLengthBetween(int minLengthInclusive, int maxLengthInclusive, @Nullable CharSequence str) {
-        return notNull(str) && str.length() >= minLengthInclusive && str.length() <= maxLengthInclusive;
-    }
-
-    public static boolean isLengthBetween(int minLengthInclusive, int maxLengthInclusive, @Nullable Object[] array) {
-        return notNull(array) && array.length >= minLengthInclusive && array.length <= maxLengthInclusive;
-    }
-
-    public static boolean isLengthBetween(int minLengthInclusive, int maxLengthInclusive, @Nullable int[] array) {
-        return notNull(array) && array.length >= minLengthInclusive && array.length <= maxLengthInclusive;
-    }
-
-    public static boolean isLengthBetween(int minLengthInclusive, int maxLengthInclusive, @Nullable byte[] array) {
-        return notNull(array) && array.length >= minLengthInclusive && array.length <= maxLengthInclusive;
-    }
-
-    public static boolean isLengthBetween(int minLengthInclusive, int maxLengthInclusive, @Nullable short[] array) {
-        return notNull(array) && array.length >= minLengthInclusive && array.length <= maxLengthInclusive;
-    }
-
-    public static boolean isLengthBetween(int minLengthInclusive, int maxLengthInclusive, @Nullable long[] array) {
-        return notNull(array) && array.length >= minLengthInclusive && array.length <= maxLengthInclusive;
-    }
-
-    public static boolean isLengthBetween(int minLengthInclusive, int maxLengthInclusive, @Nullable float[] array) {
-        return notNull(array) && array.length >= minLengthInclusive && array.length <= maxLengthInclusive;
-    }
-
-    public static boolean isLengthBetween(int minLengthInclusive, int maxLengthInclusive, @Nullable double[] array) {
-        return notNull(array) && array.length >= minLengthInclusive && array.length <= maxLengthInclusive;
-    }
-
-    public static boolean isLengthBetween(int minLengthInclusive, int maxLengthInclusive, @Nullable boolean[] array) {
-        return notNull(array) && array.length >= minLengthInclusive && array.length <= maxLengthInclusive;
-    }
-
-    public static boolean isLengthBetween(int minLengthInclusive, int maxLengthInclusive, @Nullable char[] array) {
-        return notNull(array) && array.length >= minLengthInclusive && array.length <= maxLengthInclusive;
     }
 
     public static boolean isSize(int size, @Nullable Collection<?> collection) {
@@ -592,52 +326,17 @@ public final class Checks {
         return notNull(map) && map.size() <= maxSize;
     }
 
-    public static boolean isSizeBetween(int minSizeInclusive, int maxSizeInclusive, @Nullable Collection<?> collection) {
-        return notNull(collection) && collection.size() >= minSizeInclusive && collection.size() <= maxSizeInclusive;
-    }
-
-    public static boolean isSizeBetween(int minSizeInclusive, int maxSizeInclusive, @Nullable Iterable<?> iterable) {
-
-        if (iterable == null) {
-            return false;
-        }
-
-        Optional<? extends Iterator<?>> optIterator = hasAtLeastSize(iterable, minSizeInclusive);
-        if (!optIterator.isPresent()) {
-            // Too short.
-            return false;
-        }
-
-        Iterator<?> iterator = optIterator.get();
-
-        for (int length = minSizeInclusive + 1; length <= maxSizeInclusive; length++) {
-
-            if (!iterator.hasNext()) {
-                // Greater than min but less than max, that's a match.
-                return true;
-            }
-
-            iterator.next();
-        }
-
-        return !iterator.hasNext();
-    }
-
-    public static boolean isSizeBetween(int minSizeInclusive, int maxSizeInclusive, @Nullable Map<?, ?> map) {
-        return notNull(map) && map.size() >= minSizeInclusive && map.size() <= maxSizeInclusive;
-    }
-
     /**
      * True if the duration is greater than the specified low limit. For example:
      * <pre>
      * {@code
-     *    greaterThan(Duration.ofSeconds(10), deliverTime); // "greater than 10 seconds?"
+     *    isGreaterThan(Duration.ofSeconds(10), deliverTime); // "greater than 10 seconds?"
      * }
      * </pre>
      *
      * @return true if the duration is greater than the low limit, false if either duration is null
      */
-    public static boolean greaterThan(
+    public static boolean isGreaterThan(
         @Nullable Duration lowDurationLimit,
         @Nullable Duration durationToCheck) {
 
@@ -647,76 +346,76 @@ public final class Checks {
     }
 
     public static boolean notGreaterThan(@Nullable Duration lowDurationLimit, @Nullable Duration durationToCheck) {
-        return !greaterThan(lowDurationLimit, durationToCheck);
+        return !isGreaterThan(lowDurationLimit, durationToCheck);
     }
 
     /**
      * True if the duration is greater than the specified nanoseconds.
      */
-    public static boolean greaterThanNanos(long lowValueNs, @Nullable Duration durationToCheck) {
+    public static boolean isGreaterThanNanos(long lowValueNs, @Nullable Duration durationToCheck) {
         return notNull(durationToCheck) && durationToCheck.toNanos() > lowValueNs;
     }
 
     public static boolean notGreaterThanNanos(long lowValueNs, @Nullable Duration durationToCheck) {
-        return !greaterThanNanos(lowValueNs, durationToCheck);
+        return !isGreaterThanNanos(lowValueNs, durationToCheck);
     }
 
     /**
      * True if the duration is greater than the specified milliseconds.
      */
-    public static boolean greaterThanMillis(long lowValueMs, @Nullable Duration durationToCheck) {
+    public static boolean isGreaterThanMillis(long lowValueMs, @Nullable Duration durationToCheck) {
         return notNull(durationToCheck) && durationToCheck.toMillis() > lowValueMs;
     }
 
     public static boolean notGreaterThanMillis(long lowValueMs, @Nullable Duration durationToCheck) {
-        return !greaterThanMillis(lowValueMs, durationToCheck);
+        return !isGreaterThanMillis(lowValueMs, durationToCheck);
     }
 
     /**
      * True if the duration is greater than the specified seconds.
      */
-    public static boolean greaterThanSecs(long lowValueSecs, @Nullable Duration durationToCheck) {
+    public static boolean isGreaterThanSecs(long lowValueSecs, @Nullable Duration durationToCheck) {
         return notNull(durationToCheck) && durationToCheck.getSeconds() > lowValueSecs;
     }
 
     public static boolean notGreaterThanSecs(long lowValueSecs, @Nullable Duration durationToCheck) {
-        return !greaterThanSecs(lowValueSecs, durationToCheck);
+        return !isGreaterThanSecs(lowValueSecs, durationToCheck);
     }
 
     /**
      * True if the duration is greater than the specified minutes.
      */
-    public static boolean greaterThanMins(long lowValueMins, @Nullable Duration durationToCheck) {
+    public static boolean isGreaterThanMins(long lowValueMins, @Nullable Duration durationToCheck) {
         return notNull(durationToCheck) && durationToCheck.toMinutes() > lowValueMins;
     }
 
     public static boolean notGreaterThanMins(long lowValueMins, @Nullable Duration durationToCheck) {
-        return !greaterThanMins(lowValueMins, durationToCheck);
+        return !isGreaterThanMins(lowValueMins, durationToCheck);
     }
 
     /**
      * True if the duration is greater than the specified hours.
      */
-    public static boolean greaterThanHours(long lowValueHours, @Nullable Duration durationToCheck) {
+    public static boolean isGreaterThanHours(long lowValueHours, @Nullable Duration durationToCheck) {
         return notNull(durationToCheck) && durationToCheck.toHours() > lowValueHours;
     }
 
     public static boolean notGreaterThanHours(long lowValueHours, @Nullable Duration durationToCheck) {
-        return !greaterThanHours(lowValueHours, durationToCheck);
+        return !isGreaterThanHours(lowValueHours, durationToCheck);
     }
 
     /**
      * True if the duration is greater than the specified days.
      */
-    public static boolean greaterThanDays(long lowValueDays, @Nullable Duration durationToCheck) {
+    public static boolean isGreaterThanDays(long lowValueDays, @Nullable Duration durationToCheck) {
         return notNull(durationToCheck) && durationToCheck.toDays() > lowValueDays;
     }
 
     public static boolean notGreaterThanDays(long lowValueDays, @Nullable Duration durationToCheck) {
-        return !greaterThanDays(lowValueDays, durationToCheck);
+        return !isGreaterThanDays(lowValueDays, durationToCheck);
     }
 
-    public static boolean greaterOrEqualTo(
+    public static boolean isGreaterOrEqualTo(
         @Nullable Duration minDuration,
         @Nullable Duration durationToCheck) {
 
@@ -729,76 +428,76 @@ public final class Checks {
         @Nullable Duration minDuration,
         @Nullable Duration durationToCheck) {
 
-        return !greaterOrEqualTo(minDuration, durationToCheck);
+        return !isGreaterOrEqualTo(minDuration, durationToCheck);
     }
 
     /**
      * True if the duration is greater than the specified nanoseconds.
      */
-    public static boolean greaterOrEqualToNanos(long lowValueNs, @Nullable Duration durationToCheck) {
+    public static boolean isGreaterOrEqualToNanos(long lowValueNs, @Nullable Duration durationToCheck) {
         return notNull(durationToCheck) && durationToCheck.toNanos() >= lowValueNs;
     }
 
     public static boolean notGreaterOrEqualToNanos(long lowValueNs, @Nullable Duration durationToCheck) {
-        return !greaterOrEqualToNanos(lowValueNs, durationToCheck);
+        return !isGreaterOrEqualToNanos(lowValueNs, durationToCheck);
     }
 
     /**
      * True if the duration is greater than the specified milliseconds.
      */
-    public static boolean greaterOrEqualToMillis(long lowValueMs, @Nullable Duration durationToCheck) {
+    public static boolean isGreaterOrEqualToMillis(long lowValueMs, @Nullable Duration durationToCheck) {
         return notNull(durationToCheck) && durationToCheck.toMillis() >= lowValueMs;
     }
 
     public static boolean notGreaterOrEqualToMillis(long lowValueMs, @Nullable Duration durationToCheck) {
-        return !greaterOrEqualToMillis(lowValueMs, durationToCheck);
+        return !isGreaterOrEqualToMillis(lowValueMs, durationToCheck);
     }
 
     /**
      * True if the duration is greater than the specified seconds.
      */
-    public static boolean greaterOrEqualToSecs(long lowValueSecs, @Nullable Duration durationToCheck) {
+    public static boolean isGreaterOrEqualToSecs(long lowValueSecs, @Nullable Duration durationToCheck) {
         return notNull(durationToCheck) && durationToCheck.getSeconds() >= lowValueSecs;
     }
 
     public static boolean notGreaterOrEqualToSecs(long lowValueSecs, @Nullable Duration durationToCheck) {
-        return !greaterOrEqualToSecs(lowValueSecs, durationToCheck);
+        return !isGreaterOrEqualToSecs(lowValueSecs, durationToCheck);
     }
 
     /**
      * True if the duration is greater than the specified minutes.
      */
-    public static boolean greaterOrEqualToMins(long lowValueMins, @Nullable Duration durationToCheck) {
+    public static boolean isGreaterOrEqualToMins(long lowValueMins, @Nullable Duration durationToCheck) {
         return notNull(durationToCheck) && durationToCheck.toMinutes() >= lowValueMins;
     }
 
     public static boolean notGreaterOrEqualToMins(long lowValueMins, @Nullable Duration durationToCheck) {
-        return !greaterOrEqualToMins(lowValueMins, durationToCheck);
+        return !isGreaterOrEqualToMins(lowValueMins, durationToCheck);
     }
 
     /**
      * True if the duration is greater than the specified hours.
      */
-    public static boolean greaterOrEqualToHours(long lowValueHours, @Nullable Duration durationToCheck) {
+    public static boolean isGreaterOrEqualToHours(long lowValueHours, @Nullable Duration durationToCheck) {
         return notNull(durationToCheck) && durationToCheck.toHours() >= lowValueHours;
     }
 
     public static boolean notGreaterOrEqualToHours(long lowValueHours, @Nullable Duration durationToCheck) {
-        return !greaterOrEqualToHours(lowValueHours, durationToCheck);
+        return !isGreaterOrEqualToHours(lowValueHours, durationToCheck);
     }
 
     /**
      * True if the duration is greater than the specified days.
      */
-    public static boolean greaterOrEqualToDays(long lowValueDays, @Nullable Duration durationToCheck) {
+    public static boolean isGreaterOrEqualToDays(long lowValueDays, @Nullable Duration durationToCheck) {
         return notNull(durationToCheck) && durationToCheck.toDays() >= lowValueDays;
     }
 
     public static boolean notGreaterOrEqualToDays(long lowValueDays, @Nullable Duration durationToCheck) {
-        return !greaterOrEqualToDays(lowValueDays, durationToCheck);
+        return !isGreaterOrEqualToDays(lowValueDays, durationToCheck);
     }
 
-    public static boolean lessThan(
+    public static boolean isLessThan(
         @Nullable Duration highDurationLimit,
         @Nullable Duration durationToCheck) {
 
@@ -811,76 +510,76 @@ public final class Checks {
         @Nullable Duration highDurationLimit,
         @Nullable Duration durationToCheck) {
 
-        return !lessThan(highDurationLimit, durationToCheck);
+        return !isLessThan(highDurationLimit, durationToCheck);
     }
 
     /**
      * True if the duration is less than the specified nanoseconds.
      */
-    public static boolean lessThanNanos(long highValueNs, @Nullable Duration durationToCheck) {
+    public static boolean isLessThanNanos(long highValueNs, @Nullable Duration durationToCheck) {
         return notNull(durationToCheck) && durationToCheck.toNanos() < highValueNs;
     }
 
     public static boolean notLessThanNanos(long highValueNs, @Nullable Duration durationToCheck) {
-        return !lessThanNanos(highValueNs, durationToCheck);
+        return !isLessThanNanos(highValueNs, durationToCheck);
     }
 
     /**
      * True if the duration is less than the specified milliseconds.
      */
-    public static boolean lessThanMillis(long highValueMs, @Nullable Duration durationToCheck) {
+    public static boolean isLessThanMillis(long highValueMs, @Nullable Duration durationToCheck) {
         return notNull(durationToCheck) && durationToCheck.toMillis() < highValueMs;
     }
 
     public static boolean notLessThanMillis(long highValueMs, @Nullable Duration durationToCheck) {
-        return !lessThanMillis(highValueMs, durationToCheck);
+        return !isLessThanMillis(highValueMs, durationToCheck);
     }
 
     /**
      * True if the duration is less than the specified seconds.
      */
-    public static boolean lessThanSecs(long highValueSecs, @Nullable Duration durationToCheck) {
+    public static boolean isLessThanSecs(long highValueSecs, @Nullable Duration durationToCheck) {
         return notNull(durationToCheck) && durationToCheck.getSeconds() < highValueSecs;
     }
 
     public static boolean notLessThanSecs(long highValueSecs, @Nullable Duration durationToCheck) {
-        return !lessThanSecs(highValueSecs, durationToCheck);
+        return !isLessThanSecs(highValueSecs, durationToCheck);
     }
 
     /**
      * True if the duration is less than the specified minutes.
      */
-    public static boolean lessThanMins(long highValueMins, @Nullable Duration durationToCheck) {
+    public static boolean isLessThanMins(long highValueMins, @Nullable Duration durationToCheck) {
         return notNull(durationToCheck) && durationToCheck.toMinutes() < highValueMins;
     }
 
     public static boolean notLessThanMins(long highValueMins, @Nullable Duration durationToCheck) {
-        return !lessThanMins(highValueMins, durationToCheck);
+        return !isLessThanMins(highValueMins, durationToCheck);
     }
 
     /**
      * True if the duration is less than the specified hours.
      */
-    public static boolean lessThanHours(long highValueHours, @Nullable Duration durationToCheck) {
+    public static boolean isLessThanHours(long highValueHours, @Nullable Duration durationToCheck) {
         return notNull(durationToCheck) && durationToCheck.toHours() < highValueHours;
     }
 
     public static boolean notLessThanHours(long highValueHours, @Nullable Duration durationToCheck) {
-        return !lessThanHours(highValueHours, durationToCheck);
+        return !isLessThanHours(highValueHours, durationToCheck);
     }
 
     /**
      * True if the duration is less than the specified days.
      */
-    public static boolean lessThanDays(long highValueDays, @Nullable Duration durationToCheck) {
+    public static boolean isLessThanDays(long highValueDays, @Nullable Duration durationToCheck) {
         return notNull(durationToCheck) && durationToCheck.toDays() < highValueDays;
     }
 
     public static boolean notLessThanDays(long highValueDays, @Nullable Duration durationToCheck) {
-        return !lessThanDays(highValueDays, durationToCheck);
+        return !isLessThanDays(highValueDays, durationToCheck);
     }
 
-    public static boolean lessOrEqualTo(
+    public static boolean isLessOrEqualTo(
         @Nullable Duration maxDuration,
         @Nullable Duration durationToCheck) {
 
@@ -893,219 +592,73 @@ public final class Checks {
         @Nullable Duration maxDuration,
         @Nullable Duration durationToCheck) {
 
-        return !lessOrEqualTo(maxDuration, durationToCheck);
+        return !isLessOrEqualTo(maxDuration, durationToCheck);
     }
 
     /**
      * True if the duration is less than the specified nanoseconds.
      */
-    public static boolean lessOrEqualToNanos(long maxNanos, @Nullable Duration durationToCheck) {
+    public static boolean isLessOrEqualToNanos(long maxNanos, @Nullable Duration durationToCheck) {
         return notNull(durationToCheck) && durationToCheck.toNanos() <= maxNanos;
     }
 
     public static boolean notLessOrEqualToNanos(long maxNanos, @Nullable Duration durationToCheck) {
-        return !lessOrEqualToNanos(maxNanos, durationToCheck);
+        return !isLessOrEqualToNanos(maxNanos, durationToCheck);
     }
 
     /**
      * True if the duration is less than the specified milliseconds.
      */
-    public static boolean lessOrEqualToMillis(long maxMillis, @Nullable Duration durationToCheck) {
+    public static boolean isLessOrEqualToMillis(long maxMillis, @Nullable Duration durationToCheck) {
         return notNull(durationToCheck) && durationToCheck.toMillis() <= maxMillis;
     }
 
     public static boolean notLessOrEqualToMillis(long maxMillis, @Nullable Duration durationToCheck) {
-        return !lessOrEqualToMillis(maxMillis, durationToCheck);
+        return !isLessOrEqualToMillis(maxMillis, durationToCheck);
     }
 
     /**
      * True if the duration is less than the specified seconds.
      */
-    public static boolean lessOrEqualToSecs(long maxSecs, @Nullable Duration durationToCheck) {
+    public static boolean isLessOrEqualToSecs(long maxSecs, @Nullable Duration durationToCheck) {
         return notNull(durationToCheck) && durationToCheck.getSeconds() <= maxSecs;
     }
 
     public static boolean notLessOrEqualToSecs(long maxSecs, @Nullable Duration durationToCheck) {
-        return !lessOrEqualToSecs(maxSecs, durationToCheck);
+        return !isLessOrEqualToSecs(maxSecs, durationToCheck);
     }
 
     /**
      * True if the duration is less than the specified minutes.
      */
-    public static boolean lessOrEqualToMins(long maxMins, @Nullable Duration durationToCheck) {
+    public static boolean isLessOrEqualToMins(long maxMins, @Nullable Duration durationToCheck) {
         return notNull(durationToCheck) && durationToCheck.toMinutes() <= maxMins;
     }
 
     public static boolean notLessOrEqualToMins(long maxMins, @Nullable Duration durationToCheck) {
-        return !lessOrEqualToMins(maxMins, durationToCheck);
+        return !isLessOrEqualToMins(maxMins, durationToCheck);
     }
 
     /**
      * True if the duration is less than the specified hours.
      */
-    public static boolean lessOrEqualToHours(long maxHours, @Nullable Duration durationToCheck) {
+    public static boolean isLessOrEqualToHours(long maxHours, @Nullable Duration durationToCheck) {
         return notNull(durationToCheck) && durationToCheck.toHours() <= maxHours;
     }
 
     public static boolean notLessOrEqualToHours(long maxHours, @Nullable Duration durationToCheck) {
-        return !lessOrEqualToHours(maxHours, durationToCheck);
+        return !isLessOrEqualToHours(maxHours, durationToCheck);
     }
 
     /**
      * True if the duration is less than the specified days.
      */
-    public static boolean lessOrEqualToDays(long maxDays, @Nullable Duration durationToCheck) {
+    public static boolean isLessOrEqualToDays(long maxDays, @Nullable Duration durationToCheck) {
         return notNull(durationToCheck) && durationToCheck.toDays() <= maxDays;
     }
 
     public static boolean notLessOrEqualToDays(long maxDays, @Nullable Duration durationToCheck) {
-        return !lessOrEqualToDays(maxDays, durationToCheck);
-    }
-
-    public static boolean isBetween(
-        @Nullable Duration minDurationInclusive,
-        @Nullable Duration maxDurationInclusive,
-        @Nullable Duration durationToCheck) {
-
-        return notNull(minDurationInclusive)
-            && notNull(maxDurationInclusive)
-            && notNull(durationToCheck)
-            && minDurationInclusive.compareTo(durationToCheck) <= 0
-            && maxDurationInclusive.compareTo(durationToCheck) >= 0;
-    }
-
-    public static boolean notBetween(
-        @Nullable Duration minDurationInclusive,
-        @Nullable Duration maxDurationInclusive,
-        @Nullable Duration durationToCheck) {
-
-        return !isBetween(minDurationInclusive, maxDurationInclusive, durationToCheck);
-    }
-
-    /**
-     * True if the duration is between the specified nanoseconds.
-     */
-    public static boolean isBetweenNanos(
-        long minNanosInclusive,
-        long maxNanosInclusive,
-        @Nullable Duration durationToCheck) {
-
-        return notNull(durationToCheck)
-            && durationToCheck.toNanos() >= minNanosInclusive
-            && durationToCheck.toNanos() <= maxNanosInclusive;
-    }
-
-    public static boolean notBetweenNanos(
-        long minNanosInclusive,
-        long maxNanosInclusive,
-        @Nullable Duration durationToCheck) {
-
-        return !isBetweenNanos(minNanosInclusive, maxNanosInclusive, durationToCheck);
-    }
-
-    /**
-     * True if the duration is between the specified milliseconds.
-     */
-    public static boolean isBetweenMillis(
-        long minMillisInclusive,
-        long maxMillisInclusive,
-        @Nullable Duration durationToCheck) {
-
-        return notNull(durationToCheck)
-            && durationToCheck.toMillis() >= minMillisInclusive
-            && durationToCheck.toMillis() <= maxMillisInclusive;
-    }
-
-    public static boolean notBetweenMillis(
-        long minMillisInclusive,
-        long maxMillisInclusive,
-        @Nullable Duration durationToCheck) {
-
-        return !isBetweenMillis(minMillisInclusive, maxMillisInclusive, durationToCheck);
-    }
-
-    /**
-     * True if the duration is between the specified seconds.
-     */
-    public static boolean isBetweenSecs(
-        long minSecsInclusive,
-        long maxSecsInclusive,
-        @Nullable Duration durationToCheck) {
-
-        return notNull(durationToCheck)
-            && durationToCheck.getSeconds() >= minSecsInclusive
-            && durationToCheck.getSeconds() <= maxSecsInclusive;
-    }
-
-    public static boolean notBetweenSecs(
-        long minSecsInclusive,
-        long maxSecsInclusive,
-        @Nullable Duration durationToCheck) {
-
-        return !isBetweenSecs(minSecsInclusive, maxSecsInclusive, durationToCheck);
-    }
-
-    /**
-     * True if the duration is between the specified minutes.
-     */
-    public static boolean isBetweenMins(
-        long minimumMinsInclusive,
-        long maximumMinsInclusive,
-        @Nullable Duration durationToCheck) {
-
-        return notNull(durationToCheck)
-            && durationToCheck.toMinutes() >= minimumMinsInclusive
-            && durationToCheck.toMinutes() <= maximumMinsInclusive;
-    }
-
-    public static boolean notBetweenMins(
-        long minimumMinsInclusive,
-        long maximumMinsInclusive,
-        @Nullable Duration durationToCheck) {
-
-        return !isBetweenMins(minimumMinsInclusive, maximumMinsInclusive, durationToCheck);
-    }
-
-    /**
-     * True if the duration is between the specified hours.
-     */
-    public static boolean isBetweenHours(
-        long minHoursInclusive,
-        long maxHoursInclusive,
-        @Nullable Duration durationToCheck) {
-
-        return notNull(durationToCheck)
-            && durationToCheck.toHours() >= minHoursInclusive
-            && durationToCheck.toHours() <= maxHoursInclusive;
-    }
-
-    public static boolean notBetweenHours(
-        long minHoursInclusive,
-        long maxHoursInclusive,
-        @Nullable Duration durationToCheck) {
-
-        return !isBetweenHours(minHoursInclusive, maxHoursInclusive, durationToCheck);
-    }
-
-    /**
-     * True if the duration is between the specified days.
-     */
-    public static boolean isBetweenDays(
-        long minDaysInclusive,
-        long maxDaysInclusive,
-        @Nullable Duration durationToCheck) {
-
-        return notNull(durationToCheck)
-            && durationToCheck.toDays() >= minDaysInclusive
-            && durationToCheck.toDays() <= maxDaysInclusive;
-    }
-
-    public static boolean notBetweenDays(
-        long minDaysInclusive,
-        long maxDaysInclusive,
-        @Nullable Duration durationToCheck) {
-
-        return !isBetweenDays(minDaysInclusive, maxDaysInclusive, durationToCheck);
+        return !isLessOrEqualToDays(maxDays, durationToCheck);
     }
 
     public static boolean exists(@Nullable Path path) {
@@ -1408,42 +961,11 @@ public final class Checks {
      * True if the collection is not null, and does not contain any null elements.
      */
     public static boolean notContainsNull(@Nullable Collection<?> collectionToCheck) {
-
-        if (isNull(collectionToCheck)) {
-            return false;
-        }
-
-        if (collectionToCheck.isEmpty()) {
-            // Empty collections do not contain nulls.
-            return true;
-        }
-
-        try {
-            // contains(null) will throw if the collection doesn't support nulls.
-            return !collectionToCheck.contains(null);
-        } catch (ClassCastException | NullPointerException ignore) {
-            // The collection does not support nulls.
-            return true;
-        }
+        return !containsNull(collectionToCheck);
     }
 
     public static boolean notContainsNull(@Nullable Iterable<?> iterableToCheck) {
-
-        if (isNull(iterableToCheck)) {
-            return false;
-        }
-
-        if (iterableToCheck instanceof Collection) {
-            return notContainsNull((Collection<?>) iterableToCheck);
-        }
-
-        for (Object element : iterableToCheck) {
-            if (isNull(element)) {
-                return false;
-            }
-        }
-
-        return true;
+        return !containsNull(iterableToCheck);
     }
 
     /**
@@ -1451,13 +973,11 @@ public final class Checks {
      * @throws IllegalStateException if the map does not support null keys or values
      */
     public static boolean notContainsNull(@Nullable Map<?, ?> mapToCheck) {
-        return notNull(mapToCheck) && notContainsNull(mapToCheck.keySet()) && notContainsNull(mapToCheck.values());
+        return isNull(mapToCheck) || notContainsNull(mapToCheck.keySet()) && notContainsNull(mapToCheck.values());
     }
 
     public static boolean notContainsNull(@Nullable Object[] arrayToCheck) {
-        if (isNull(arrayToCheck)) return false;
-        for (Object element : arrayToCheck) if (isNull(element)) return false;
-        return true;
+        return !containsNull(arrayToCheck);
     }
 
     /**
@@ -1544,17 +1064,33 @@ public final class Checks {
         return notNull(ip6Address) && IP6_ADDRESS_PATTERN.matcher(ip6Address).matches();
     }
 
+    public static boolean notIPAddress(@Nullable CharSequence ipAddress) {
+        return !isIpAddress(ipAddress);
+    }
+
+    public static boolean notIPv4Address(@Nullable CharSequence ip4Address) {
+        return !isIPv4Address(ip4Address);
+    }
+
+    public static boolean notIPv6Address(@Nullable CharSequence ip6Address) {
+        return !isIPv6Address(ip6Address);
+    }
+
     /**
      * True if the value is not empty, and looks like JSON.
      * This means starting and ending with curly braces or square brackets.
      */
     public static boolean isJson(@Nullable CharSequence json) {
 
-        if (isNullOrEmpty(json)) {
+        if (isEmpty(json)) {
             return false;
         }
 
         return RequireUtils.isJson(json.toString());
+    }
+
+    public static boolean notJson(@Nullable CharSequence json) {
+        return !isJson(json);
     }
 
     /**
@@ -1563,14 +1099,22 @@ public final class Checks {
      */
     public static boolean isXml(@Nullable CharSequence xml) {
 
-        if (isNullOrEmpty(xml)) {
+        if (isEmpty(xml)) {
             return false;
         }
 
         return RequireUtils.isXml(xml.toString());
     }
 
+    public static boolean notXml(@Nullable CharSequence xml) {
+        return !isXml(xml);
+    }
+
     public static boolean isUUID(@Nullable CharSequence uuid) {
         return notNull(uuid) && UUID_PATTERN.matcher(uuid).matches();
+    }
+
+    public static boolean notUUID(@Nullable CharSequence uuid) {
+        return !isUUID(uuid);
     }
 }

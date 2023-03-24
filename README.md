@@ -109,7 +109,7 @@ when it was not. Nulls are always false.
 
 ### Parameter Order
 Every effort has been made to make method usage as easy to read as possible.
-This is why constant parameters / limits come first. Compare:
+This is why constant values / limits come first. Compare:
 ```java
 // Bad: reading is disjointed: "Is length SSN 9? Oh I see, is the length of the ssn var equal to 9."
 isLength(ssn, 9);
@@ -147,47 +147,51 @@ isEmpty(null); // true
 
 ## Comparison to Other Libraries
 
-| [Jakarta + Hibernate](https://docs.jboss.org/hibernate/stable/validator/reference/en-US/html_single/#section-builtin-constraints) | JRequisites                           |
-|-----------------------------------------------------------------------------------------------------------------------------------|---------------------------------------|
-| `@AssertFalse`                                                                                                                    | `isFalse()`                           |
-| `@AssertTrue`                                                                                                                     | `isTrue()`                            |
-| `@DecimalMax`                                                                                                                     | `isLessThan()`                        |
-| `@DecimalMin`                                                                                                                     | `isGreaterThan()`                     |
-| `@Digits`                                                                                                                         | `isDigits()`                          |
-| `@Email`                                                                                                                          | `isEmail()`                           |
-| `@Future`                                                                                                                         | `isFuture()`                          |
-| `@FutureOrPresent`                                                                                                                | `isNowOrFuture()`                     |
-| `@Max`                                                                                                                            | `isLessOrEqualTo()`                   |
-| `@Min`                                                                                                                            | `isGreaterOrEqualTo()`                |
-| `@NotBlank`                                                                                                                       | `isNotBlank()`                        |
-| `@NotEmpty`                                                                                                                       | `isNotEmpty()`                        |
-| `@NotNull`                                                                                                                        | `isNotNull()`                         |
-| `@Negative`                                                                                                                       | `isLessThan()`                        |
-| `@NegativeOrZero`                                                                                                                 | `isLessOrEqualTo()`                   |
-| `@Null`                                                                                                                           | `isNull()`                            |
-| `@Past`                                                                                                                           | `isPast()`                            |
-| `@PastOrPresent`                                                                                                                  | `isNowOrPast()`                       |
-| `@Pattern`                                                                                                                        | `isMatch()`                           |
-| `@Positive`                                                                                                                       | `isGreaterThan()`                     |
-| `@PositiveOrZero`                                                                                                                 | `isGreaterOrEqualTo()`                |
-| `@Size`                                                                                                                           | `isSize() / isLength()`               |
-| `@CreditCardNumber`                                                                                                               | ---                |
-| `@Currency`                                                                                                                       | ---                        |
-| `@DurationMax`                                                                                                                    | `isDurationLessThan()`                |
-| `@DurationMin`                                                                                                                    | `isDurationGreaterThan()`             |
-| `@EAN`                                                                                                                            | ---                             |
-| `@ISBN`                                                                                                                           | ---                            |
-| `@Length`                                                                                                                         | `isLengthBetween() / isSizeBetween()` |
-| `@CodePointLength`                                                                                                                | ---                                   |
-| `@LuhnCheck`                                                                                                                      | ---                                   |
-| `@Mod10Check`                                                                                                                     | ---                                   |
-| `@Mod11Check`                                                                                                                     | ---                                   |
-| `@Normalized`                                                                                                                     | ---                                   |
-| `@Range`                                                                                                                          | `isLengthBetween(), isSizeBetween()`  |
-| `@ScriptAssert`                                                                                                                   | ---                                   |
-| `@UniqueElements`                                                                                                                 | `isUniqueElements()`                  |
-| `@URL`                                                                                                                            | `isURL()`                             |
-| `@UUID`                                                                                                                           | `isUUID()`                            |
+- [Jakarta Bean Validation](https://docs.jboss.org/hibernate/stable/validator/reference/en-US/html_single/#section-builtin-constraints)
+- [Google Guava Preconditions]()
+- [Apache Commons Validation](https://commons.apache.org/proper/commons-validator/)
+
+| Jakarta + Hibernate | JRequisites                           |
+|---------------------|---------------------------------------|
+| `@AssertFalse`      | `isFalse()`                           |
+| `@AssertTrue`       | `isTrue()`                            |
+| `@DecimalMax`       | `isLessThan()`                        |
+| `@DecimalMin`       | `isGreaterThan()`                     |
+| `@Digits`           | `isDigits()`                          |
+| `@Email`            | `isEmail()`                           |
+| `@Future`           | `isFuture()`                          |
+| `@FutureOrPresent`  | `isNowOrFuture()`                     |
+| `@Max`              | `isLessOrEqualTo()`                   |
+| `@Min`              | `isGreaterOrEqualTo()`                |
+| `@NotBlank`         | `isNotBlank()`                        |
+| `@NotEmpty`         | `isNotEmpty()`                        |
+| `@NotNull`          | `isNotNull()`                         |
+| `@Negative`         | `isLessThan()`                        |
+| `@NegativeOrZero`   | `isLessOrEqualTo()`                   |
+| `@Null`             | `isNull()`                            |
+| `@Past`             | `isPast()`                            |
+| `@PastOrPresent`    | `isNowOrPast()`                       |
+| `@Pattern`          | `isMatch()`                           |
+| `@Positive`         | `isGreaterThan()`                     |
+| `@PositiveOrZero`   | `isGreaterOrEqualTo()`                |
+| `@Size`             | `isSize() / isLength()`               |
+| `@CreditCardNumber` | ---                                   |
+| `@Currency`         | ---                                   |
+| `@DurationMax`      | `isDurationLessThan()`                |
+| `@DurationMin`      | `isDurationGreaterThan()`             |
+| `@EAN`              | ---                                   |
+| `@ISBN`             | ---                                   |
+| `@Length`           | `isLengthBetween() / isSizeBetween()` |
+| `@CodePointLength`  | ---                                   |
+| `@LuhnCheck`        | ---                                   |
+| `@Mod10Check`       | ---                                   |
+| `@Mod11Check`       | ---                                   |
+| `@Normalized`       | ---                                   |
+| `@Range`            | `isLengthBetween(), isSizeBetween()`  |
+| `@ScriptAssert`     | ---                                   |
+| `@UniqueElements`   | `isUniqueElements()`                  |
+| `@URL`              | `isURL()`                             |
+| `@UUID`             | `isUUID()`                            |
 
 
 ## Contents
@@ -272,3 +276,29 @@ return ifNotEmpty(users)
     .map(u -> u.size())
     .orElse(0);
 ```
+
+## Design Decisions
+
+### All Checks
+
+#### Removing the primitive array checks
+- autocomplete for methods shouldn't be overwhelming, it's too confusing
+- I think I need to trim back the APIs in general
+
+### Just for Check
+
+#### Negative usage vs. positive usage
+- the boolean checks should have different behavior depending on if they're being used to qualify or disqualify
+- this seems to only be tricksy for the `not` methods
+
+```java
+// Positive usage — should return true if password is null:
+if (notLengthGreaterThan(8, password)) { return SUCCESS; }
+// Negative usage — should return false if password is null:
+if (notLengthGreaterThan(3, password)) { return FAIL; }
+```
+
+#### Except for `isNull`, `isEmpty`, and `isBlank`, "positive" checks, e.g. `isLength`, require non-null
+- `isLength` = false if null
+- `notLength` = true if null
+- by and large, the `not` version is always `!isVersion`

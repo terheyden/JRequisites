@@ -67,10 +67,6 @@ class RequireTest {
     private final String[] emptyArray = new String[0];
     private final String[] nullArray = null;
     private final String[] nullInsideArray = new String[] { "a", null, "c" };
-    private final int[] goodPrimitiveArray = new int[] { 1, 2, 3 };
-    private final int[] emptyPrimitiveArray = new int[0];
-    private final int[] nullPrimitiveArray = null;
-
     private final Path goodPathDir = Paths.get(GOOD_DIR_STR);
     private final Path goodPathFile = Paths.get(GOOD_FILE_STR);
     private final Path badPathDir = Paths.get(BAD);
@@ -273,9 +269,6 @@ class RequireTest {
         assertThatNoException().isThrownBy(() -> Require.requireLength(goodArray, goodArray.length, BAD));
         assertThatNullPointerException().isThrownBy(() -> Require.requireLength(nullArray, 1, BAD)).withMessage(BAD + " is null");
         assertThatIllegalArgumentException().isThrownBy(() -> Require.requireLength(goodArray, goodArray.length + 1, BAD)).withMessage(BAD + " (3) is not equal to: 4 — contains: [a, b, c]");
-        assertThatNoException().isThrownBy(() -> Require.requireLength(goodPrimitiveArray, goodPrimitiveArray.length, BAD));
-        assertThatNullPointerException().isThrownBy(() -> Require.requireLength(nullPrimitiveArray, 1, BAD)).withMessage(BAD + " is null");
-        assertThatIllegalArgumentException().isThrownBy(() -> Require.requireLength(goodPrimitiveArray, goodPrimitiveArray.length + 1, BAD)).withMessage(BAD + " (3) is not equal to: 4 — contains: [1, 2, 3]");
     }
 
     @Test
@@ -329,12 +322,12 @@ class RequireTest {
 
     @Test
     void requireMin() {
-        assertThatNoException().isThrownBy(() -> Require.requireMin(1, 0));
+        assertThatNoException().isThrownBy(() -> Require.requireMinValue(1, 0));
         assertThatIllegalArgumentException()
-            .isThrownBy(() -> Require.requireMin(0, 1))
+            .isThrownBy(() -> Require.requireMinValue(0, 1))
             .withMessage("Value (0) is less than minimum: 1");
         assertThatIllegalArgumentException()
-            .isThrownBy(() -> Require.requireMin(0, 1, BAD))
+            .isThrownBy(() -> Require.requireMinValue(0, 1, BAD))
             .withMessage(BAD + " (0) is less than minimum: 1");
     }
 
