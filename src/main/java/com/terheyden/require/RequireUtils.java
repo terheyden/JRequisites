@@ -160,6 +160,21 @@ final class RequireUtils {
         } else {
             return false;
         }
+    }
 
+    static int longToInt(long value) {
+        return Math.toIntExact(value);
+    }
+
+    static long intToLong(int value) {
+        return value;
+    }
+
+    static float doubleToFloat(double value) {
+        return (float) value;
+    }
+
+    static double floatToDouble(float value) {
+        return value;
     }
 }

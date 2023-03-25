@@ -5,6 +5,7 @@ import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -292,94 +293,398 @@ public final class Require {
         return requireNotBlank(str, null);
     }
 
-    public static <T extends CharSequence> T requireLength(
-        @Nullable T str,
-        int length,
-        @Nullable String label) {
-
+    public static <T extends CharSequence> T requireLength(int length, @Nullable T str, @Nullable String label) {
         requireNotNull(str, getName(label, "String"));
-        requireContainerLength(str.length(), length, getName(label, "String length"), str);
+        if (str.length() != length) throwIAE(label, "String", " has length " + str.length() + ", but required length is: " + length + " — contains: " + str);
         return str;
     }
 
-    public static <T extends CharSequence> T requireLength(@Nullable T str, int length) {
-        return requireLength(str, length, null);
+    public static <T extends CharSequence> T requireLength(int length, @Nullable T str) {
+        return requireLength(length, str, null);
     }
 
-    public static <T> T[] requireLength(
-        @Nullable T[] arrayToCheck,
-        int requiredLength,
-        @Nullable String label) {
-
+    public static <T> T[] requireLength(int requiredLength, @Nullable T[] arrayToCheck, @Nullable String label) {
         requireNotNull(arrayToCheck, getName(label, "Array"));
-        requireContainerLength(arrayToCheck.length, requiredLength, getName(label, "Array length"), Arrays.toString(arrayToCheck));
+        if (arrayToCheck.length != requiredLength) throwIAE(label, "Array", " has length " + arrayToCheck.length + ", but required length is: " + requiredLength + " — contains: " + Arrays.toString(arrayToCheck));
         return arrayToCheck;
     }
 
-    public static <T> T[] requireLength(@Nullable T[] arrayToCheck, int requiredLength) {
-        return requireLength(arrayToCheck, requiredLength, null);
+    public static <T> T[] requireLength(int requiredLength, @Nullable T[] arrayToCheck) {
+        return requireLength(requiredLength, arrayToCheck, null);
     }
 
-    public static <T extends CharSequence> T requireMinLength(
-        @Nullable T str,
-        int minLength,
-        @Nullable String label) {
-
+    public static <T extends CharSequence> T requireLengthGreaterThan(int lowValue, @Nullable T str, @Nullable String label) {
         requireNotNull(str, getName(label, "String"));
-        requireMinContainers(str.length(), minLength, getName(label, "String length"), str);
+        if (str.length() <= lowValue) throwIAE(label, "String", " has length " + str.length() + ", but minimum is: " + (lowValue + 1) + " — contains: " + str);
         return str;
     }
 
-    public static <T extends CharSequence> T requireMinLength(@Nullable T str, int minLength) {
-        return requireMinLength(str, minLength, null);
+    public static <T extends CharSequence> T requireLengthGreaterThan(int minLength, @Nullable T str) {
+        return requireLengthGreaterThan(minLength, str, null);
     }
 
-    public static <T> T[] requireMinLength(@Nullable T[] array, int minLength, @Nullable String label) {
+    public static <T> T[] requireLengthGreaterThan(int lowValue, @Nullable T[] array, @Nullable String label) {
         requireNotNull(array, getName(label, "Array"));
-        requireMinContainers(array.length, minLength, getName(label, "Array length"), Arrays.toString(array));
+        if (array.length <= lowValue) throwIAE(label, "Array", " has length " + array.length + ", but minimum is: " + (lowValue + 1) + " — contains: " + Arrays.toString(array));
         return array;
     }
 
-    public static <T> T[] requireMinLength(@Nullable T[] array, int minLength) {
-        return requireMinLength(array, minLength, null);
+    public static <T> T[] requireLengthGreaterThan(int minLength, @Nullable T[] array) {
+        return requireLengthGreaterThan(minLength, array, null);
     }
 
-    public static <T extends Collection<?>> T requireMinSize(@Nullable T collection, int minSize, @Nullable String label) {
+    public static <T extends CharSequence> T requireLengthGreaterOrEqualTo(
+        int minLength,
+        @Nullable T str,
+        @Nullable String label) {
+        requireNotNull(str, getName(label, "String"));
+        if (str.length() < minLength) throwIAE(label, "String", " has length " + str.length() + ", but minimum is: " + minLength + " — contains: " + str);
+        return str;
+    }
+
+    public static <T extends CharSequence> T requireLengthGreaterOrEqualTo(int minLength, @Nullable T str) {
+        return requireLengthGreaterOrEqualTo(minLength, str, null);
+    }
+
+    public static <T> T[] requireLengthGreaterOrEqualTo(int minLength, @Nullable T[] array, @Nullable String label) {
+        requireNotNull(array, getName(label, "Array"));
+        if (array.length < minLength) throwIAE(label, "Array", " has length " + array.length + ", but minimum is: " + minLength + " — contains: " + Arrays.toString(array));
+        return array;
+    }
+
+    public static <T> T[] requireLengthGreaterOrEqualTo(int minLength, @Nullable T[] array) {
+        return requireLengthGreaterOrEqualTo(minLength, array, null);
+    }
+
+    public static <T extends CharSequence> T requireLengthLessThan(int highValue, @Nullable T str, @Nullable String label) {
+        requireNotNull(str, getName(label, "String"));
+        if (str.length() >= highValue) throwIAE(label, "String", " has length " + str.length() + ", but maximum is: " + (highValue - 1) + " — contains: " + str);
+        return str;
+    }
+
+    public static <T extends CharSequence> T requireLengthLessThan(int highValue, @Nullable T str) {
+        return requireLengthLessThan(highValue, str, null);
+    }
+
+    public static <T> T[] requireLengthLessThan(int highValue, @Nullable T[] array, @Nullable String label) {
+        requireNotNull(array, getName(label, "Array"));
+        if (array.length >= highValue) throwIAE(label, "Array", " has length " + array.length + ", but maximum is: " + (highValue - 1) + " — contains: " + Arrays.toString(array));
+        return array;
+    }
+
+    public static <T> T[] requireLengthLessThan(int maxLength, @Nullable T[] array) {
+        return requireLengthLessThan(maxLength, array, null);
+    }
+
+    public static <T extends CharSequence> T requireLengthLessOrEqualTo(int maxLength, @Nullable T str, @Nullable String label) {
+        requireNotNull(str, getName(label, "String"));
+        if (str.length() > maxLength) throwIAE(label, "String", " has length " + str.length() + ", but maximum is: " + maxLength + " — contains: " + str);
+        return str;
+    }
+
+    public static <T extends CharSequence> T requireLengthLessOrEqualTo(int maxLength, @Nullable T str) {
+        return requireLengthLessOrEqualTo(maxLength, str, null);
+    }
+
+    public static <T> T[] requireLengthLessOrEqualTo(int maxLength, @Nullable T[] array, @Nullable String label) {
+        requireNotNull(array, getName(label, "Array"));
+        if (array.length > maxLength) throwIAE(label, "Array", " has length " + array.length + ", but maximum is: " + maxLength + " — contains: " + Arrays.toString(array));
+        return array;
+    }
+
+    public static <T> T[] requireLengthLessOrEqualTo(int maxLength, @Nullable T[] array) {
+        return requireLengthLessOrEqualTo(maxLength, array, null);
+    }
+
+    public static <T extends Collection<?>> T requireSizeGreaterThan(int lowValue, @Nullable T collection, @Nullable String label) {
         requireNotNull(collection, getName(label, "Collection"));
-        requireMinContainers(collection.size(), minSize, getName(label, "Collection size"), collection);
+        if (collection.size() <= lowValue) throwIAE(label, "Collection", " has size " + collection.size() + ", but minimum is: " + (lowValue + 1) + " — contains: " + collection);
         return collection;
     }
 
-    public static <T extends Collection<?>> T requireMinSize(@Nullable T collection, int minSize) {
-        return requireMinSize(collection, minSize, null);
+    public static <T extends Collection<?>> T requireSizeGreaterThan(int minSize, @Nullable T collection) {
+        return requireSizeGreaterThan(minSize, collection, null);
     }
 
-    public static <T extends Map<?, ?>> T requireMinSize(@Nullable T map, int minSize, @Nullable String label) {
+    public static <T extends Map<?, ?>> T requireSizeGreaterThan(int lowValue, @Nullable T map, @Nullable String label) {
         requireNotNull(map, getName(label, "Map"));
-        requireMinContainers(map.size(), minSize, getName(label, "Map size"), map);
+        if (map.size() <= lowValue) throwIAE(label, "Map", " has size " + map.size() + ", but minimum is: " + (lowValue + 1) + " — contains: " + map);
         return map;
     }
 
-    public static <T extends Map<?, ?>> T requireMinSize(@Nullable T map, int minSize) {
-        return requireMinSize(map, minSize, null);
+    public static <T extends Map<?, ?>> T requireSizeGreaterThan(int minSize, @Nullable T map) {
+        return requireSizeGreaterThan(minSize, map, null);
     }
 
-    public static int requireMinValue(int value, int minValue, @Nullable String label) {
-        if (value < minValue) throwIAE(label, "Value", " (" + value + ") is less than minimum: " + minValue);
+    public static <T extends Collection<?>> T requireSizeGreaterOrEqualTo(int minSize, @Nullable T collection, @Nullable String label) {
+        requireNotNull(collection, getName(label, "Collection"));
+        if (collection.size() < minSize) throwIAE(label, "Collection", " has size " + collection.size() + ", but minimum is: " + minSize + " — contains: " + collection);
+        return collection;
+    }
+
+    public static <T extends Collection<?>> T requireSizeGreaterOrEqualTo(int minSize, @Nullable T collection) {
+        return requireSizeGreaterOrEqualTo(minSize, collection, null);
+    }
+
+    public static <T extends Map<?, ?>> T requireSizeGreaterOrEqualTo(int minSize, @Nullable T map, @Nullable String label) {
+        requireNotNull(map, getName(label, "Map"));
+        if (map.size() < minSize) throwIAE(label, "Map", " has size " + map.size() + ", but minimum is: " + minSize + " — contains: " + map);
+        return map;
+    }
+
+    public static <T extends Map<?, ?>> T requireSizeGreaterOrEqualTo(int minSize, @Nullable T map) {
+        return requireSizeGreaterOrEqualTo(minSize, map, null);
+    }
+
+    public static <T extends Collection<?>> T requireSizeLessThan(int highValue, @Nullable T collection, @Nullable String label) {
+        requireNotNull(collection, getName(label, "Collection"));
+        if (collection.size() >= highValue) throwIAE(label, "Collection", " has size " + collection.size() + ", but maximum is: " + (highValue - 1) + " — contains: " + collection);
+        return collection;
+    }
+
+    public static <T extends Collection<?>> T requireSizeLessThan(int maxSize, @Nullable T collection) {
+        return requireSizeLessThan(maxSize, collection, null);
+    }
+
+    public static <T extends Map<?, ?>> T requireSizeLessThan(int highValue, @Nullable T map, @Nullable String label) {
+        requireNotNull(map, getName(label, "Map"));
+        if (map.size() >= highValue) throwIAE(label, "Map", " has size " + map.size() + ", but maximum is: " + (highValue - 1) + " — contains: " + map);
+        return map;
+    }
+
+    public static <T extends Map<?, ?>> T requireSizeLessThan(int maxSize, @Nullable T map) {
+        return requireSizeLessThan(maxSize, map, null);
+    }
+
+    public static <T extends Collection<?>> T requireSizeLessOrEqualTo(int maxSize, @Nullable T collection, @Nullable String label) {
+        requireNotNull(collection, getName(label, "Collection"));
+        if (collection.size() > maxSize) throwIAE(label, "Collection", " has size " + collection.size() + ", but maximum is: " + maxSize + " — contains: " + collection);
+        return collection;
+    }
+
+    public static <T extends Collection<?>> T requireSizeLessOrEqualTo(int maxSize, @Nullable T collection) {
+        return requireSizeLessOrEqualTo(maxSize, collection, null);
+    }
+
+    public static <T extends Map<?, ?>> T requireSizeLessOrEqualTo(int maxSize, @Nullable T map, @Nullable String label) {
+        requireNotNull(map, getName(label, "Map"));
+        if (map.size() > maxSize) throwIAE(label, "Map", " has size " + map.size() + ", but maximum is: " + maxSize + " — contains: " + map);
+        return map;
+    }
+
+    public static <T extends Map<?, ?>> T requireSizeLessOrEqualTo(int maxSize, @Nullable T map) {
+        return requireSizeLessOrEqualTo(maxSize, map, null);
+    }
+
+    public static int requireValueGreaterThan(int minValue, int value, @Nullable String label) {
+        if (value < minValue) throwIAE(label, "Value", " is " + value + ", but minimum is: " + (minValue + 1));
         return value;
     }
 
-    public static int requireMinValue(int value, int minValue) {
-        return requireMinValue(value, minValue, null);
+    public static int requireValueGreaterThan(int minValue, int value) {
+        return requireValueGreaterThan(minValue, value, null);
     }
 
-    public static int requireMaxValue(int value, int maxValue, @Nullable String label) {
-        if (value > maxValue) throwIAE(label, "Value", " (" + value + ") is greater than maximum: " + maxValue);
+    public static long requireValueGreaterThan(long minValue, long value, @Nullable String label) {
+        if (value < minValue) throwIAE(label, "Value", " is " + value + ", but minimum is: " + (minValue + 1));
         return value;
     }
 
-    public static int requireMaxValue(int value, int maxValue) {
-        return requireMaxValue(value, maxValue, null);
+    public static long requireValueGreaterThan(long minValue, long value) {
+        return requireValueGreaterThan(minValue, value, null);
+    }
+
+    public static float requireValueGreaterThan(float minValue, float value, @Nullable String label) {
+        if (value < minValue) throwIAE(label, "Value", " is " + value + ", but minimum is: " + (minValue + 1));
+        return value;
+    }
+
+    public static float requireValueGreaterThan(float minValue, float value) {
+        return requireValueGreaterThan(minValue, value, null);
+    }
+
+    public static double requireValueGreaterThan(double minValue, double value, @Nullable String label) {
+        if (value < minValue) throwIAE(label, "Value", " is " + value + ", but minimum is: " + (minValue + 1));
+        return value;
+    }
+
+    public static double requireValueGreaterThan(double minValue, double value) {
+        return requireValueGreaterThan(minValue, value, null);
+    }
+
+    public static int requireValueGreaterOrEqualTo(int minValue, int value, @Nullable String label) {
+        if (value < minValue) throwIAE(label, "Value", " is " + value + ", but minimum is: " + minValue);
+        return value;
+    }
+
+    public static int requireValueGreaterOrEqualTo(int minValue, int value) {
+        return requireValueGreaterOrEqualTo(minValue, value, null);
+    }
+
+    public static long requireValueGreaterOrEqualTo(long minValue, long value, @Nullable String label) {
+        if (value < minValue) throwIAE(label, "Value", " is " + value + ", but minimum is: " + minValue);
+        return value;
+    }
+
+    public static long requireValueGreaterOrEqualTo(long minValue, long value) {
+        return requireValueGreaterOrEqualTo(minValue, value, null);
+    }
+
+    public static float requireValueGreaterOrEqualTo(float minValue, float value, @Nullable String label) {
+        if (value < minValue) throwIAE(label, "Value", " is " + value + ", but minimum is: " + minValue);
+        return value;
+    }
+
+    public static float requireValueGreaterOrEqualTo(float minValue, float value) {
+        return requireValueGreaterOrEqualTo(minValue, value, null);
+    }
+
+    public static double requireValueGreaterOrEqualTo(double minValue, double value, @Nullable String label) {
+        if (value < minValue) throwIAE(label, "Value", " is " + value + ", but minimum is: " + minValue);
+        return value;
+    }
+
+    public static double requireValueGreaterOrEqualTo(double minValue, double value) {
+        return requireValueGreaterOrEqualTo(minValue, value, null);
+    }
+
+    public static int requireValueLessThan(int highValue, int value, @Nullable String label) {
+        if (value >= highValue) throwIAE(label, "Value", " is " + value + ", but maximum is: " + (highValue - 1));
+        return value;
+    }
+
+    public static int requireValueLessThan(int highValue, int value) {
+        return requireValueLessThan(highValue, value, null);
+    }
+
+    public static long requireValueLessThan(long highValue, long value, @Nullable String label) {
+        if (value >= highValue) throwIAE(label, "Value", " is " + value + ", but maximum is: " + (highValue - 1));
+        return value;
+    }
+
+    public static long requireValueLessThan(long highValue, long value) {
+        return requireValueLessThan(highValue, value, null);
+    }
+
+    public static float requireValueLessThan(float highValue, float value, @Nullable String label) {
+        if (value >= highValue) throwIAE(label, "Value", " is " + value + ", but maximum is: " + (highValue - 1));
+        return value;
+    }
+
+    public static float requireValueLessThan(float highValue, float value) {
+        return requireValueLessThan(highValue, value, null);
+    }
+
+    public static double requireValueLessThan(double highValue, double value, @Nullable String label) {
+        if (value >= highValue) throwIAE(label, "Value", " is " + value + ", but maximum is: " + (highValue - 1));
+        return value;
+    }
+
+    public static double requireValueLessThan(double highValue, double value) {
+        return requireValueLessThan(highValue, value, null);
+    }
+
+    public static int requireValueLessOrEqualTo(int highValue, int value, @Nullable String label) {
+        if (value > highValue) throwIAE(label, "Value", " is " + value + ", but maximum is: " + highValue);
+        return value;
+    }
+
+    public static int requireValueLessOrEqualTo(int highValue, int value) {
+        return requireValueLessOrEqualTo(highValue, value, null);
+    }
+
+    public static long requireValueLessOrEqualTo(long highValue, long value, @Nullable String label) {
+        if (value > highValue) throwIAE(label, "Value", " is " + value + ", but maximum is: " + highValue);
+        return value;
+    }
+
+    public static long requireValueLessOrEqualTo(long highValue, long value) {
+        return requireValueLessOrEqualTo(highValue, value, null);
+    }
+
+    public static float requireValueLessOrEqualTo(float highValue, float value, @Nullable String label) {
+        if (value > highValue) throwIAE(label, "Value", " is " + value + ", but maximum is: " + highValue);
+        return value;
+    }
+
+    public static float requireValueLessOrEqualTo(float highValue, float value) {
+        return requireValueLessOrEqualTo(highValue, value, null);
+    }
+
+    public static double requireValueLessOrEqualTo(double highValue, double value, @Nullable String label) {
+        if (value > highValue) throwIAE(label, "Value", " is " + value + ", but maximum is: " + highValue);
+        return value;
+    }
+
+    public static double requireValueLessOrEqualTo(double highValue, double value) {
+        return requireValueLessOrEqualTo(highValue, value, null);
+    }
+
+    public static Duration requireDurationGreaterThan(Duration minDuration, Duration durationToCheck, @Nullable String label) {
+        requireNotNull(minDuration, getName(label, "Minimum Duration"));
+        requireNotNull(durationToCheck, getName(label, "Duration"));
+        if (durationToCheck.compareTo(minDuration) < 0) throwIAE(label, "Duration", " is " + durationToCheck + " but minimum is: " + minDuration);
+        return durationToCheck;
+    }
+
+    public static Duration requireDurationGreaterThan(Duration minDuration, Duration durationToCheck) {
+        return requireDurationGreaterThan(minDuration, durationToCheck, null);
+    }
+
+    public static Duration requireDurationGreaterThanNanos(long lowValueNanos, Duration durationToCheck, @Nullable String label) {
+        requireNotNull(durationToCheck, getName(label, "Duration"));
+        if (durationToCheck.toNanos() < lowValueNanos) throwIAE(label, "Duration", " is " + durationToCheck.toNanos() + " ns but minimum is: " + (lowValueNanos + 1) + " ns");
+        return durationToCheck;
+    }
+
+    public static Duration requireDurationGreaterThanNanos(long lowValueNanos, Duration durationToCheck) {
+        return requireDurationGreaterThanNanos(lowValueNanos, durationToCheck, null);
+    }
+
+    public static Duration requireDurationGreaterThanMillis(long lowValueMillis, Duration durationToCheck, @Nullable String label) {
+        requireNotNull(durationToCheck, getName(label, "Duration"));
+        if (durationToCheck.toMillis() < lowValueMillis) throwIAE(label, "Duration", " is " + durationToCheck.toMillis() + " ms but minimum is: " + (lowValueMillis + 1) + " ms");
+        return durationToCheck;
+    }
+
+    public static Duration requireDurationGreaterThanMillis(long lowValueMillis, Duration durationToCheck) {
+        return requireDurationGreaterThanMillis(lowValueMillis, durationToCheck, null);
+    }
+
+    public static Duration requireDurationGreaterThanSecs(int lowValueSeconds, Duration durationToCheck, @Nullable String label) {
+        requireNotNull(durationToCheck, getName(label, "Duration"));
+        if (durationToCheck.getSeconds() < lowValueSeconds) throwIAE(label, "Duration", " is " + durationToCheck.getSeconds() + " secs but minimum is: " + (lowValueSeconds + 1) + " secs");
+        return durationToCheck;
+    }
+
+    public static Duration requireDurationGreaterThanSecs(int lowValueSeconds, Duration durationToCheck) {
+        return requireDurationGreaterThanSecs(lowValueSeconds, durationToCheck, null);
+    }
+
+    public static Duration requireDurationGreaterThanMins(int lowValueMinutes, Duration durationToCheck, @Nullable String label) {
+        requireNotNull(durationToCheck, getName(label, "Duration"));
+        if (durationToCheck.toMinutes() < lowValueMinutes) throwIAE(label, "Duration", " is " + durationToCheck.toMinutes() + " mins but minimum is: " + (lowValueMinutes + 1) + " mins");
+        return durationToCheck;
+    }
+
+    public static Duration requireDurationGreaterThanMins(int lowValueMinutes, Duration durationToCheck) {
+        return requireDurationGreaterThanMins(lowValueMinutes, durationToCheck, null);
+    }
+
+    public static Duration requireDurationGreaterThanHours(int lowValueHours, Duration durationToCheck, @Nullable String label) {
+        requireNotNull(durationToCheck, getName(label, "Duration"));
+        if (durationToCheck.toHours() < lowValueHours) throwIAE(label, "Duration", " is " + durationToCheck.toHours() + " hours but minimum is: " + (lowValueHours + 1) + " hours");
+        return durationToCheck;
+    }
+
+    public static Duration requireDurationGreaterThanHours(int lowValueHours, Duration durationToCheck) {
+        return requireDurationGreaterThanHours(lowValueHours, durationToCheck, null);
+    }
+
+    public static Duration requireDurationGreaterThanDays(int lowValueDays, Duration durationToCheck, @Nullable String label) {
+        requireNotNull(durationToCheck, getName(label, "Duration"));
+        if (durationToCheck.toDays() < lowValueDays) throwIAE(label, "Duration", " is " + durationToCheck.toDays() + " days but minimum is: " + (lowValueDays + 1) + " days");
+        return durationToCheck;
     }
 
     @Contract(value = "null, _ -> fail; !null, _ -> param1", pure = true)
@@ -606,37 +911,6 @@ public final class Require {
 
     public static LocalTime requirePast(@Nullable LocalTime time) {
         return requirePast(time, null);
-    }
-
-    private static int requireMinContainers(int value, int minValue, @Nullable String label, Object container) {
-
-        if (value < minValue) {
-            throwIAE(label, "Value",
-                " (" + value + ") is less than minimum: " + minValue + " — contains: " + container);
-        }
-
-        return value;
-    }
-
-
-    private static int requireMaxContainers(int value, int maxValue, @Nullable String label, Object container) {
-
-        if (value > maxValue) {
-            throwIAE(label, "Value",
-                " (" + value + ") is greater than maximum: " + maxValue + " — contains: " + container);
-        }
-
-        return value;
-    }
-
-    private static int requireContainerLength(int lengthToCheck, int requiredLength, String label, Object container) {
-
-        if (lengthToCheck != requiredLength) {
-            throwIAE(label, "Value",
-                " (" + lengthToCheck + ") is not equal to: " + requiredLength + " — contains: " + container);
-        }
-
-        return lengthToCheck;
     }
 
     /**

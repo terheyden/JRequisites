@@ -14,8 +14,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
-import java.util.stream.IntStream;
 
 import org.junit.jupiter.api.Test;
 
@@ -248,98 +246,84 @@ class RequireTest {
     }
 
     @Test
-    void testRequireLength_string() {
-        assertThatNoException().isThrownBy(() -> Require.requireMinLength(goodStr, goodStr.length()));
-        assertThatNullPointerException()
-            .isThrownBy(() -> Require.requireMinLength(nullStr, 1))
-            .withMessage("String is null");
-        assertThatNullPointerException()
-            .isThrownBy(() -> Require.requireMinLength(nullStr, 1, BAD))
-            .withMessage(BAD + " is null");
-        assertThatIllegalArgumentException()
-            .isThrownBy(() -> Require.requireMinLength(goodStr, goodStr.length() + 1))
-            .withMessage("String length (4) is less than minimum: 5 — contains: good");
-        assertThatIllegalArgumentException()
-            .isThrownBy(() -> Require.requireMinLength(goodStr, goodStr.length() + 1, BAD))
-            .withMessage(BAD + " (4) is less than minimum: 5 — contains: good");
+    void testRequireLengthGreaterThan_string() {
+        assertThatNoException().isThrownBy(() -> Require.requireLengthGreaterThan(goodStr.length() - 1, goodStr));
+        assertThatNullPointerException().isThrownBy(() -> Require.requireLengthGreaterThan(1, nullStr)).withMessage("String is null");
+        assertThatNullPointerException().isThrownBy(() -> Require.requireLengthGreaterThan(1, nullStr, BAD)).withMessage(BAD + " is null");
+        assertThatIllegalArgumentException().isThrownBy(() -> Require.requireLengthGreaterThan(goodStr.length(), goodStr)).withMessage("String has length 4, but minimum is: 5 — contains: good");
+        assertThatIllegalArgumentException().isThrownBy(() -> Require.requireLengthGreaterThan(goodStr.length(), goodStr, BAD)).withMessage(BAD + " has length 4, but minimum is: 5 — contains: good");
     }
 
     @Test
     void testRequireLength_array() {
-        assertThatNoException().isThrownBy(() -> Require.requireLength(goodArray, goodArray.length, BAD));
-        assertThatNullPointerException().isThrownBy(() -> Require.requireLength(nullArray, 1, BAD)).withMessage(BAD + " is null");
-        assertThatIllegalArgumentException().isThrownBy(() -> Require.requireLength(goodArray, goodArray.length + 1, BAD)).withMessage(BAD + " (3) is not equal to: 4 — contains: [a, b, c]");
+        assertThatNoException().isThrownBy(() -> Require.requireLength(goodArray.length, goodArray, BAD));
+        assertThatNullPointerException().isThrownBy(() -> Require.requireLength(1, nullArray, BAD)).withMessage(BAD + " is null");
+        assertThatIllegalArgumentException().isThrownBy(() -> Require.requireLength(goodArray.length + 1, goodArray, BAD)).withMessage(BAD + " has length 3, but required length is: 4 — contains: [a, b, c]");
     }
 
     @Test
-    void testRequireMinLength_array() {
-        assertThatNoException().isThrownBy(() -> Require.requireMinLength(goodArray, goodArray.length));
+    void testRequireLengthGreaterThan_array() {
+        assertThatNoException().isThrownBy(() -> Require.requireLengthGreaterThan(goodArray.length - 1, goodArray));
         assertThatNullPointerException()
-            .isThrownBy(() -> Require.requireMinLength(nullArray, 1))
+            .isThrownBy(() -> Require.requireLengthGreaterThan(1, nullArray))
             .withMessage("Array is null");
         assertThatNullPointerException()
-            .isThrownBy(() -> Require.requireMinLength(nullArray, 1, BAD))
+            .isThrownBy(() -> Require.requireLengthGreaterThan(1, nullArray, BAD))
             .withMessage(BAD + " is null");
         assertThatIllegalArgumentException()
-            .isThrownBy(() -> Require.requireMinLength(goodArray, goodArray.length + 1))
-            .withMessage("Array length (3) is less than minimum: 4 — contains: [a, b, c]");
+            .isThrownBy(() -> Require.requireLengthGreaterThan(goodArray.length, goodArray))
+            .withMessage("Array has length 3, but minimum is: 4 — contains: [a, b, c]");
         assertThatIllegalArgumentException()
-            .isThrownBy(() -> Require.requireMinLength(goodArray, goodArray.length + 1, BAD))
-            .withMessage(BAD + " (3) is less than minimum: 4 — contains: [a, b, c]");
+            .isThrownBy(() -> Require.requireLengthGreaterThan(goodArray.length, goodArray, BAD))
+            .withMessage(BAD + " has length 3, but minimum is: 4 — contains: [a, b, c]");
     }
 
     @Test
-    void requireSize_collection() {
-        assertThatNoException().isThrownBy(() -> Require.requireMinSize(goodList, goodList.size()));
+    void testRequreLengthGreaterOrEqualTo_string() {
+        assertThatNoException().isThrownBy(() -> Require.requireLengthGreaterOrEqualTo(goodStr.length(), goodStr));
         assertThatNullPointerException()
-            .isThrownBy(() -> Require.requireMinSize(nullList, 1))
-            .withMessage("Collection is null");
+            .isThrownBy(() -> Require.requireLengthGreaterOrEqualTo(1, nullStr))
+            .withMessage("String is null");
         assertThatNullPointerException()
-            .isThrownBy(() -> Require.requireMinSize(nullList, 1, BAD))
+            .isThrownBy(() -> Require.requireLengthGreaterOrEqualTo(1, nullStr, BAD))
             .withMessage(BAD + " is null");
         assertThatIllegalArgumentException()
-            .isThrownBy(() -> Require.requireMinSize(goodList, goodList.size() + 1))
-            .withMessage("Collection size (3) is less than minimum: 4 — contains: [a, b, c]");
+            .isThrownBy(() -> Require.requireLengthGreaterOrEqualTo(goodStr.length() + 1, goodStr))
+            .withMessage("String has length 4, but minimum is: 5 — contains: good");
         assertThatIllegalArgumentException()
-            .isThrownBy(() -> Require.requireMinSize(goodList, goodList.size() + 1, BAD))
-            .withMessage(BAD + " (3) is less than minimum: 4 — contains: [a, b, c]");
+            .isThrownBy(() -> Require.requireLengthGreaterOrEqualTo(goodStr.length() + 1, goodStr, BAD))
+            .withMessage(BAD + " has length 4, but minimum is: 5 — contains: good");
+    }
+
+    @Test
+    void requireSizeGreaterThan_collection() {
+        assertThatNoException().isThrownBy(() -> Require.requireSizeGreaterThan(goodList.size() - 1, goodList));
+        assertThatNullPointerException().isThrownBy(() -> Require.requireSizeGreaterThan(1, nullList)).withMessage("Collection is null");
+        assertThatNullPointerException().isThrownBy(() -> Require.requireSizeGreaterThan(1, nullList, BAD)).withMessage(BAD + " is null");
+        assertThatIllegalArgumentException().isThrownBy(() -> Require.requireSizeGreaterThan(goodList.size(), goodList)).withMessage("Collection has size 3, but minimum is: 4 — contains: [a, b, c]");
+        assertThatIllegalArgumentException().isThrownBy(() -> Require.requireSizeGreaterThan(goodList.size(), goodList, BAD)).withMessage(BAD + " has size 3, but minimum is: 4 — contains: [a, b, c]");
     }
 
     @Test
     void requireSize_map() {
-        assertThatNoException().isThrownBy(() -> Require.requireMinSize(goodMap, goodMap.size()));
-        assertThatNullPointerException().isThrownBy(() -> Require.requireMinSize(nullMap, 1)).withMessage("Map is null");
+        assertThatNoException().isThrownBy(() -> Require.requireSizeGreaterThan(goodMap.size() - 1, goodMap));
+        assertThatNullPointerException().isThrownBy(() -> Require.requireSizeGreaterThan(1, nullMap)).withMessage("Map is null");
         assertThatNullPointerException()
-            .isThrownBy(() -> Require.requireMinSize(nullMap, 1, BAD))
+            .isThrownBy(() -> Require.requireSizeGreaterThan(1, nullMap, BAD))
             .withMessage(BAD + " is null");
         assertThatIllegalArgumentException()
-            .isThrownBy(() -> Require.requireMinSize(goodMap, goodMap.size() + 1))
-            .withMessage("Map size (2) is less than minimum: 3 — contains: {a=1, b=2}");
+            .isThrownBy(() -> Require.requireSizeGreaterThan(goodMap.size(), goodMap))
+            .withMessage("Map has size 2, but minimum is: 3 — contains: {a=1, b=2}");
         assertThatIllegalArgumentException()
-            .isThrownBy(() -> Require.requireMinSize(goodMap, goodMap.size() + 1, BAD))
-            .withMessage(BAD + " (2) is less than minimum: 3 — contains: {a=1, b=2}");
+            .isThrownBy(() -> Require.requireSizeGreaterThan(goodMap.size(), goodMap, BAD))
+            .withMessage(BAD + " has size 2, but minimum is: 3 — contains: {a=1, b=2}");
     }
 
     @Test
-    void requireMin() {
-        assertThatNoException().isThrownBy(() -> Require.requireMinValue(1, 0));
-        assertThatIllegalArgumentException()
-            .isThrownBy(() -> Require.requireMinValue(0, 1))
-            .withMessage("Value (0) is less than minimum: 1");
-        assertThatIllegalArgumentException()
-            .isThrownBy(() -> Require.requireMinValue(0, 1, BAD))
-            .withMessage(BAD + " (0) is less than minimum: 1");
-    }
-
-    @Test
-    void requireMax() {
-        assertThatNoException().isThrownBy(() -> Require.requireMaxValue(0, 1));
-        assertThatIllegalArgumentException()
-            .isThrownBy(() -> Require.requireMaxValue(1, 0))
-            .withMessage("Value (1) is greater than maximum: 0");
-        assertThatIllegalArgumentException()
-            .isThrownBy(() -> Require.requireMaxValue(1, 0, BAD))
-            .withMessage(BAD + " (1) is greater than maximum: 0");
+    void testRequireValueGreaterThan() {
+        assertThatNoException().isThrownBy(() -> Require.requireValueGreaterThan(0, 1));
+        assertThatIllegalArgumentException().isThrownBy(() -> Require.requireValueGreaterThan(1, 0)).withMessage("Value is 0, but minimum is: 2");
+        assertThatIllegalArgumentException().isThrownBy(() -> Require.requireValueGreaterThan(1, 0, BAD)).withMessage(BAD + " is 0, but minimum is: 2");
     }
 
     @Test
@@ -488,16 +472,5 @@ class RequireTest {
         assertThatNullPointerException().isThrownBy(() -> Require.requirePast(ldtNull)).withMessage("Date Time is null");
         assertThatNullPointerException().isThrownBy(() -> Require.requirePast(ldNull)).withMessage("Date is null");
         assertThatNullPointerException().isThrownBy(() -> Require.requirePast(ltNull)).withMessage("Time is null");
-    }
-
-    void betweenThings() {
-
-        // JDK methods that take inclusive, exclusive parameters:
-        goodStr.substring(0, 1);
-        goodStr.subSequence(0, 1);
-        goodList.subList(0, 1);
-        Arrays.copyOfRange(goodArray, 0, 1);
-        IntStream.range(0, 1);
-        new Random().ints(0, 1);
     }
 }

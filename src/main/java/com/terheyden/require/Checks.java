@@ -330,349 +330,208 @@ public final class Checks {
      * True if the duration is greater than the specified low limit. For example:
      * <pre>
      * {@code
-     *    isGreaterThan(Duration.ofSeconds(10), deliverTime); // "greater than 10 seconds?"
+     *    isDurationGreaterThan(Duration.ofSeconds(10), deliverTime); // "greater than 10 seconds?"
      * }
      * </pre>
      *
      * @return true if the duration is greater than the low limit, false if either duration is null
      */
-    public static boolean isGreaterThan(
-        @Nullable Duration lowDurationLimit,
-        @Nullable Duration durationToCheck) {
-
-        return notNull(lowDurationLimit)
-            && notNull(durationToCheck)
-            && lowDurationLimit.compareTo(durationToCheck) < 0;
-    }
-
-    public static boolean notGreaterThan(@Nullable Duration lowDurationLimit, @Nullable Duration durationToCheck) {
-        return !isGreaterThan(lowDurationLimit, durationToCheck);
+    public static boolean isDurationGreaterThan(@Nullable Duration lowDurationLimit, @Nullable Duration durationToCheck) {
+        return notNull(lowDurationLimit) && notNull(durationToCheck) && lowDurationLimit.compareTo(durationToCheck) < 0;
     }
 
     /**
      * True if the duration is greater than the specified nanoseconds.
      */
-    public static boolean isGreaterThanNanos(long lowValueNs, @Nullable Duration durationToCheck) {
+    public static boolean isDurationGreaterThanNanos(long lowValueNs, @Nullable Duration durationToCheck) {
         return notNull(durationToCheck) && durationToCheck.toNanos() > lowValueNs;
     }
 
-    public static boolean notGreaterThanNanos(long lowValueNs, @Nullable Duration durationToCheck) {
-        return !isGreaterThanNanos(lowValueNs, durationToCheck);
-    }
-
     /**
      * True if the duration is greater than the specified milliseconds.
      */
-    public static boolean isGreaterThanMillis(long lowValueMs, @Nullable Duration durationToCheck) {
+    public static boolean isDurationGreaterThanMillis(long lowValueMs, @Nullable Duration durationToCheck) {
         return notNull(durationToCheck) && durationToCheck.toMillis() > lowValueMs;
-    }
-
-    public static boolean notGreaterThanMillis(long lowValueMs, @Nullable Duration durationToCheck) {
-        return !isGreaterThanMillis(lowValueMs, durationToCheck);
     }
 
     /**
      * True if the duration is greater than the specified seconds.
      */
-    public static boolean isGreaterThanSecs(long lowValueSecs, @Nullable Duration durationToCheck) {
+    public static boolean isDurationGreaterThanSecs(long lowValueSecs, @Nullable Duration durationToCheck) {
         return notNull(durationToCheck) && durationToCheck.getSeconds() > lowValueSecs;
-    }
-
-    public static boolean notGreaterThanSecs(long lowValueSecs, @Nullable Duration durationToCheck) {
-        return !isGreaterThanSecs(lowValueSecs, durationToCheck);
     }
 
     /**
      * True if the duration is greater than the specified minutes.
      */
-    public static boolean isGreaterThanMins(long lowValueMins, @Nullable Duration durationToCheck) {
+    public static boolean isDurationGreaterThanMins(long lowValueMins, @Nullable Duration durationToCheck) {
         return notNull(durationToCheck) && durationToCheck.toMinutes() > lowValueMins;
-    }
-
-    public static boolean notGreaterThanMins(long lowValueMins, @Nullable Duration durationToCheck) {
-        return !isGreaterThanMins(lowValueMins, durationToCheck);
     }
 
     /**
      * True if the duration is greater than the specified hours.
      */
-    public static boolean isGreaterThanHours(long lowValueHours, @Nullable Duration durationToCheck) {
+    public static boolean isDurationGreaterThanHours(long lowValueHours, @Nullable Duration durationToCheck) {
         return notNull(durationToCheck) && durationToCheck.toHours() > lowValueHours;
-    }
-
-    public static boolean notGreaterThanHours(long lowValueHours, @Nullable Duration durationToCheck) {
-        return !isGreaterThanHours(lowValueHours, durationToCheck);
     }
 
     /**
      * True if the duration is greater than the specified days.
      */
-    public static boolean isGreaterThanDays(long lowValueDays, @Nullable Duration durationToCheck) {
+    public static boolean isDurationGreaterThanDays(long lowValueDays, @Nullable Duration durationToCheck) {
         return notNull(durationToCheck) && durationToCheck.toDays() > lowValueDays;
     }
 
-    public static boolean notGreaterThanDays(long lowValueDays, @Nullable Duration durationToCheck) {
-        return !isGreaterThanDays(lowValueDays, durationToCheck);
-    }
-
-    public static boolean isGreaterOrEqualTo(
-        @Nullable Duration minDuration,
-        @Nullable Duration durationToCheck) {
-
-        return notNull(minDuration)
-            && notNull(durationToCheck)
-            && minDuration.compareTo(durationToCheck) <= 0;
-    }
-
-    public static boolean notGreaterOrEqualTo(
-        @Nullable Duration minDuration,
-        @Nullable Duration durationToCheck) {
-
-        return !isGreaterOrEqualTo(minDuration, durationToCheck);
+    public static boolean isDurationGreaterOrEqualTo(@Nullable Duration minDuration, @Nullable Duration durationToCheck) {
+        return notNull(minDuration) && notNull(durationToCheck) && minDuration.compareTo(durationToCheck) <= 0;
     }
 
     /**
      * True if the duration is greater than the specified nanoseconds.
      */
-    public static boolean isGreaterOrEqualToNanos(long lowValueNs, @Nullable Duration durationToCheck) {
+    public static boolean isDurationGreaterOrEqualToNanos(long lowValueNs, @Nullable Duration durationToCheck) {
         return notNull(durationToCheck) && durationToCheck.toNanos() >= lowValueNs;
-    }
-
-    public static boolean notGreaterOrEqualToNanos(long lowValueNs, @Nullable Duration durationToCheck) {
-        return !isGreaterOrEqualToNanos(lowValueNs, durationToCheck);
     }
 
     /**
      * True if the duration is greater than the specified milliseconds.
      */
-    public static boolean isGreaterOrEqualToMillis(long lowValueMs, @Nullable Duration durationToCheck) {
+    public static boolean isDurationGreaterOrEqualToMillis(long lowValueMs, @Nullable Duration durationToCheck) {
         return notNull(durationToCheck) && durationToCheck.toMillis() >= lowValueMs;
-    }
-
-    public static boolean notGreaterOrEqualToMillis(long lowValueMs, @Nullable Duration durationToCheck) {
-        return !isGreaterOrEqualToMillis(lowValueMs, durationToCheck);
     }
 
     /**
      * True if the duration is greater than the specified seconds.
      */
-    public static boolean isGreaterOrEqualToSecs(long lowValueSecs, @Nullable Duration durationToCheck) {
+    public static boolean isDurationGreaterOrEqualToSecs(long lowValueSecs, @Nullable Duration durationToCheck) {
         return notNull(durationToCheck) && durationToCheck.getSeconds() >= lowValueSecs;
-    }
-
-    public static boolean notGreaterOrEqualToSecs(long lowValueSecs, @Nullable Duration durationToCheck) {
-        return !isGreaterOrEqualToSecs(lowValueSecs, durationToCheck);
     }
 
     /**
      * True if the duration is greater than the specified minutes.
      */
-    public static boolean isGreaterOrEqualToMins(long lowValueMins, @Nullable Duration durationToCheck) {
+    public static boolean isDurationGreaterOrEqualToMins(long lowValueMins, @Nullable Duration durationToCheck) {
         return notNull(durationToCheck) && durationToCheck.toMinutes() >= lowValueMins;
-    }
-
-    public static boolean notGreaterOrEqualToMins(long lowValueMins, @Nullable Duration durationToCheck) {
-        return !isGreaterOrEqualToMins(lowValueMins, durationToCheck);
     }
 
     /**
      * True if the duration is greater than the specified hours.
      */
-    public static boolean isGreaterOrEqualToHours(long lowValueHours, @Nullable Duration durationToCheck) {
+    public static boolean isDurationGreaterOrEqualToHours(long lowValueHours, @Nullable Duration durationToCheck) {
         return notNull(durationToCheck) && durationToCheck.toHours() >= lowValueHours;
-    }
-
-    public static boolean notGreaterOrEqualToHours(long lowValueHours, @Nullable Duration durationToCheck) {
-        return !isGreaterOrEqualToHours(lowValueHours, durationToCheck);
     }
 
     /**
      * True if the duration is greater than the specified days.
      */
-    public static boolean isGreaterOrEqualToDays(long lowValueDays, @Nullable Duration durationToCheck) {
+    public static boolean isDurationGreaterOrEqualToDays(long lowValueDays, @Nullable Duration durationToCheck) {
         return notNull(durationToCheck) && durationToCheck.toDays() >= lowValueDays;
     }
 
-    public static boolean notGreaterOrEqualToDays(long lowValueDays, @Nullable Duration durationToCheck) {
-        return !isGreaterOrEqualToDays(lowValueDays, durationToCheck);
-    }
-
-    public static boolean isLessThan(
-        @Nullable Duration highDurationLimit,
-        @Nullable Duration durationToCheck) {
-
-        return notNull(highDurationLimit)
-            && notNull(durationToCheck)
-            && highDurationLimit.compareTo(durationToCheck) > 0;
-    }
-
-    public static boolean notLessThan(
-        @Nullable Duration highDurationLimit,
-        @Nullable Duration durationToCheck) {
-
-        return !isLessThan(highDurationLimit, durationToCheck);
+    public static boolean isDurationLessThan(@Nullable Duration highDurationLimit, @Nullable Duration durationToCheck) {
+        return notNull(highDurationLimit) && notNull(durationToCheck) && highDurationLimit.compareTo(durationToCheck) > 0;
     }
 
     /**
      * True if the duration is less than the specified nanoseconds.
      */
-    public static boolean isLessThanNanos(long highValueNs, @Nullable Duration durationToCheck) {
+    public static boolean isDurationLessThanNanos(long highValueNs, @Nullable Duration durationToCheck) {
         return notNull(durationToCheck) && durationToCheck.toNanos() < highValueNs;
     }
 
-    public static boolean notLessThanNanos(long highValueNs, @Nullable Duration durationToCheck) {
-        return !isLessThanNanos(highValueNs, durationToCheck);
-    }
-
     /**
      * True if the duration is less than the specified milliseconds.
      */
-    public static boolean isLessThanMillis(long highValueMs, @Nullable Duration durationToCheck) {
+    public static boolean isDurationLessThanMillis(long highValueMs, @Nullable Duration durationToCheck) {
         return notNull(durationToCheck) && durationToCheck.toMillis() < highValueMs;
-    }
-
-    public static boolean notLessThanMillis(long highValueMs, @Nullable Duration durationToCheck) {
-        return !isLessThanMillis(highValueMs, durationToCheck);
     }
 
     /**
      * True if the duration is less than the specified seconds.
      */
-    public static boolean isLessThanSecs(long highValueSecs, @Nullable Duration durationToCheck) {
+    public static boolean isDurationLessThanSecs(long highValueSecs, @Nullable Duration durationToCheck) {
         return notNull(durationToCheck) && durationToCheck.getSeconds() < highValueSecs;
-    }
-
-    public static boolean notLessThanSecs(long highValueSecs, @Nullable Duration durationToCheck) {
-        return !isLessThanSecs(highValueSecs, durationToCheck);
     }
 
     /**
      * True if the duration is less than the specified minutes.
      */
-    public static boolean isLessThanMins(long highValueMins, @Nullable Duration durationToCheck) {
+    public static boolean isDurationLessThanMins(long highValueMins, @Nullable Duration durationToCheck) {
         return notNull(durationToCheck) && durationToCheck.toMinutes() < highValueMins;
-    }
-
-    public static boolean notLessThanMins(long highValueMins, @Nullable Duration durationToCheck) {
-        return !isLessThanMins(highValueMins, durationToCheck);
     }
 
     /**
      * True if the duration is less than the specified hours.
      */
-    public static boolean isLessThanHours(long highValueHours, @Nullable Duration durationToCheck) {
+    public static boolean isDurationLessThanHours(long highValueHours, @Nullable Duration durationToCheck) {
         return notNull(durationToCheck) && durationToCheck.toHours() < highValueHours;
-    }
-
-    public static boolean notLessThanHours(long highValueHours, @Nullable Duration durationToCheck) {
-        return !isLessThanHours(highValueHours, durationToCheck);
     }
 
     /**
      * True if the duration is less than the specified days.
      */
-    public static boolean isLessThanDays(long highValueDays, @Nullable Duration durationToCheck) {
+    public static boolean isDurationLessThanDays(long highValueDays, @Nullable Duration durationToCheck) {
         return notNull(durationToCheck) && durationToCheck.toDays() < highValueDays;
     }
 
-    public static boolean notLessThanDays(long highValueDays, @Nullable Duration durationToCheck) {
-        return !isLessThanDays(highValueDays, durationToCheck);
-    }
-
-    public static boolean isLessOrEqualTo(
-        @Nullable Duration maxDuration,
-        @Nullable Duration durationToCheck) {
-
-        return notNull(maxDuration)
-            && notNull(durationToCheck)
-            && maxDuration.compareTo(durationToCheck) >= 0;
-    }
-
-    public static boolean notLessOrEqualTo(
-        @Nullable Duration maxDuration,
-        @Nullable Duration durationToCheck) {
-
-        return !isLessOrEqualTo(maxDuration, durationToCheck);
+    public static boolean isDurationLessOrEqualTo(@Nullable Duration maxDuration, @Nullable Duration durationToCheck) {
+        return notNull(maxDuration) && notNull(durationToCheck) && maxDuration.compareTo(durationToCheck) >= 0;
     }
 
     /**
      * True if the duration is less than the specified nanoseconds.
      */
-    public static boolean isLessOrEqualToNanos(long maxNanos, @Nullable Duration durationToCheck) {
+    public static boolean isDurationLessOrEqualToNanos(long maxNanos, @Nullable Duration durationToCheck) {
         return notNull(durationToCheck) && durationToCheck.toNanos() <= maxNanos;
-    }
-
-    public static boolean notLessOrEqualToNanos(long maxNanos, @Nullable Duration durationToCheck) {
-        return !isLessOrEqualToNanos(maxNanos, durationToCheck);
     }
 
     /**
      * True if the duration is less than the specified milliseconds.
      */
-    public static boolean isLessOrEqualToMillis(long maxMillis, @Nullable Duration durationToCheck) {
+    public static boolean isDurationLessOrEqualToMillis(long maxMillis, @Nullable Duration durationToCheck) {
         return notNull(durationToCheck) && durationToCheck.toMillis() <= maxMillis;
-    }
-
-    public static boolean notLessOrEqualToMillis(long maxMillis, @Nullable Duration durationToCheck) {
-        return !isLessOrEqualToMillis(maxMillis, durationToCheck);
     }
 
     /**
      * True if the duration is less than the specified seconds.
      */
-    public static boolean isLessOrEqualToSecs(long maxSecs, @Nullable Duration durationToCheck) {
+    public static boolean isDurationLessOrEqualToSecs(long maxSecs, @Nullable Duration durationToCheck) {
         return notNull(durationToCheck) && durationToCheck.getSeconds() <= maxSecs;
-    }
-
-    public static boolean notLessOrEqualToSecs(long maxSecs, @Nullable Duration durationToCheck) {
-        return !isLessOrEqualToSecs(maxSecs, durationToCheck);
     }
 
     /**
      * True if the duration is less than the specified minutes.
      */
-    public static boolean isLessOrEqualToMins(long maxMins, @Nullable Duration durationToCheck) {
+    public static boolean isDurationLessOrEqualToMins(long maxMins, @Nullable Duration durationToCheck) {
         return notNull(durationToCheck) && durationToCheck.toMinutes() <= maxMins;
-    }
-
-    public static boolean notLessOrEqualToMins(long maxMins, @Nullable Duration durationToCheck) {
-        return !isLessOrEqualToMins(maxMins, durationToCheck);
     }
 
     /**
      * True if the duration is less than the specified hours.
      */
-    public static boolean isLessOrEqualToHours(long maxHours, @Nullable Duration durationToCheck) {
+    public static boolean isDurationLessOrEqualToHours(long maxHours, @Nullable Duration durationToCheck) {
         return notNull(durationToCheck) && durationToCheck.toHours() <= maxHours;
-    }
-
-    public static boolean notLessOrEqualToHours(long maxHours, @Nullable Duration durationToCheck) {
-        return !isLessOrEqualToHours(maxHours, durationToCheck);
     }
 
     /**
      * True if the duration is less than the specified days.
      */
-    public static boolean isLessOrEqualToDays(long maxDays, @Nullable Duration durationToCheck) {
+    public static boolean isDurationLessOrEqualToDays(long maxDays, @Nullable Duration durationToCheck) {
         return notNull(durationToCheck) && durationToCheck.toDays() <= maxDays;
     }
 
-    public static boolean notLessOrEqualToDays(long maxDays, @Nullable Duration durationToCheck) {
-        return !isLessOrEqualToDays(maxDays, durationToCheck);
-    }
-
-    public static boolean exists(@Nullable Path path) {
+    public static boolean pathExists(@Nullable Path path) {
         return notNull(path) && Files.exists(path);
     }
 
-    public static boolean exists(@Nullable File path) {
+    public static boolean pathExists(@Nullable File path) {
         return notNull(path) && path.exists();
     }
 
-    public static boolean exists(@Nullable String path) {
+    public static boolean pathExists(@Nullable String path) {
         return RequireUtils
             .pathGetOptional(path)
-            .map(Checks::exists)
+            .map(Checks::pathExists)
             .orElse(false);
     }
 
@@ -686,7 +545,7 @@ public final class Checks {
     }
 
     public static boolean notExists(@Nullable File path) {
-        return !exists(path);
+        return !pathExists(path);
     }
 
     public static boolean notExists(@Nullable String path) {
