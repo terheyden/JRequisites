@@ -8,7 +8,10 @@ import java.io.StringReader;
 import java.nio.file.InvalidPathException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.Duration;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Optional;
 
 import org.xml.sax.InputSource;
@@ -17,6 +20,8 @@ import org.xml.sax.InputSource;
  * RequireUtils class.
  */
 final class RequireUtils {
+
+    private static final String DEFAULT_ZERO_DURATION = "0s 0ms 0ns";
 
     /**
      * Used to do XML parsing / validation.
@@ -30,6 +35,7 @@ final class RequireUtils {
 
     /**
      * Get the size of a regular file, or the number of files in a directory.
+     *
      * @throws IllegalArgumentException If the file is not a regular file or directory
      */
     static long getFileOrDirSize(File path, String name) {
@@ -57,7 +63,6 @@ final class RequireUtils {
         try {
 
             return Optional.of(Paths.get(path));
-
         } catch (InvalidPathException ignore) {
             return Optional.empty();
         }
@@ -74,6 +79,7 @@ final class RequireUtils {
     /**
      * A check just for Iterables to determine length checks.
      * This doesn't account for nulls, so the iterable param must be non-null.
+     *
      * @return the iterator used for checking, or {@link Optional#empty()}.
      */
     static <T> Optional<Iterator<T>> hasAtLeastSize(Iterable<T> iterable, int length) {
@@ -95,12 +101,12 @@ final class RequireUtils {
 
     private static DocumentBuilderFactory getDocumentBuilderFactory() {
 
-            if (lazyDocumentBuilderFactory == null) {
-                // It's not super important if there's a thread collision, it'll just get created twice.
-                lazyDocumentBuilderFactory = createDocumentBuilderFactory();
-            }
+        if (lazyDocumentBuilderFactory == null) {
+            // It's not super important if there's a thread collision, it'll just get created twice.
+            lazyDocumentBuilderFactory = createDocumentBuilderFactory();
+        }
 
-            return lazyDocumentBuilderFactory;
+        return lazyDocumentBuilderFactory;
     }
 
     /**
@@ -127,7 +133,6 @@ final class RequireUtils {
             factory.setExpandEntityReferences(false);
 
             return factory;
-
         } catch (Exception e) {
             return throwUnchecked(e);
         }
@@ -143,7 +148,6 @@ final class RequireUtils {
 
             // Didn't throw!
             return true;
-
         } catch (Exception ignore) {
             return false;
         }
@@ -176,5 +180,68 @@ final class RequireUtils {
 
     static double floatToDouble(float value) {
         return value;
+    }
+
+    /**
+     * Convert a duration to a human readable string. Examples:
+     * <pre>
+     * {@code
+     * Duration duration = Duration.ofHours(1).plusMinutes(30).plusSeconds(15);
+     * durationToHumanReadableString(duration); // "1h 30m 15s"
+     * // You can also specify the max number of parts to show:
+     * durationToHumanReadableString(duration, 2); // "1h 30m"
+     * }
+     * </pre>
+     * @param duration The duration to convert
+     * @param maxParts The max number of parts to show (precision)
+     * @return A human readable version of the duration
+     */
+    static String durationToHumanReadableString(@Nullable Duration duration, int maxParts) {
+
+        if (duration == null) {
+            return DEFAULT_ZERO_DURATION + " (null)";
+        }
+
+        List<String> parts = new ArrayList<>(6);
+
+        long days = duration.toDays();
+        if (days > 0) parts.add(days + "d");
+
+        long hours = duration.toHours() % 24;
+        if (hours > 0) parts.add(hours + "h");
+
+        long minutes = duration.toMinutes() % 60;
+        if (minutes > 0) parts.add(minutes + "m");
+
+        long seconds = duration.getSeconds() % 60;
+        if (seconds > 0) parts.add(seconds + "s");
+
+        // If it's more than about 111k days, then toNanos() will throw.
+        // If that happens just skip these, who cares at that point.
+
+        try {
+            long millis = duration.toMillis() % 1000;
+            if (millis > 0) parts.add(millis + "ms");
+
+            long nanos = duration.toNanos() % 1_000_000;
+            if (nanos > 0) parts.add(nanos + "ns");
+
+        } catch (Exception ignore) {
+            // Doesn't really matter.
+        }
+
+        if (parts.isEmpty()) {
+            return DEFAULT_ZERO_DURATION;
+        }
+
+        if (parts.size() > maxParts) {
+            parts = parts.subList(0, maxParts);
+        }
+
+        return String.join(" ", parts);
+    }
+
+    static String durationToHumanReadableString(@Nullable Duration duration) {
+        return durationToHumanReadableString(duration, Integer.MAX_VALUE);
     }
 }
