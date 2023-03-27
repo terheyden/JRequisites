@@ -7,8 +7,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import static com.terheyden.require.Check.checkNotBlank;
-import static com.terheyden.require.Check.checkNotNull;
 import static com.terheyden.require.Require.requireFuture;
 import static com.terheyden.require.Require.requireNotBlank;
 import static com.terheyden.require.Require.requireNotEmpty;
@@ -42,15 +40,6 @@ class Tutorial {
         // You can perform custom checks:
         Require.requireTrue(age >= 18, "You must be 18 or older to use this app."); // Throws IllegalArgumentException
         requireState(data.containsKey("email"));                        // Throws IllegalStateException
-
-        // For providing simple default values, use the 'First' class:
-        UUID goodId = checkNotNull(id).orElseGet(UUID::randomUUID);
-        String userName = checkNotBlank(name).orElse("(no name)");
-
-        // Finally, use the 'Check' class to use an Optional instead of throwing an exception.
-        String greeting = checkNotBlank(name)
-            .map(nam -> "Hi there, " + nam + "!")
-            .orElse("I'm all alone...");
 
         // Checks build on each other, for example, checkNotBlank() includes checkNotNull() and checkNotEmpty().
 

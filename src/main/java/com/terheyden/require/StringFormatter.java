@@ -21,13 +21,13 @@ public final class StringFormatter {
     }
 
     public static String format(String str, Object arg1) {
-        if (Checks.isBlank(str)) return str;
+        if (Check.isBlank(str)) return str;
         FormattedString formatStr = new FormattedString(str);
         return injectPlaceholder(formatStr, arg1).str;
     }
 
     public static String format(String str, Object arg1, Object arg2) {
-        if (Checks.isBlank(str)) return str;
+        if (Check.isBlank(str)) return str;
         FormattedString formatStr = new FormattedString(str);
         formatStr = injectPlaceholder(formatStr, arg1); // I know, the same reference gets returned.
         formatStr = injectPlaceholder(formatStr, arg2); // Still we can treat it like it's immutable.
@@ -35,7 +35,7 @@ public final class StringFormatter {
     }
 
     public static String format(String str, Object arg1, Object arg2, Object arg3) {
-        if (Checks.isBlank(str)) return str;
+        if (Check.isBlank(str)) return str;
         FormattedString formatStr = new FormattedString(str);
         formatStr = injectPlaceholder(formatStr, arg1); // I know, the same reference gets returned.
         formatStr = injectPlaceholder(formatStr, arg2); // Still we can treat it like it's immutable.
@@ -44,7 +44,7 @@ public final class StringFormatter {
     }
 
     public static String format(String str, Object arg1, Object arg2, Object arg3, Object arg4) {
-        if (Checks.isBlank(str)) return str;
+        if (Check.isBlank(str)) return str;
         FormattedString formatStr = new FormattedString(str);
         formatStr = injectPlaceholder(formatStr, arg1); // I know, the same reference gets returned.
         formatStr = injectPlaceholder(formatStr, arg2); // Still we can treat it like it's immutable.
@@ -54,7 +54,7 @@ public final class StringFormatter {
     }
 
     public static String format(String str, Object arg1, Object arg2, Object arg3, Object arg4, Object arg5) {
-        if (Checks.isBlank(str)) return str;
+        if (Check.isBlank(str)) return str;
         FormattedString formatStr = new FormattedString(str);
         formatStr = injectPlaceholder(formatStr, arg1); // I know, the same reference gets returned.
         formatStr = injectPlaceholder(formatStr, arg2); // Still we can treat it like it's immutable.

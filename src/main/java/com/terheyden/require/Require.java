@@ -17,7 +17,7 @@ import java.util.Map;
 
 import org.jetbrains.annotations.Contract;
 
-import static com.terheyden.require.Checks.isEmpty;
+import static com.terheyden.require.Check.isEmpty;
 import static com.terheyden.require.RequireUtils.durationToHumanReadableString;
 
 /**
