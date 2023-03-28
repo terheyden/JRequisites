@@ -51,7 +51,7 @@ class Tutorial {
         logMessages.sort(Comparator.naturalOrder());
 
         // With Java Requirements:
-        Require.requireSizeGreaterThan(3, logMessages).sort(Comparator.naturalOrder());
+        Require.requireSizeGreaterThan(logMessages, 3).sort(Comparator.naturalOrder());
 
         // There are also checks for files and dirs, and even conversion from String:
         Path settingsFile = requireRegularFile("/some/path/settings.txt");

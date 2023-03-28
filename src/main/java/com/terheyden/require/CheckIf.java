@@ -127,104 +127,104 @@ public final class CheckIf {
         return Check.notBlank(str) ? Optional.of(str) : Optional.empty();
     }
 
-    public static <T extends CharSequence> Optional<T> ifLength(int length, @Nullable T str) {
-        return Check.isLength(length, str) ? Optional.of(str) : Optional.empty();
+    public static <T extends CharSequence> Optional<T> ifLength(@Nullable T str, int length) {
+        return Check.isLength(str, length) ? Optional.of(str) : Optional.empty();
     }
 
-    public static <T> Optional<T[]> ifLength(int length, @Nullable T[] array) {
-        return Check.isLength(length, array) ? Optional.of(array) : Optional.empty();
+    public static <T> Optional<T[]> ifLength(@Nullable T[] array, int length) {
+        return Check.isLength(array, length) ? Optional.of(array) : Optional.empty();
     }
 
-    public static <T extends CharSequence> Optional<T> ifLengthGreaterThan(int lowValue, @Nullable T str) {
-        return Check.isLengthGreaterThan(lowValue, str) ? Optional.ofNullable(str) : Optional.empty();
+    public static <T extends CharSequence> Optional<T> ifLengthGreaterThan(@Nullable T str, int lowValue) {
+        return Check.isLengthGreaterThan(str, lowValue) ? Optional.ofNullable(str) : Optional.empty();
     }
 
-    public static <T> Optional<T[]> ifLengthGreaterThan(int lowValue, @Nullable T[] array) {
-        return Check.isLengthGreaterThan(lowValue, array) ? Optional.ofNullable(array) : Optional.empty();
+    public static <T> Optional<T[]> ifLengthGreaterThan(@Nullable T[] array, int lowValue) {
+        return Check.isLengthGreaterThan(array, lowValue) ? Optional.ofNullable(array) : Optional.empty();
     }
 
-    public static <T extends CharSequence> Optional<T> ifLengthGreaterOrEqualTo(int minLength, @Nullable T str) {
-        return Check.isLengthGreaterOrEqualTo(minLength, str) ? Optional.ofNullable(str) : Optional.empty();
+    public static <T extends CharSequence> Optional<T> ifLengthGreaterOrEqualTo(@Nullable T str, int minLength) {
+        return Check.isLengthGreaterOrEqualTo(str, minLength) ? Optional.ofNullable(str) : Optional.empty();
     }
 
-    public static <T> Optional<T[]> ifLengthGreaterOrEqualTo(int minLength, @Nullable T[] array) {
-        return Check.isLengthGreaterOrEqualTo(minLength, array) ? Optional.ofNullable(array) : Optional.empty();
+    public static <T> Optional<T[]> ifLengthGreaterOrEqualTo(@Nullable T[] array, int minLength) {
+        return Check.isLengthGreaterOrEqualTo(array, minLength) ? Optional.ofNullable(array) : Optional.empty();
     }
 
-    public static <T extends CharSequence> Optional<T> ifLengthLessThan(int maxValue, @Nullable T str) {
-        return Check.isLengthLessThan(maxValue, str) ? Optional.ofNullable(str) : Optional.empty();
+    public static <T extends CharSequence> Optional<T> ifLengthLessThan(@Nullable T str, int maxValue) {
+        return Check.isLengthLessThan(str, maxValue) ? Optional.ofNullable(str) : Optional.empty();
     }
 
-    public static <T> Optional<T[]> ifLengthLessThan(int maxValue, @Nullable T[] array) {
-        return Check.isLengthLessThan(maxValue, array) ? Optional.ofNullable(array) : Optional.empty();
+    public static <T> Optional<T[]> ifLengthLessThan(@Nullable T[] array, int maxValue) {
+        return Check.isLengthLessThan(array, maxValue) ? Optional.ofNullable(array) : Optional.empty();
     }
 
-    public static <T extends CharSequence> Optional<T> ifLengthLessOrEqualTo(int maxLength, @Nullable T str) {
-        return Check.isLengthLessOrEqualTo(maxLength, str) ? Optional.ofNullable(str) : Optional.empty();
+    public static <T extends CharSequence> Optional<T> ifLengthLessOrEqualTo(@Nullable T str, int maxLength) {
+        return Check.isLengthLessOrEqualTo(str, maxLength) ? Optional.ofNullable(str) : Optional.empty();
     }
 
-    public static <T> Optional<T[]> ifLengthLessOrEqualTo(int maxLength, @Nullable T[] array) {
-        return Check.isLengthLessOrEqualTo(maxLength, array) ? Optional.ofNullable(array) : Optional.empty();
+    public static <T> Optional<T[]> ifLengthLessOrEqualTo(@Nullable T[] array, int maxLength) {
+        return Check.isLengthLessOrEqualTo(array, maxLength) ? Optional.ofNullable(array) : Optional.empty();
     }
 
-    public static <T extends Collection<?>> Optional<T> ifSize(int size, @Nullable T collection) {
-        return Check.isSize(size, collection) ? Optional.ofNullable(collection) : Optional.empty();
+    public static <T extends Collection<?>> Optional<T> ifSize(@Nullable T collection, int size) {
+        return Check.isSize(collection, size) ? Optional.ofNullable(collection) : Optional.empty();
     }
 
-    public static <T extends Iterable<?>> Optional<T> ifSize(int size, @Nullable T iterable) {
-        return Check.isSize(size, iterable) ? Optional.ofNullable(iterable) : Optional.empty();
+    public static <T extends Iterable<?>> Optional<T> ifSize(@Nullable T iterable, int size) {
+        return Check.isSize(iterable, size) ? Optional.ofNullable(iterable) : Optional.empty();
     }
 
-    public static <T extends Map<?, ?>> Optional<T> ifSize(int size, @Nullable T map) {
-        return Check.isSize(size, map) ? Optional.ofNullable(map) : Optional.empty();
+    public static <T extends Map<?, ?>> Optional<T> ifSize(@Nullable T map, int size) {
+        return Check.isSize(map, size) ? Optional.ofNullable(map) : Optional.empty();
     }
 
-    public static <T extends Collection<?>> Optional<T> ifSizeGreaterThan(int minSize, @Nullable T collection) {
-        return Check.isSizeGreaterThan(minSize, collection) ? Optional.ofNullable(collection) : Optional.empty();
+    public static <T extends Collection<?>> Optional<T> ifSizeGreaterThan(@Nullable T collection, int minSize) {
+        return Check.isSizeGreaterThan(collection, minSize) ? Optional.ofNullable(collection) : Optional.empty();
     }
 
-    public static <T extends Iterable<?>> Optional<T> ifSizeGreaterThan(int minSize, @Nullable T iterable) {
-        return Check.isSizeGreaterThan(minSize, iterable) ? Optional.ofNullable(iterable) : Optional.empty();
+    public static <T extends Iterable<?>> Optional<T> ifSizeGreaterThan(@Nullable T iterable, int minSize) {
+        return Check.isSizeGreaterThan(iterable, minSize) ? Optional.ofNullable(iterable) : Optional.empty();
     }
 
-    public static <T extends Map<?, ?>> Optional<T> ifSizeGreaterThan(int minSize, @Nullable T map) {
-        return Check.isSizeGreaterThan(minSize, map) ? Optional.ofNullable(map) : Optional.empty();
+    public static <T extends Map<?, ?>> Optional<T> ifSizeGreaterThan(@Nullable T map, int minSize) {
+        return Check.isSizeGreaterThan(map, minSize) ? Optional.ofNullable(map) : Optional.empty();
     }
 
-    public static <T extends Collection<?>> Optional<T> ifSizeGreaterOrEqualTo(int minSize, @Nullable T collection) {
-        return Check.isSizeGreaterOrEqualTo(minSize, collection) ? Optional.ofNullable(collection) : Optional.empty();
+    public static <T extends Collection<?>> Optional<T> ifSizeGreaterOrEqualTo(@Nullable T collection, int minSize) {
+        return Check.isSizeGreaterOrEqualTo(collection, minSize) ? Optional.ofNullable(collection) : Optional.empty();
     }
 
-    public static <T extends Iterable<?>> Optional<T> ifSizeGreaterOrEqualTo(int minSize, @Nullable T iterable) {
-        return Check.isSizeGreaterOrEqualTo(minSize, iterable) ? Optional.ofNullable(iterable) : Optional.empty();
+    public static <T extends Iterable<?>> Optional<T> ifSizeGreaterOrEqualTo(@Nullable T iterable, int minSize) {
+        return Check.isSizeGreaterOrEqualTo(iterable, minSize) ? Optional.ofNullable(iterable) : Optional.empty();
     }
 
-    public static <T extends Map<?, ?>> Optional<T> ifSizeGreaterOrEqualTo(int minSize, @Nullable T map) {
-        return Check.isSizeGreaterOrEqualTo(minSize, map) ? Optional.ofNullable(map) : Optional.empty();
+    public static <T extends Map<?, ?>> Optional<T> ifSizeGreaterOrEqualTo(@Nullable T map, int minSize) {
+        return Check.isSizeGreaterOrEqualTo(map, minSize) ? Optional.ofNullable(map) : Optional.empty();
     }
 
-    public static <T extends Collection<?>> Optional<T> ifSizeLessThan(int maxSize, @Nullable T collection) {
-        return Check.isSizeLessThan(maxSize, collection) ? Optional.ofNullable(collection) : Optional.empty();
+    public static <T extends Collection<?>> Optional<T> ifSizeLessThan(@Nullable T collection, int maxSize) {
+        return Check.isSizeLessThan(collection, maxSize) ? Optional.ofNullable(collection) : Optional.empty();
     }
 
-    public static <T extends Iterable<?>> Optional<T> ifSizeLessThan(int maxSize, @Nullable T iterable) {
-        return Check.isSizeLessThan(maxSize, iterable) ? Optional.ofNullable(iterable) : Optional.empty();
+    public static <T extends Iterable<?>> Optional<T> ifSizeLessThan(@Nullable T iterable, int maxSize) {
+        return Check.isSizeLessThan(iterable, maxSize) ? Optional.ofNullable(iterable) : Optional.empty();
     }
 
-    public static <T extends Map<?, ?>> Optional<T> ifSizeLessThan(int maxSize, @Nullable T map) {
-        return Check.isSizeLessThan(maxSize, map) ? Optional.ofNullable(map) : Optional.empty();
+    public static <T extends Map<?, ?>> Optional<T> ifSizeLessThan(@Nullable T map, int maxSize) {
+        return Check.isSizeLessThan(map, maxSize) ? Optional.ofNullable(map) : Optional.empty();
     }
 
-    public static <T extends Collection<?>> Optional<T> ifSizeLessOrEqualTo(int maxSize, @Nullable T collection) {
-        return Check.isSizeLessOrEqualTo(maxSize, collection) ? Optional.ofNullable(collection) : Optional.empty();
+    public static <T extends Collection<?>> Optional<T> ifSizeLessOrEqualTo(@Nullable T collection, int maxSize) {
+        return Check.isSizeLessOrEqualTo(collection, maxSize) ? Optional.ofNullable(collection) : Optional.empty();
     }
 
-    public static <T extends Iterable<?>> Optional<T> ifSizeLessOrEqualTo(int maxSize, @Nullable T iterable) {
-        return Check.isSizeLessOrEqualTo(maxSize, iterable) ? Optional.ofNullable(iterable) : Optional.empty();
+    public static <T extends Iterable<?>> Optional<T> ifSizeLessOrEqualTo(@Nullable T iterable, int maxSize) {
+        return Check.isSizeLessOrEqualTo(iterable, maxSize) ? Optional.ofNullable(iterable) : Optional.empty();
     }
 
-    public static <T extends Map<?, ?>> Optional<T> ifSizeLessOrEqualTo(int maxSize, @Nullable T map) {
-        return Check.isSizeLessOrEqualTo(maxSize, map) ? Optional.ofNullable(map) : Optional.empty();
+    public static <T extends Map<?, ?>> Optional<T> ifSizeLessOrEqualTo(@Nullable T map, int maxSize) {
+        return Check.isSizeLessOrEqualTo(map, maxSize) ? Optional.ofNullable(map) : Optional.empty();
     }
 
     /**
@@ -237,344 +237,312 @@ public final class CheckIf {
      *
      * @return true if the duration is greater than the low limit, false if either duration is null
      */
-    public static boolean ifDurationGreaterThan(@Nullable Duration minDurationLimit, @Nullable Duration durationToCheck) {
-        return Check.isDurationGreaterThan(minDurationLimit, durationToCheck);
+    @Contract(value = "null, _ -> !null; _, null -> !null", pure = true)
+    public static Optional<Duration> ifDurationGreaterThan(@Nullable Duration durationToCheck, @Nullable Duration minDuration) {
+        return Check.isDurationGreaterThan(durationToCheck, minDuration) ? Optional.of(durationToCheck) : Optional.empty();
     }
 
     /**
      * True if the duration is greater than the specified nanoseconds.
      */
-    public static boolean ifDurationGreaterThanNanos(long minValueNs, @Nullable Duration durationToCheck) {
-        return Check.isDurationGreaterThanNanos(minValueNs, durationToCheck);
+    @Contract(value = "null, _ -> !null", pure = true)
+    public static Optional<Duration> ifDurationGreaterThanNanos(@Nullable Duration durationToCheck, long minValueNs) {
+        return Check.isDurationGreaterThanNanos(durationToCheck, minValueNs) ? Optional.of(durationToCheck) : Optional.empty();
     }
 
     /**
      * True if the duration is greater than the specified milliseconds.
      */
-    public static boolean ifDurationGreaterThanMillis(long minValueMs, @Nullable Duration durationToCheck) {
-        return Check.isDurationGreaterThanMillis(minValueMs, durationToCheck);
+    @Contract(value = "null, _ -> !null", pure = true)
+    public static Optional<Duration> ifDurationGreaterThanMillis(@Nullable Duration durationToCheck, long minValueMs) {
+        return Check.isDurationGreaterThanMillis(durationToCheck, minValueMs) ? Optional.of(durationToCheck) : Optional.empty();
     }
 
     /**
      * True if the duration is greater than the specified seconds.
      */
-    public static boolean ifDurationGreaterThanSecs(long minValueSecs, @Nullable Duration durationToCheck) {
-        return Check.isDurationGreaterThanSecs(minValueSecs, durationToCheck);
+    @Contract(value = "null, _ -> !null", pure = true)
+    public static Optional<Duration> ifDurationGreaterThanSecs(@Nullable Duration durationToCheck, long minValueSecs) {
+        return Check.isDurationGreaterThanSecs(durationToCheck, minValueSecs) ? Optional.of(durationToCheck) : Optional.empty();
     }
 
     /**
      * True if the duration is greater than the specified minutes.
      */
-    public static boolean ifDurationGreaterThanMins(long minValueMins, @Nullable Duration durationToCheck) {
-        return Check.isDurationGreaterThanMins(minValueMins, durationToCheck);
+    @Contract(value = "null, _ -> !null", pure = true)
+    public static Optional<Duration> ifDurationGreaterThanMins(@Nullable Duration durationToCheck, long minValueMins) {
+        return Check.isDurationGreaterThanMins(durationToCheck, minValueMins) ? Optional.of(durationToCheck) : Optional.empty();
     }
 
     /**
      * True if the duration is greater than the specified hours.
      */
-    public static boolean ifDurationGreaterThanHours(long minValueHours, @Nullable Duration durationToCheck) {
-        return Check.isDurationGreaterThanHours(minValueHours, durationToCheck);
+    @Contract(value = "null, _ -> !null", pure = true)
+    public static Optional<Duration> ifDurationGreaterThanHours(@Nullable Duration durationToCheck, long minValueHours) {
+        return Check.isDurationGreaterThanHours(durationToCheck, minValueHours) ? Optional.of(durationToCheck) : Optional.empty();
     }
 
     /**
      * True if the duration is greater than the specified days.
      */
-    public static boolean ifDurationGreaterThanDays(long minValueDays, @Nullable Duration durationToCheck) {
-        return Check.isDurationGreaterThanDays(minValueDays, durationToCheck);
+    @Contract(value = "null, _ -> !null", pure = true)
+    public static Optional<Duration> ifDurationGreaterThanDays(@Nullable Duration durationToCheck, long minValueDays) {
+        return Check.isDurationGreaterThanDays(durationToCheck, minValueDays) ? Optional.of(durationToCheck) : Optional.empty();
     }
 
-    public static boolean ifDurationGreaterOrEqualTo(@Nullable Duration minDuration, @Nullable Duration durationToCheck) {
-        return Check.isDurationGreaterOrEqualTo(minDuration, durationToCheck);
+    @Contract(value = "null, _ -> !null", pure = true)
+    public static Optional<Duration> ifDurationGreaterOrEqualTo(@Nullable Duration durationToCheck, @Nullable Duration minDuration) {
+        return Check.isDurationGreaterOrEqualTo(durationToCheck, minDuration) ? Optional.of(durationToCheck) : Optional.empty();
     }
 
     /**
      * True if the duration is greater than the specified nanoseconds.
      */
-    public static boolean ifDurationGreaterOrEqualToNanos(long minValueNs, @Nullable Duration durationToCheck) {
-        return Check.isDurationGreaterOrEqualToNanos(minValueNs, durationToCheck);
+    @Contract(value = "null, _ -> !null", pure = true)
+    public static Optional<Duration> ifDurationGreaterOrEqualToNanos(@Nullable Duration durationToCheck, long minValueNs) {
+        return Check.isDurationGreaterOrEqualToNanos(durationToCheck, minValueNs) ? Optional.of(durationToCheck) : Optional.empty();
     }
 
     /**
      * True if the duration is greater than the specified milliseconds.
      */
-    public static boolean ifDurationGreaterOrEqualToMillis(long minValueMs, @Nullable Duration durationToCheck) {
-        return Check.isDurationGreaterOrEqualToMillis(minValueMs, durationToCheck);
+    @Contract(value = "null, _ -> !null", pure = true)
+    public static Optional<Duration> ifDurationGreaterOrEqualToMillis(@Nullable Duration durationToCheck, long minValueMs) {
+        return Check.isDurationGreaterOrEqualToMillis(durationToCheck, minValueMs) ? Optional.of(durationToCheck) : Optional.empty();
     }
 
     /**
      * True if the duration is greater than the specified seconds.
      */
-    public static boolean ifDurationGreaterOrEqualToSecs(long minValueSecs, @Nullable Duration durationToCheck) {
-        return Check.isDurationGreaterOrEqualToSecs(minValueSecs, durationToCheck);
+    @Contract(value = "null, _ -> !null", pure = true)
+    public static Optional<Duration> ifDurationGreaterOrEqualToSecs(@Nullable Duration durationToCheck, long minValueSecs) {
+        return Check.isDurationGreaterOrEqualToSecs(durationToCheck, minValueSecs) ? Optional.of(durationToCheck) : Optional.empty();
     }
 
     /**
      * True if the duration is greater than the specified minutes.
      */
-    public static boolean ifDurationGreaterOrEqualToMins(long minValueMins, @Nullable Duration durationToCheck) {
-        return Check.isDurationGreaterOrEqualToMins(minValueMins, durationToCheck);
+    @Contract(value = "null, _ -> !null", pure = true)
+    public static Optional<Duration> ifDurationGreaterOrEqualToMins(@Nullable Duration durationToCheck, long minValueMins) {
+        return Check.isDurationGreaterOrEqualToMins(durationToCheck, minValueMins) ? Optional.of(durationToCheck) : Optional.empty();
     }
 
     /**
      * True if the duration is greater than the specified hours.
      */
-    public static boolean ifDurationGreaterOrEqualToHours(long minValueHours, @Nullable Duration durationToCheck) {
-        return Check.isDurationGreaterOrEqualToHours(minValueHours, durationToCheck);
+    @Contract(value = "null, _ -> !null", pure = true)
+    public static Optional<Duration> ifDurationGreaterOrEqualToHours(@Nullable Duration durationToCheck, long minValueHours) {
+        return Check.isDurationGreaterOrEqualToHours(durationToCheck, minValueHours) ? Optional.of(durationToCheck) : Optional.empty();
     }
 
     /**
      * True if the duration is greater than the specified days.
      */
-    public static boolean ifDurationGreaterOrEqualToDays(long minValueDays, @Nullable Duration durationToCheck) {
-        return Check.isDurationGreaterOrEqualToDays(minValueDays, durationToCheck);
+    @Contract(value = "null, _ -> !null", pure = true)
+    public static Optional<Duration> ifDurationGreaterOrEqualToDays(@Nullable Duration durationToCheck, long minValueDays) {
+        return Check.isDurationGreaterOrEqualToDays(durationToCheck, minValueDays) ? Optional.of(durationToCheck) : Optional.empty();
     }
 
-    public static boolean ifDurationLessThan(@Nullable Duration maxDurationLimit, @Nullable Duration durationToCheck) {
-        return Check.isDurationLessThan(maxDurationLimit, durationToCheck);
-    }
-
-    /**
-     * True if the duration is less than the specified nanoseconds.
-     */
-    public static boolean ifDurationLessThanNanos(long maxValueNs, @Nullable Duration durationToCheck) {
-        return Check.isDurationLessThanNanos(maxValueNs, durationToCheck);
-    }
-
-    /**
-     * True if the duration is less than the specified milliseconds.
-     */
-    public static boolean ifDurationLessThanMillis(long maxValueMs, @Nullable Duration durationToCheck) {
-        return Check.isDurationLessThanMillis(maxValueMs, durationToCheck);
-    }
-
-    /**
-     * True if the duration is less than the specified seconds.
-     */
-    public static boolean ifDurationLessThanSecs(long maxValueSecs, @Nullable Duration durationToCheck) {
-        return Check.isDurationLessThanSecs(maxValueSecs, durationToCheck);
-    }
-
-    /**
-     * True if the duration is less than the specified minutes.
-     */
-    public static boolean ifDurationLessThanMins(long maxValueMins, @Nullable Duration durationToCheck) {
-        return Check.isDurationLessThanMins(maxValueMins, durationToCheck);
-    }
-
-    /**
-     * True if the duration is less than the specified hours.
-     */
-    public static boolean ifDurationLessThanHours(long maxValueHours, @Nullable Duration durationToCheck) {
-        return Check.isDurationLessThanHours(maxValueHours, durationToCheck);
-    }
-
-    /**
-     * True if the duration is less than the specified days.
-     */
-    public static boolean ifDurationLessThanDays(long maxValueDays, @Nullable Duration durationToCheck) {
-        return Check.isDurationLessThanDays(maxValueDays, durationToCheck);
-    }
-
-    public static boolean ifDurationLessOrEqualTo(@Nullable Duration maxDuration, @Nullable Duration durationToCheck) {
-        return Check.isDurationLessOrEqualTo(maxDuration, durationToCheck);
+    @Contract(value = "null, _ -> !null", pure = true)
+    public static Optional<Duration> ifDurationLessThan(@Nullable Duration durationToCheck, @Nullable Duration maxDurationLimit) {
+        return Check.isDurationLessThan(durationToCheck, maxDurationLimit) ? Optional.of(durationToCheck) : Optional.empty();
     }
 
     /**
      * True if the duration is less than the specified nanoseconds.
      */
-    public static boolean ifDurationLessOrEqualToNanos(long maxNanos, @Nullable Duration durationToCheck) {
-        return Check.isDurationLessOrEqualToNanos(maxNanos, durationToCheck);
+    @Contract(value = "null, _ -> !null", pure = true)
+    public static Optional<Duration> ifDurationLessThanNanos(@Nullable Duration durationToCheck, long maxValueNs) {
+        return Check.isDurationLessThanNanos(durationToCheck, maxValueNs) ? Optional.of(durationToCheck) : Optional.empty();
     }
 
     /**
      * True if the duration is less than the specified milliseconds.
      */
-    public static boolean ifDurationLessOrEqualToMillis(long maxMillis, @Nullable Duration durationToCheck) {
-        return Check.isDurationLessOrEqualToMillis(maxMillis, durationToCheck);
+    @Contract(value = "null, _ -> !null", pure = true)
+    public static Optional<Duration> ifDurationLessThanMillis(@Nullable Duration durationToCheck, long maxValueMs) {
+        return Check.isDurationLessThanMillis(durationToCheck, maxValueMs) ? Optional.of(durationToCheck) : Optional.empty();
     }
 
     /**
      * True if the duration is less than the specified seconds.
      */
-    public static boolean ifDurationLessOrEqualToSecs(long maxSecs, @Nullable Duration durationToCheck) {
-        return Check.isDurationLessOrEqualToSecs(maxSecs, durationToCheck);
+    @Contract(value = "null, _ -> !null", pure = true)
+    public static Optional<Duration> ifDurationLessThanSecs(@Nullable Duration durationToCheck, long maxValueSecs) {
+        return Check.isDurationLessThanSecs(durationToCheck, maxValueSecs) ? Optional.of(durationToCheck) : Optional.empty();
     }
 
     /**
      * True if the duration is less than the specified minutes.
      */
-    public static boolean ifDurationLessOrEqualToMins(long maxMins, @Nullable Duration durationToCheck) {
-        return Check.isDurationLessOrEqualToMins(maxMins, durationToCheck);
+    @Contract(value = "null, _ -> !null", pure = true)
+    public static Optional<Duration> ifDurationLessThanMins(@Nullable Duration durationToCheck, long maxValueMins) {
+        return Check.isDurationLessThanMins(durationToCheck, maxValueMins) ? Optional.of(durationToCheck) : Optional.empty();
     }
 
     /**
      * True if the duration is less than the specified hours.
      */
-    public static boolean ifDurationLessOrEqualToHours(long maxHours, @Nullable Duration durationToCheck) {
-        return Check.isDurationLessOrEqualToHours(maxHours, durationToCheck);
+    @Contract(value = "null, _ -> !null", pure = true)
+    public static Optional<Duration> ifDurationLessThanHours(@Nullable Duration durationToCheck, long maxValueHours) {
+        return Check.isDurationLessThanHours(durationToCheck, maxValueHours) ? Optional.of(durationToCheck) : Optional.empty();
     }
 
     /**
      * True if the duration is less than the specified days.
      */
-    public static boolean ifDurationLessOrEqualToDays(long maxDays, @Nullable Duration durationToCheck) {
-        return Check.isDurationLessOrEqualToDays(maxDays, durationToCheck);
+    @Contract(value = "null, _ -> !null", pure = true)
+    public static Optional<Duration> ifDurationLessThanDays(@Nullable Duration durationToCheck, long maxValueDays) {
+        return Check.isDurationLessThanDays(durationToCheck, maxValueDays) ? Optional.of(durationToCheck) : Optional.empty();
     }
 
-    public static boolean pathExists(@Nullable Path path) {
-        return Check.pathExists(path);
-    }
-
-    public static boolean pathExists(@Nullable File path) {
-        return Check.pathExists(path);
-    }
-
-    public static boolean pathExists(@Nullable String path) {
-        return Check.pathExists(path);
+    @Contract(value = "null, _ -> !null", pure = true)
+    public static Optional<Duration> ifDurationLessOrEqualTo(@Nullable Duration durationToCheck, @Nullable Duration maxDuration) {
+        return Check.isDurationLessOrEqualTo(durationToCheck, maxDuration) ? Optional.of(durationToCheck) : Optional.empty();
     }
 
     /**
-     * It's expected that this method will be used as a guard clause.
-     * Therefore this method returns true if the path is null.
+     * True if the duration is less than the specified nanoseconds.
      */
-    public static boolean ifNotExists(@Nullable Path path) {
-        return Check.notExists(path);
+    @Contract(value = "null, _ -> !null", pure = true)
+    public static Optional<Duration> ifDurationLessOrEqualToNanos(@Nullable Duration durationToCheck, long maxNanos) {
+        return Check.isDurationLessOrEqualToNanos(durationToCheck, maxNanos) ? Optional.of(durationToCheck) : Optional.empty();
     }
 
-    public static boolean ifNotExists(@Nullable File path) {
-        return Check.notExists(path);
+    /**
+     * True if the duration is less than the specified milliseconds.
+     */
+    @Contract(value = "null, _ -> !null", pure = true)
+    public static Optional<Duration> ifDurationLessOrEqualToMillis(@Nullable Duration durationToCheck, long maxMillis) {
+        return Check.isDurationLessOrEqualToMillis(durationToCheck, maxMillis) ? Optional.of(durationToCheck) : Optional.empty();
     }
 
-    public static boolean ifNotExists(@Nullable String path) {
-        return Check.notExists(path);
+    /**
+     * True if the duration is less than the specified seconds.
+     */
+    @Contract(value = "null, _ -> !null", pure = true)
+    public static Optional<Duration> ifDurationLessOrEqualToSecs(@Nullable Duration durationToCheck, long maxSecs) {
+        return Check.isDurationLessOrEqualToSecs(durationToCheck, maxSecs) ? Optional.of(durationToCheck) : Optional.empty();
     }
 
-    public static boolean ifRegularFile(@Nullable Path file) {
-        return Check.isRegularFile(file);
+    /**
+     * True if the duration is less than the specified minutes.
+     */
+    @Contract(value = "null, _ -> !null", pure = true)
+    public static Optional<Duration> ifDurationLessOrEqualToMins(@Nullable Duration durationToCheck, long maxMins) {
+        return Check.isDurationLessOrEqualToMins(durationToCheck, maxMins) ? Optional.of(durationToCheck) : Optional.empty();
     }
 
-    public static boolean ifRegularFile(@Nullable File file) {
-        return Check.isRegularFile(file);
+    /**
+     * True if the duration is less than the specified hours.
+     */
+    @Contract(value = "null, _ -> !null", pure = true)
+    public static Optional<Duration> ifDurationLessOrEqualToHours(@Nullable Duration durationToCheck, long maxHours) {
+        return Check.isDurationLessOrEqualToHours(durationToCheck, maxHours) ? Optional.of(durationToCheck) : Optional.empty();
     }
 
-    public static boolean ifRegularFile(@Nullable String filePath) {
-        return Check.isRegularFile(filePath);
+    /**
+     * True if the duration is less than the specified days.
+     */
+    @Contract(value = "null, _ -> !null", pure = true)
+    public static Optional<Duration> ifDurationLessOrEqualToDays(@Nullable Duration durationToCheck, long maxDays) {
+        return Check.isDurationLessOrEqualToDays(durationToCheck, maxDays) ? Optional.of(durationToCheck) : Optional.empty();
     }
 
-    public static boolean ifNotRegularFile(@Nullable Path file) {
-        return Check.notRegularFile(file);
+    public static Optional<Path> ifPathExists(@Nullable Path path) {
+        return Check.pathExists(path) ? Optional.of(path) : Optional.empty();
     }
 
-    public static boolean ifNotRegularFile(@Nullable File file) {
-        return Check.notRegularFile(file);
+    public static Optional<File> ifPathExists(@Nullable File path) {
+        return Check.pathExists(path) ? Optional.of(path) : Optional.empty();
     }
 
-    public static boolean ifNotRegularFile(@Nullable String filePath) {
-        return Check.notRegularFile(filePath);
+    public static Optional<String> ifPathExists(@Nullable String path) {
+        return Check.pathExists(path) ? Optional.of(path) : Optional.empty();
     }
 
-    public static boolean ifDirectory(@Nullable Path directory) {
-        return Check.isDirectory(directory);
+    public static Optional<Path> ifRegularFile(@Nullable Path file) {
+        return Check.isRegularFile(file) ? Optional.of(file) : Optional.empty();
     }
 
-    public static boolean ifDirectory(@Nullable File directory) {
-        return Check.isDirectory(directory);
+    public static Optional<File> ifRegularFile(@Nullable File file) {
+        return Check.isRegularFile(file) ? Optional.of(file) : Optional.empty();
     }
 
-    public static boolean ifDirectory(@Nullable String directoryPath) {
-        return Check.isDirectory(directoryPath);
+    public static Optional<String> ifRegularFile(@Nullable String filePath) {
+        return Check.isRegularFile(filePath) ? Optional.of(filePath) : Optional.empty();
     }
 
-    public static boolean ifNotDirectory(@Nullable Path directory) {
-        return Check.notDirectory(directory);
+    public static Optional<Path> ifDirectory(@Nullable Path directory) {
+        return Check.isDirectory(directory) ? Optional.of(directory) : Optional.empty();
     }
 
-    public static boolean ifNotDirectory(@Nullable File directory) {
-        return Check.notDirectory(directory);
+    public static Optional<File> ifDirectory(@Nullable File directory) {
+        return Check.isDirectory(directory) ? Optional.of(directory) : Optional.empty();
     }
 
-    public static boolean ifNotDirectory(@Nullable String directoryPath) {
-        return Check.notDirectory(directoryPath);
+    public static Optional<String> ifDirectory(@Nullable String directoryPath) {
+        return Check.isDirectory(directoryPath) ? Optional.of(directoryPath) : Optional.empty();
     }
 
-    public static boolean ifFuture(@Nullable ZonedDateTime dateTime) {
-        return Check.isFuture(dateTime);
+    public static Optional<ZonedDateTime> ifFuture(@Nullable ZonedDateTime dateTime) {
+        return Check.isFuture(dateTime) ? Optional.of(dateTime) : Optional.empty();
     }
 
-    public static boolean ifFuture(@Nullable OffsetDateTime dateTime) {
-        return Check.isFuture(dateTime);
+    public static Optional<OffsetDateTime> ifFuture(@Nullable OffsetDateTime dateTime) {
+        return Check.isFuture(dateTime) ? Optional.of(dateTime) : Optional.empty();
     }
 
-    public static boolean ifFuture(@Nullable LocalDateTime dateTime) {
-        return Check.isFuture(dateTime);
+    public static Optional<LocalDateTime> ifFuture(@Nullable LocalDateTime dateTime) {
+        return Check.isFuture(dateTime) ? Optional.of(dateTime) : Optional.empty();
     }
 
-    public static boolean ifFuture(@Nullable LocalDate date) {
-        return Check.isFuture(date);
+    public static Optional<LocalDate> ifFuture(@Nullable LocalDate date) {
+        return Check.isFuture(date) ? Optional.of(date) : Optional.empty();
     }
 
-    public static boolean ifFuture(@Nullable LocalTime time) {
-        return Check.isFuture(time);
+    public static Optional<LocalTime> ifFuture(@Nullable LocalTime time) {
+        return Check.isFuture(time) ? Optional.of(time) : Optional.empty();
     }
 
-    public static boolean ifPast(@Nullable ZonedDateTime dateTime) {
-        return Check.isPast(dateTime);
+    public static Optional<ZonedDateTime> ifPast(@Nullable ZonedDateTime dateTime) {
+        return Check.isPast(dateTime) ? Optional.of(dateTime) : Optional.empty();
     }
 
-    public static boolean ifPast(@Nullable OffsetDateTime dateTime) {
-        return Check.isPast(dateTime);
+    public static Optional<OffsetDateTime> ifPast(@Nullable OffsetDateTime dateTime) {
+        return Check.isPast(dateTime) ? Optional.of(dateTime) : Optional.empty();
     }
 
-    public static boolean ifPast(@Nullable LocalDateTime dateTime) {
-        return Check.isPast(dateTime);
+    public static Optional<LocalDateTime> ifPast(@Nullable LocalDateTime dateTime) {
+        return Check.isPast(dateTime) ? Optional.of(dateTime) : Optional.empty();
     }
 
-    public static boolean ifPast(@Nullable LocalDate date) {
-        return Check.isPast(date);
+    public static Optional<LocalDate> ifPast(@Nullable LocalDate date) {
+        return Check.isPast(date) ? Optional.of(date) : Optional.empty();
     }
 
-    public static boolean ifPast(@Nullable LocalTime time) {
-        return Check.isPast(time);
+    public static Optional<LocalTime> ifPast(@Nullable LocalTime time) {
+        return Check.isPast(time) ? Optional.of(time) : Optional.empty();
     }
 
-    public static boolean ifInstanceOf(@Nullable Class<?> classType, @Nullable Object object) {
-        return Check.isInstanceOf(classType, object);
+    public static <T> Optional<T> ifInstanceOf(@Nullable T object, @Nullable Class<?> classType) {
+        return Check.isInstanceOf(object, classType) ? Optional.of(object) : Optional.empty();
     }
 
-    public static boolean ifNotInstanceOf(@Nullable Class<?> classType, @Nullable Object object) {
-        return Check.notInstanceOf(classType, object);
+    public static <T extends CharSequence> Optional<T> ifContains(@Nullable T stringToCheck, @Nullable CharSequence contains) {
+        return Check.contains(stringToCheck, contains) ? Optional.of(stringToCheck) : Optional.empty();
     }
 
-    public static boolean contains(@Nullable CharSequence contains, @Nullable CharSequence stringToCheck) {
-        return Check.contains(contains, stringToCheck);
+    public static <T, C extends Collection<T>> Optional<C> ifContains(@Nullable C collectionToCheck, @Nullable T contains) {
+        return Check.contains(collectionToCheck, contains) ? Optional.of(collectionToCheck) : Optional.empty();
     }
 
-    public static <T> boolean contains(@Nullable T contains, @Nullable Collection<T> collectionToCheck) {
-        return Check.contains(contains, collectionToCheck);
+    public static <T> Optional<T[]> ifContains(@Nullable T[] arrayToCheck, @Nullable T contains) {
+        return Check.contains(arrayToCheck, contains) ? Optional.of(arrayToCheck) : Optional.empty();
     }
 
-    public static <T> boolean contains(@Nullable T contains, @Nullable T[] arrayToCheck) {
-        return Check.contains(contains, arrayToCheck);
-    }
-
-    public static <T> boolean contains(@Nullable T contains, @Nullable Iterable<T> iterableToCheck) {
-        return Check.contains(contains, iterableToCheck);
-    }
-
-    public static boolean ifNotContains(@Nullable CharSequence contains, @Nullable CharSequence stringToCheck) {
-        return Check.notContains(contains, stringToCheck);
-    }
-
-    public static <T> boolean notContains(@Nullable T contains, @Nullable Collection<T> collectionToCheck) {
-        return Check.notContains(contains, collectionToCheck);
-    }
-
-    public static <T> boolean notContains(@Nullable T contains, @Nullable T[] arrayToCheck) {
-        return Check.notContains(contains, arrayToCheck);
-    }
-
-    public static <T> boolean notContains(@Nullable T contains, @Nullable Iterable<T> iterableToCheck) {
-        return Check.notContains(contains, iterableToCheck);
+    public static <T, C extends Iterable<T>> Optional<C> ifContains(@Nullable C iterableToCheck, @Nullable T contains) {
+        return Check.contains(iterableToCheck, contains) ? Optional.of(iterableToCheck) : Optional.empty();
     }
 
     /**
@@ -586,103 +554,60 @@ public final class CheckIf {
      * }
      * </pre>
      */
-    public static <T> boolean containsElement(
-        @Nullable Predicate<? super T> predicate,
-        @Nullable Collection<T> collectionToCheck) {
-        return Check.containsElement(predicate, collectionToCheck);
+    public static <T, C extends Collection<T>> Optional<C> ifContainsElement(@Nullable C collectionToCheck, @Nullable Predicate<? super T> predicate) {
+        return Check.containsElement(predicate, collectionToCheck) ? Optional.of(collectionToCheck) : Optional.empty();
     }
 
-    public static <T> boolean containsElement(@Nullable Predicate<? super T> predicate, @Nullable T[] arrayToCheck) {
-        return Check.containsElement(predicate, arrayToCheck);
+    public static <T> Optional<T[]> ifContainsElement(@Nullable T[] arrayToCheck, @Nullable Predicate<? super T> predicate) {
+        return Check.containsElement(arrayToCheck, predicate) ? Optional.of(arrayToCheck) : Optional.empty();
     }
 
-    public static <T> boolean containsElement(
-        @Nullable Predicate<? super T> predicate,
-        @Nullable Iterable<T> iterableToCheck) {
-        return Check.containsElement(predicate, iterableToCheck);
+    public static <T, C extends Iterable<T>> Optional<C> ifContainsElement(@Nullable C iterableToCheck, @Nullable Predicate<? super T> predicate) {
+        return Check.containsElement(predicate, iterableToCheck) ? Optional.of(iterableToCheck) : Optional.empty();
     }
 
-    public static <T> boolean notContainsElement(
-        @Nullable Predicate<? super T> predicate,
-        @Nullable Collection<T> collectionToCheck) {
-        return Check.notContainsElement(predicate, collectionToCheck);
+    public static <T extends CharSequence> Optional<T> ifContainsRegex(@Nullable T stringToCheck, @Nullable Pattern regex) {
+        return Check.containsRegex(stringToCheck, regex) ? Optional.of(stringToCheck) : Optional.empty();
     }
 
-    public static <T> boolean notContainsElement(@Nullable Predicate<? super T> predicate, @Nullable T[] arrayToCheck) {
-        return Check.notContainsElement(predicate, arrayToCheck);
+    public static <T extends CharSequence> Optional<T> ifContainsRegex(@Nullable T stringToCheck, @Nullable String regex) {
+        return Check.containsRegex(stringToCheck, regex) ? Optional.of(stringToCheck) : Optional.empty();
     }
 
-    public static <T> boolean notContainsElement(
-        @Nullable Predicate<? super T> predicate,
-        @Nullable Iterable<T> iterableToCheck) {
-        return Check.notContainsElement(predicate, iterableToCheck);
+    public static <T extends CharSequence> Optional<T> matchesRegex(@Nullable T stringToCheck, @Nullable Pattern regex) {
+        return Check.matchesRegex(stringToCheck, regex) ? Optional.of(stringToCheck) : Optional.empty();
     }
 
-    public static boolean containsRegex(@Nullable Pattern regex, @Nullable CharSequence stringToCheck) {
-        return Check.containsRegex(regex, stringToCheck);
+    public static <T extends CharSequence> Optional<T> matchesRegex(@Nullable T stringToCheck, @Nullable String regex) {
+        return Check.matchesRegex(stringToCheck, regex) ? Optional.of(stringToCheck) : Optional.empty();
     }
 
-    public static boolean containsRegex(@Nullable String regex, @Nullable CharSequence stringToCheck) {
-        return Check.containsRegex(regex, stringToCheck);
+    public static <T extends Map<?, ?>> Optional<T> ifContainsKey(@Nullable T mapToCheck, @Nullable Object key) {
+        return Check.containsKey(mapToCheck, key) ? Optional.of(mapToCheck) : Optional.empty();
     }
 
-    public static boolean matchesRegex(@Nullable Pattern regex, @Nullable CharSequence stringToCheck) {
-        return Check.matchesRegex(regex, stringToCheck);
+    public static <T extends Map<?, ?>> Optional<T> ifContainsValue(@Nullable T mapToCheck, @Nullable Object value) {
+        return Check.containsValue(mapToCheck, value) ? Optional.of(mapToCheck) : Optional.empty();
     }
 
-    public static boolean matchesRegex(@Nullable String regex, @Nullable CharSequence stringToCheck) {
-        return Check.matchesRegex(regex, stringToCheck);
+    public static <T extends Collection<?>> Optional<T> ifContainsUniqueElements(@Nullable T collectionToCheck) {
+        return Check.containsUniqueElements(collectionToCheck) ? Optional.of(collectionToCheck) : Optional.empty();
     }
 
-    public static boolean containsKey(@Nullable Object key, @Nullable Map<?, ?> mapToCheck) {
-        return Check.containsKey(key, mapToCheck);
+    public static <T extends Collection<?>> Optional<T> ifContainsNull(@Nullable T collectionToCheck) {
+        return Check.containsNull(collectionToCheck) ? Optional.of(collectionToCheck) : Optional.empty();
     }
 
-    public static boolean containsValue(@Nullable Object value, @Nullable Map<?, ?> mapToCheck) {
-        return Check.containsValue(value, mapToCheck);
+    public static <T extends Iterable<?>> Optional<T> ifContainsNull(@Nullable T iterableToCheck) {
+        return Check.containsNull(iterableToCheck) ? Optional.of(iterableToCheck) : Optional.empty();
     }
 
-    public static boolean containsUniqueElements(@Nullable Collection<?> collectionToCheck) {
-        return Check.containsUniqueElements(collectionToCheck);
+    public static <T> Optional<T[]> ifContainsNull(@Nullable T[] arrayToCheck) {
+        return Check.containsNull(arrayToCheck) ? Optional.of(arrayToCheck) : Optional.empty();
     }
 
-    public static boolean containsNull(@Nullable Collection<?> collectionToCheck) {
-        return Check.containsNull(collectionToCheck);
-    }
-
-    public static boolean containsNull(@Nullable Iterable<?> iterableToCheck) {
-        return Check.containsNull(iterableToCheck);
-    }
-
-    public static boolean containsNull(@Nullable Object[] arrayToCheck) {
-        return Check.containsNull(arrayToCheck);
-    }
-
-    public static boolean containsNull(@Nullable Map<?, ?> mapToCheck) {
-        return Check.containsNull(mapToCheck);
-    }
-
-    /**
-     * True if the collection is not null, and does not contain any null elements.
-     */
-    public static boolean ifNotContainsNull(@Nullable Collection<?> collectionToCheck) {
-        return Check.notContainsNull(collectionToCheck);
-    }
-
-    public static boolean ifNotContainsNull(@Nullable Iterable<?> iterableToCheck) {
-        return Check.notContainsNull(iterableToCheck);
-    }
-
-    /**
-     * True if the map does not contain null keys or values.
-     * @throws IllegalStateException if the map does not support null keys or values
-     */
-    public static boolean ifNotContainsNull(@Nullable Map<?, ?> mapToCheck) {
-        return Check.notContainsNull(mapToCheck);
-    }
-
-    public static boolean ifNotContainsNull(@Nullable Object[] arrayToCheck) {
-        return Check.notContainsNull(arrayToCheck);
+    public static <T extends Map<?, ?>> Optional<T> ifContainsNull(@Nullable T mapToCheck) {
+        return Check.containsNull(mapToCheck) ? Optional.of(mapToCheck) : Optional.empty();
     }
 
     /**
@@ -699,42 +624,27 @@ public final class CheckIf {
      * }
      * </pre>
      */
-    @Contract("null -> false")
-    public static <T extends CharSequence> Optional<T> numbersOnly(@Nullable T str) {
+    public static <T extends CharSequence> Optional<T> ifNumbersOnly(@Nullable T str) {
         return Check.numbersOnly(str) ? Optional.ofNullable(str) : Optional.empty();
     }
 
-    public static <T extends CharSequence> Optional<T> ifNotNumbersOnly(@Nullable T str) {
-        return Check.notNumbersOnly(str) ? Optional.ofNullable(str) : Optional.empty();
-    }
-
-    @Contract("null -> false")
-    public static <T extends CharSequence> Optional<T> alphasOnly(@Nullable T str) {
+    public static <T extends CharSequence> Optional<T> ifAlphasOnly(@Nullable T str) {
         return Check.alphasOnly(str) ? Optional.ofNullable(str) : Optional.empty();
     }
 
-    public static <T extends CharSequence> Optional<T> ifNotAlphasOnly(@Nullable T str) {
-        return Check.notAlphasOnly(str) ? Optional.ofNullable(str) : Optional.empty();
-    }
-
-    @Contract("null -> false")
-    public static <T extends CharSequence> Optional<T> alphaNumericOnly(@Nullable T str) {
+    public static <T extends CharSequence> Optional<T> ifAlphaNumericOnly(@Nullable T str) {
         return Check.alphaNumericOnly(str) ? Optional.ofNullable(str) : Optional.empty();
     }
 
-    public static <T extends CharSequence> Optional<T> ifNotAlphaNumericOnly(@Nullable T str) {
-        return Check.notAlphaNumericOnly(str) ? Optional.ofNullable(str) : Optional.empty();
-    }
-
-    public static boolean ifEmail(@Nullable CharSequence email) {
-        return Check.isEmail(email);
+    public static <T extends CharSequence> Optional<T> ifEmail(@Nullable T email) {
+        return Check.isEmail(email) ? Optional.of(email) : Optional.empty();
     }
 
     /**
      * True if the value begins with {@code http://} or {@code https://} and has any sort of hostname or IP address.
      */
-    public static boolean ifUrl(@Nullable CharSequence url) {
-        return Check.isUrl(url);
+    public static <T extends CharSequence> Optional<T> ifUrl(@Nullable T url) {
+        return Check.isUrl(url) ? Optional.of(url) : Optional.empty();
     }
 
     /**
@@ -742,59 +652,35 @@ public final class CheckIf {
      * If you want to check for a specific version, use {@link #isIPv4Address(CharSequence)} or
      * {@link #isIPv6Address(CharSequence)}.
      */
-    public static boolean ifIpAddress(@Nullable CharSequence ipAddress) {
-        return Check.isIpAddress(ipAddress);
+    public static <T extends CharSequence> Optional<T> ifIpAddress(@Nullable T ipAddress) {
+        return Check.isIpAddress(ipAddress) ? Optional.of(ipAddress) : Optional.empty();
     }
 
-    public static boolean ifIPv4Address(@Nullable CharSequence ip4Address) {
-        return Check.isIPv4Address(ip4Address);
+    public static <T extends CharSequence> Optional<T> ifIPv4Address(@Nullable T ip4Address) {
+        return Check.isIPv4Address(ip4Address) ? Optional.of(ip4Address) : Optional.empty();
     }
 
-    public static boolean ifIPv6Address(@Nullable CharSequence ip6Address) {
-        return Check.isIPv6Address(ip6Address);
-    }
-
-    public static boolean ifNotIPAddress(@Nullable CharSequence ipAddress) {
-        return Check.notIPAddress(ipAddress);
-    }
-
-    public static boolean ifNotIPv4Address(@Nullable CharSequence ip4Address) {
-        return Check.notIPv4Address(ip4Address);
-    }
-
-    public static boolean ifNotIPv6Address(@Nullable CharSequence ip6Address) {
-        return Check.notIPv6Address(ip6Address);
+    public static <T extends CharSequence> Optional<T> ifIPv6Address(@Nullable T ip6Address) {
+        return Check.isIPv6Address(ip6Address) ? Optional.of(ip6Address) : Optional.empty();
     }
 
     /**
      * True if the value is not empty, and looks like JSON.
      * This means starting and ending with curly braces or square brackets.
      */
-    public static boolean ifJson(@Nullable CharSequence json) {
-        return Check.isJson(json);
-    }
-
-    public static boolean ifNotJson(@Nullable CharSequence json) {
-        return Check.notJson(json);
+    public static <T extends CharSequence> Optional<T> ifJson(@Nullable T json) {
+        return Check.isJson(json) ? Optional.of(json) : Optional.empty();
     }
 
     /**
      * True if the value is not empty and can be parsed as XML without errors.
      * Uses {@link DocumentBuilder} to parse the XML.
      */
-    public static boolean ifXml(@Nullable CharSequence xml) {
-        return Check.isXml(xml);
+    public static <T extends CharSequence> Optional<T> ifXml(@Nullable T xml) {
+        return Check.isXml(xml) ? Optional.of(xml) : Optional.empty();
     }
 
-    public static boolean ifNotXml(@Nullable CharSequence xml) {
-        return Check.notXml(xml);
-    }
-
-    public static boolean ifUUID(@Nullable CharSequence uuid) {
-        return Check.isUUID(uuid);
-    }
-
-    public static boolean ifNotUUID(@Nullable CharSequence uuid) {
-        return Check.notUUID(uuid);
+    public static <T extends CharSequence> Optional<T> ifUUID(@Nullable T uuid) {
+        return Check.isUUID(uuid) ? Optional.of(uuid) : Optional.empty();
     }
 }

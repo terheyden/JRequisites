@@ -247,11 +247,11 @@ class RequireTest {
 
     @Test
     void testRequireLength_string() {
-        assertThatNoException().isThrownBy(() -> Require.requireLength(goodStr.length(), goodStr));
-        assertThatNullPointerException().isThrownBy(() -> Require.requireLength(1, nullStr)).withMessage("String is null");
-        assertThatNullPointerException().isThrownBy(() -> Require.requireLength(1, nullStr, BAD)).withMessage(BAD + " is null");
-        assertThatIllegalArgumentException().isThrownBy(() -> Require.requireLength(goodStr.length() + 1, goodStr)).withMessage("String has length 4, but required length is: 5 — contains: good");
-        assertThatIllegalArgumentException().isThrownBy(() -> Require.requireLength(goodStr.length() + 1, goodStr, BAD)).withMessage(BAD + " has length 4, but required length is: 5 — contains: good");
+        assertThatNoException().isThrownBy(() -> Require.requireLength(goodStr, goodStr.length()));
+        assertThatNullPointerException().isThrownBy(() -> Require.requireLength(nullStr, 1)).withMessage("String is null");
+        assertThatNullPointerException().isThrownBy(() -> Require.requireLength(nullStr, 1, BAD)).withMessage(BAD + " is null");
+        assertThatIllegalArgumentException().isThrownBy(() -> Require.requireLength(goodStr, goodStr.length() + 1)).withMessage("String has length 4, but required length is: 5 — contains: good");
+        assertThatIllegalArgumentException().isThrownBy(() -> Require.requireLength(goodStr, goodStr.length() + 1, BAD)).withMessage(BAD + " has length 4, but required length is: 5 — contains: good");
     }
 
     @Test
@@ -263,11 +263,16 @@ class RequireTest {
 
     @Test
     void testRequireLengthGreaterThan_string() {
-        assertThatNoException().isThrownBy(() -> Require.requireLengthGreaterThan(goodStr.length() - 1, goodStr));
-        assertThatNullPointerException().isThrownBy(() -> Require.requireLengthGreaterThan(1, nullStr)).withMessage("String is null");
-        assertThatNullPointerException().isThrownBy(() -> Require.requireLengthGreaterThan(1, nullStr, BAD)).withMessage(BAD + " is null");
-        assertThatIllegalArgumentException().isThrownBy(() -> Require.requireLengthGreaterThan(goodStr.length(), goodStr)).withMessage("String has length 4, but minimum is: 5 — contains: good");
-        assertThatIllegalArgumentException().isThrownBy(() -> Require.requireLengthGreaterThan(goodStr.length(), goodStr, BAD)).withMessage(BAD + " has length 4, but minimum is: 5 — contains: good");
+        assertThatNoException().isThrownBy(() -> Require.requireLengthGreaterThan(goodStr, goodStr.length() - 1));
+        assertThatNullPointerException().isThrownBy(() -> Require.requireLengthGreaterThan(nullStr, 1)).withMessage("String is null");
+        assertThatNullPointerException().isThrownBy(() -> Require.requireLengthGreaterThan(nullStr, 1, BAD)).withMessage(BAD + " is null");
+        assertThatIllegalArgumentException().isThrownBy(() -> Require.requireLengthGreaterThan(
+            goodStr,
+            goodStr.length())).withMessage("String has length 4, but minimum is: 5 — contains: good");
+        assertThatIllegalArgumentException().isThrownBy(() -> Require.requireLengthGreaterThan(
+            goodStr,
+            goodStr.length(),
+            BAD)).withMessage(BAD + " has length 4, but minimum is: 5 — contains: good");
     }
 
     @Test
@@ -289,10 +294,12 @@ class RequireTest {
 
     @Test
     void testRequreLengthGreaterOrEqualTo_string() {
-        assertThatNoException().isThrownBy(() -> Require.requireLengthGreaterOrEqualTo(goodStr.length(), goodStr));
-        assertThatNullPointerException().isThrownBy(() -> Require.requireLengthGreaterOrEqualTo(1, nullStr)).withMessage("String is null");
+        assertThatNoException().isThrownBy(() -> Require.requireLengthGreaterOrEqualTo(goodStr, goodStr.length()));
+        assertThatNullPointerException().isThrownBy(() -> Require.requireLengthGreaterOrEqualTo(nullStr, 1)).withMessage("String is null");
         assertThatNullPointerException().isThrownBy(() -> Require.requireLengthGreaterOrEqualTo(1, nullStr, BAD)).withMessage(BAD + " is null");
-        assertThatIllegalArgumentException().isThrownBy(() -> Require.requireLengthGreaterOrEqualTo(goodStr.length() + 1, goodStr)).withMessage("String has length 4, but minimum is: 5 — contains: good");
+        assertThatIllegalArgumentException().isThrownBy(() -> Require.requireLengthGreaterOrEqualTo(
+            goodStr,
+            goodStr.length() + 1)).withMessage("String has length 4, but minimum is: 5 — contains: good");
         assertThatIllegalArgumentException().isThrownBy(() -> Require.requireLengthGreaterOrEqualTo(goodStr.length() + 1, goodStr, BAD)).withMessage(BAD + " has length 4, but minimum is: 5 — contains: good");
     }
 
@@ -307,11 +314,14 @@ class RequireTest {
 
     @Test
     void testRequireLengthLessThan_string() {
-        assertThatNoException().isThrownBy(() -> Require.requireLengthLessThan(goodStr.length() + 1, goodStr));
-        assertThatNullPointerException().isThrownBy(() -> Require.requireLengthLessThan(1, nullStr)).withMessage("String is null");
-        assertThatNullPointerException().isThrownBy(() -> Require.requireLengthLessThan(1, nullStr, BAD)).withMessage(BAD + " is null");
-        assertThatIllegalArgumentException().isThrownBy(() -> Require.requireLengthLessThan(goodStr.length(), goodStr)).withMessage("String has length 4, but maximum is: 3 — contains: good");
-        assertThatIllegalArgumentException().isThrownBy(() -> Require.requireLengthLessThan(goodStr.length(), goodStr, BAD)).withMessage(BAD + " has length 4, but maximum is: 3 — contains: good");
+        assertThatNoException().isThrownBy(() -> Require.requireLengthLessThan(goodStr, goodStr.length() + 1));
+        assertThatNullPointerException().isThrownBy(() -> Require.requireLengthLessThan(nullStr, 1)).withMessage("String is null");
+        assertThatNullPointerException().isThrownBy(() -> Require.requireLengthLessThan(nullStr, 1, BAD)).withMessage(BAD + " is null");
+        assertThatIllegalArgumentException().isThrownBy(() -> Require.requireLengthLessThan(goodStr, goodStr.length())).withMessage("String has length 4, but maximum is: 3 — contains: good");
+        assertThatIllegalArgumentException().isThrownBy(() -> Require.requireLengthLessThan(
+            goodStr,
+            goodStr.length(),
+            BAD)).withMessage(BAD + " has length 4, but maximum is: 3 — contains: good");
     }
 
     @Test
@@ -325,11 +335,16 @@ class RequireTest {
 
     @Test
     void testRequireLengthLessOrEqualTo_string() {
-        assertThatNoException().isThrownBy(() -> Require.requireLengthLessOrEqualTo(goodStr.length(), goodStr));
-        assertThatNullPointerException().isThrownBy(() -> Require.requireLengthLessOrEqualTo(1, nullStr)).withMessage("String is null");
-        assertThatNullPointerException().isThrownBy(() -> Require.requireLengthLessOrEqualTo(1, nullStr, BAD)).withMessage(BAD + " is null");
-        assertThatIllegalArgumentException().isThrownBy(() -> Require.requireLengthLessOrEqualTo(goodStr.length() - 1, goodStr)).withMessage("String has length 4, but maximum is: 3 — contains: good");
-        assertThatIllegalArgumentException().isThrownBy(() -> Require.requireLengthLessOrEqualTo(goodStr.length() - 1, goodStr, BAD)).withMessage(BAD + " has length 4, but maximum is: 3 — contains: good");
+        assertThatNoException().isThrownBy(() -> Require.requireLengthLessOrEqualTo(goodStr, goodStr.length()));
+        assertThatNullPointerException().isThrownBy(() -> Require.requireLengthLessOrEqualTo(nullStr, 1)).withMessage("String is null");
+        assertThatNullPointerException().isThrownBy(() -> Require.requireLengthLessOrEqualTo(nullStr, 1, BAD)).withMessage(BAD + " is null");
+        assertThatIllegalArgumentException().isThrownBy(() -> Require.requireLengthLessOrEqualTo(
+            goodStr,
+            goodStr.length() - 1)).withMessage("String has length 4, but maximum is: 3 — contains: good");
+        assertThatIllegalArgumentException().isThrownBy(() -> Require.requireLengthLessOrEqualTo(
+            goodStr,
+            goodStr.length() - 1,
+            BAD)).withMessage(BAD + " has length 4, but maximum is: 3 — contains: good");
     }
 
     @Test
@@ -343,156 +358,182 @@ class RequireTest {
 
     @Test
     void requireSizeGreaterThan_collection() {
-        assertThatNoException().isThrownBy(() -> Require.requireSizeGreaterThan(goodList.size() - 1, goodList));
-        assertThatNullPointerException().isThrownBy(() -> Require.requireSizeGreaterThan(1, nullList)).withMessage("Collection is null");
-        assertThatNullPointerException().isThrownBy(() -> Require.requireSizeGreaterThan(1, nullList, BAD)).withMessage(BAD + " is null");
-        assertThatIllegalArgumentException().isThrownBy(() -> Require.requireSizeGreaterThan(goodList.size(), goodList)).withMessage("Collection has size 3, but minimum is: 4 — contains: [a, b, c]");
-        assertThatIllegalArgumentException().isThrownBy(() -> Require.requireSizeGreaterThan(goodList.size(), goodList, BAD)).withMessage(BAD + " has size 3, but minimum is: 4 — contains: [a, b, c]");
+        assertThatNoException().isThrownBy(() -> Require.requireSizeGreaterThan(goodList, goodList.size() - 1));
+        assertThatNullPointerException().isThrownBy(() -> Require.requireSizeGreaterThan(nullList, 1)).withMessage("Collection is null");
+        assertThatNullPointerException().isThrownBy(() -> Require.requireSizeGreaterThan(nullList, 1, BAD)).withMessage(BAD + " is null");
+        assertThatIllegalArgumentException().isThrownBy(() -> Require.requireSizeGreaterThan(goodList, goodList.size())).withMessage("Collection has size 3, but minimum is: 4 — contains: [a, b, c]");
+        assertThatIllegalArgumentException().isThrownBy(() -> Require.requireSizeGreaterThan(
+            goodList,
+            goodList.size(),
+            BAD)).withMessage(BAD + " has size 3, but minimum is: 4 — contains: [a, b, c]");
     }
 
     @Test
     void testRequireSizeGreaterThan_map() {
-        assertThatNoException().isThrownBy(() -> Require.requireSizeGreaterThan(goodMap.size() - 1, goodMap));
-        assertThatNullPointerException().isThrownBy(() -> Require.requireSizeGreaterThan(1, nullMap)).withMessage("Map is null");
-        assertThatNullPointerException().isThrownBy(() -> Require.requireSizeGreaterThan(1, nullMap, BAD)).withMessage(BAD + " is null");
-        assertThatIllegalArgumentException().isThrownBy(() -> Require.requireSizeGreaterThan(goodMap.size(), goodMap)).withMessage("Map has size 2, but minimum is: 3 — contains: {a=1, b=2}");
-        assertThatIllegalArgumentException().isThrownBy(() -> Require.requireSizeGreaterThan(goodMap.size(), goodMap, BAD)).withMessage(BAD + " has size 2, but minimum is: 3 — contains: {a=1, b=2}");
+        assertThatNoException().isThrownBy(() -> Require.requireSizeGreaterThan(goodMap, goodMap.size() - 1));
+        assertThatNullPointerException().isThrownBy(() -> Require.requireSizeGreaterThan(nullMap, 1)).withMessage("Map is null");
+        assertThatNullPointerException().isThrownBy(() -> Require.requireSizeGreaterThan(nullMap, 1, BAD)).withMessage(BAD + " is null");
+        assertThatIllegalArgumentException().isThrownBy(() -> Require.requireSizeGreaterThan(goodMap, goodMap.size())).withMessage("Map has size 2, but minimum is: 3 — contains: {a=1, b=2}");
+        assertThatIllegalArgumentException().isThrownBy(() -> Require.requireSizeGreaterThan(
+            goodMap,
+            goodMap.size(),
+            BAD)).withMessage(BAD + " has size 2, but minimum is: 3 — contains: {a=1, b=2}");
     }
 
     @Test
     void testRequireSizeGreaterOrEqualTo_collection() {
-        assertThatNoException().isThrownBy(() -> Require.requireSizeGreaterOrEqualTo(goodList.size(), goodList));
-        assertThatNullPointerException().isThrownBy(() -> Require.requireSizeGreaterOrEqualTo(1, nullList)).withMessage("Collection is null");
-        assertThatNullPointerException().isThrownBy(() -> Require.requireSizeGreaterOrEqualTo(1, nullList, BAD)).withMessage(BAD + " is null");
-        assertThatIllegalArgumentException().isThrownBy(() -> Require.requireSizeGreaterOrEqualTo(goodList.size() + 1, goodList)).withMessage("Collection has size 3, but minimum is: 4 — contains: [a, b, c]");
-        assertThatIllegalArgumentException().isThrownBy(() -> Require.requireSizeGreaterOrEqualTo(goodList.size() + 1, goodList, BAD)).withMessage(BAD + " has size 3, but minimum is: 4 — contains: [a, b, c]");
+        assertThatNoException().isThrownBy(() -> Require.requireSizeGreaterOrEqualTo(goodList, goodList.size()));
+        assertThatNullPointerException().isThrownBy(() -> Require.requireSizeGreaterOrEqualTo(nullList, 1)).withMessage("Collection is null");
+        assertThatNullPointerException().isThrownBy(() -> Require.requireSizeGreaterOrEqualTo(nullList, 1, BAD)).withMessage(BAD + " is null");
+        assertThatIllegalArgumentException().isThrownBy(() -> Require.requireSizeGreaterOrEqualTo(
+            goodList,
+            goodList.size() + 1)).withMessage("Collection has size 3, but minimum is: 4 — contains: [a, b, c]");
+        assertThatIllegalArgumentException().isThrownBy(() -> Require.requireSizeGreaterOrEqualTo(
+            goodList,
+            goodList.size() + 1,
+            BAD)).withMessage(BAD + " has size 3, but minimum is: 4 — contains: [a, b, c]");
     }
 
     @Test
     void testRequireSizeGreaterOrEqualTo_map() {
-        assertThatNoException().isThrownBy(() -> Require.requireSizeGreaterOrEqualTo(goodMap.size(), goodMap));
-        assertThatNullPointerException().isThrownBy(() -> Require.requireSizeGreaterOrEqualTo(1, nullMap)).withMessage("Map is null");
-        assertThatNullPointerException().isThrownBy(() -> Require.requireSizeGreaterOrEqualTo(1, nullMap, BAD)).withMessage(BAD + " is null");
-        assertThatIllegalArgumentException().isThrownBy(() -> Require.requireSizeGreaterOrEqualTo(goodMap.size() + 1, goodMap)).withMessage("Map has size 2, but minimum is: 3 — contains: {a=1, b=2}");
-        assertThatIllegalArgumentException().isThrownBy(() -> Require.requireSizeGreaterOrEqualTo(goodMap.size() + 1, goodMap, BAD)).withMessage(BAD + " has size 2, but minimum is: 3 — contains: {a=1, b=2}");
+        assertThatNoException().isThrownBy(() -> Require.requireSizeGreaterOrEqualTo(goodMap, goodMap.size()));
+        assertThatNullPointerException().isThrownBy(() -> Require.requireSizeGreaterOrEqualTo(nullMap, 1)).withMessage("Map is null");
+        assertThatNullPointerException().isThrownBy(() -> Require.requireSizeGreaterOrEqualTo(nullMap, 1, BAD)).withMessage(BAD + " is null");
+        assertThatIllegalArgumentException().isThrownBy(() -> Require.requireSizeGreaterOrEqualTo(
+            goodMap,
+            goodMap.size() + 1)).withMessage("Map has size 2, but minimum is: 3 — contains: {a=1, b=2}");
+        assertThatIllegalArgumentException().isThrownBy(() -> Require.requireSizeGreaterOrEqualTo(
+            goodMap,
+            goodMap.size() + 1,
+            BAD)).withMessage(BAD + " has size 2, but minimum is: 3 — contains: {a=1, b=2}");
     }
 
     @Test
     void testRequireSizeLessThan_collection() {
-        assertThatNoException().isThrownBy(() -> Require.requireSizeLessThan(goodList.size() + 1, goodList));
-        assertThatNullPointerException().isThrownBy(() -> Require.requireSizeLessThan(1, nullList)).withMessage("Collection is null");
-        assertThatNullPointerException().isThrownBy(() -> Require.requireSizeLessThan(1, nullList, BAD)).withMessage(BAD + " is null");
-        assertThatIllegalArgumentException().isThrownBy(() -> Require.requireSizeLessThan(goodList.size(), goodList)).withMessage("Collection has size 3, but maximum is: 2 — contains: [a, b, c]");
-        assertThatIllegalArgumentException().isThrownBy(() -> Require.requireSizeLessThan(goodList.size(), goodList, BAD)).withMessage(BAD + " has size 3, but maximum is: 2 — contains: [a, b, c]");
+        assertThatNoException().isThrownBy(() -> Require.requireSizeLessThan(goodList, goodList.size() + 1));
+        assertThatNullPointerException().isThrownBy(() -> Require.requireSizeLessThan(nullList, 1)).withMessage("Collection is null");
+        assertThatNullPointerException().isThrownBy(() -> Require.requireSizeLessThan(nullList, 1, BAD)).withMessage(BAD + " is null");
+        assertThatIllegalArgumentException().isThrownBy(() -> Require.requireSizeLessThan(goodList, goodList.size())).withMessage("Collection has size 3, but maximum is: 2 — contains: [a, b, c]");
+        assertThatIllegalArgumentException().isThrownBy(() -> Require.requireSizeLessThan(goodList, goodList.size(), BAD)).withMessage(BAD + " has size 3, but maximum is: 2 — contains: [a, b, c]");
     }
 
     @Test
     void testRequireSizeLessThan_map() {
-        assertThatNoException().isThrownBy(() -> Require.requireSizeLessThan(goodMap.size() + 1, goodMap));
-        assertThatNullPointerException().isThrownBy(() -> Require.requireSizeLessThan(1, nullMap)).withMessage("Map is null");
-        assertThatNullPointerException().isThrownBy(() -> Require.requireSizeLessThan(1, nullMap, BAD)).withMessage(BAD + " is null");
-        assertThatIllegalArgumentException().isThrownBy(() -> Require.requireSizeLessThan(goodMap.size(), goodMap)).withMessage("Map has size 2, but maximum is: 1 — contains: {a=1, b=2}");
-        assertThatIllegalArgumentException().isThrownBy(() -> Require.requireSizeLessThan(goodMap.size(), goodMap, BAD)).withMessage(BAD + " has size 2, but maximum is: 1 — contains: {a=1, b=2}");
+        assertThatNoException().isThrownBy(() -> Require.requireSizeLessThan(goodMap, goodMap.size() + 1));
+        assertThatNullPointerException().isThrownBy(() -> Require.requireSizeLessThan(nullMap, 1)).withMessage("Map is null");
+        assertThatNullPointerException().isThrownBy(() -> Require.requireSizeLessThan(nullMap, 1, BAD)).withMessage(BAD + " is null");
+        assertThatIllegalArgumentException().isThrownBy(() -> Require.requireSizeLessThan(goodMap, goodMap.size())).withMessage("Map has size 2, but maximum is: 1 — contains: {a=1, b=2}");
+        assertThatIllegalArgumentException().isThrownBy(() -> Require.requireSizeLessThan(goodMap, goodMap.size(), BAD)).withMessage(BAD + " has size 2, but maximum is: 1 — contains: {a=1, b=2}");
     }
 
     @Test
     void testRequireSizeLessOrEqualTo_collection() {
-        assertThatNoException().isThrownBy(() -> Require.requireSizeLessOrEqualTo(goodList.size(), goodList));
-        assertThatNullPointerException().isThrownBy(() -> Require.requireSizeLessOrEqualTo(1, nullList)).withMessage("Collection is null");
-        assertThatNullPointerException().isThrownBy(() -> Require.requireSizeLessOrEqualTo(1, nullList, BAD)).withMessage(BAD + " is null");
-        assertThatIllegalArgumentException().isThrownBy(() -> Require.requireSizeLessOrEqualTo(goodList.size() - 1, goodList)).withMessage("Collection has size 3, but maximum is: 2 — contains: [a, b, c]");
-        assertThatIllegalArgumentException().isThrownBy(() -> Require.requireSizeLessOrEqualTo(goodList.size() - 1, goodList, BAD)).withMessage(BAD + " has size 3, but maximum is: 2 — contains: [a, b, c]");
+        assertThatNoException().isThrownBy(() -> Require.requireSizeLessOrEqualTo(goodList, goodList.size()));
+        assertThatNullPointerException().isThrownBy(() -> Require.requireSizeLessOrEqualTo(nullList, 1)).withMessage("Collection is null");
+        assertThatNullPointerException().isThrownBy(() -> Require.requireSizeLessOrEqualTo(nullList, 1, BAD)).withMessage(BAD + " is null");
+        assertThatIllegalArgumentException().isThrownBy(() -> Require.requireSizeLessOrEqualTo(
+            goodList,
+            goodList.size() - 1)).withMessage("Collection has size 3, but maximum is: 2 — contains: [a, b, c]");
+        assertThatIllegalArgumentException().isThrownBy(() -> Require.requireSizeLessOrEqualTo(
+            goodList,
+            goodList.size() - 1,
+            BAD)).withMessage(BAD + " has size 3, but maximum is: 2 — contains: [a, b, c]");
     }
 
     @Test
     void testRequireSizeLessOrEqualTo_map() {
-        assertThatNoException().isThrownBy(() -> Require.requireSizeLessOrEqualTo(goodMap.size(), goodMap));
-        assertThatNullPointerException().isThrownBy(() -> Require.requireSizeLessOrEqualTo(1, nullMap)).withMessage("Map is null");
-        assertThatNullPointerException().isThrownBy(() -> Require.requireSizeLessOrEqualTo(1, nullMap, BAD)).withMessage(BAD + " is null");
-        assertThatIllegalArgumentException().isThrownBy(() -> Require.requireSizeLessOrEqualTo(goodMap.size() - 1, goodMap)).withMessage("Map has size 2, but maximum is: 1 — contains: {a=1, b=2}");
-        assertThatIllegalArgumentException().isThrownBy(() -> Require.requireSizeLessOrEqualTo(goodMap.size() - 1, goodMap, BAD)).withMessage(BAD + " has size 2, but maximum is: 1 — contains: {a=1, b=2}");
+        assertThatNoException().isThrownBy(() -> Require.requireSizeLessOrEqualTo(goodMap, goodMap.size()));
+        assertThatNullPointerException().isThrownBy(() -> Require.requireSizeLessOrEqualTo(nullMap, 1)).withMessage("Map is null");
+        assertThatNullPointerException().isThrownBy(() -> Require.requireSizeLessOrEqualTo(nullMap, 1, BAD)).withMessage(BAD + " is null");
+        assertThatIllegalArgumentException().isThrownBy(() -> Require.requireSizeLessOrEqualTo(
+            goodMap,
+            goodMap.size() - 1)).withMessage("Map has size 2, but maximum is: 1 — contains: {a=1, b=2}");
+        assertThatIllegalArgumentException().isThrownBy(() -> Require.requireSizeLessOrEqualTo(
+            goodMap,
+            goodMap.size() - 1,
+            BAD)).withMessage(BAD + " has size 2, but maximum is: 1 — contains: {a=1, b=2}");
     }
 
     @Test
     void testRequireValueGreaterThan_int() {
-        assertThatNoException().isThrownBy(() -> Require.requireValueGreaterThan(0, 1));
-        assertThatIllegalArgumentException().isThrownBy(() -> Require.requireValueGreaterThan(1, 0)).withMessage("Value is 0, but minimum is: 2");
-        assertThatIllegalArgumentException().isThrownBy(() -> Require.requireValueGreaterThan(1, 0, BAD)).withMessage(BAD + " is 0, but minimum is: 2");
+        assertThatNoException().isThrownBy(() -> Require.requireValueGreaterThan(1, 0));
+        assertThatIllegalArgumentException().isThrownBy(() -> Require.requireValueGreaterThan(0, 1)).withMessage("Value is 0, but minimum is: 2");
+        assertThatIllegalArgumentException().isThrownBy(() -> Require.requireValueGreaterThan(0, 1, BAD)).withMessage(BAD + " is 0, but minimum is: 2");
     }
 
     @Test
     void testRequireValueGreaterThan_long() {
-        assertThatNoException().isThrownBy(() -> Require.requireValueGreaterThan(0L, 1L));
-        assertThatIllegalArgumentException().isThrownBy(() -> Require.requireValueGreaterThan(1L, 0L)).withMessage("Value is 0, but minimum is: 2");
-        assertThatIllegalArgumentException().isThrownBy(() -> Require.requireValueGreaterThan(1L, 0L, BAD)).withMessage(BAD + " is 0, but minimum is: 2");
+        assertThatNoException().isThrownBy(() -> Require.requireValueGreaterThan(1L, 0L));
+        assertThatIllegalArgumentException().isThrownBy(() -> Require.requireValueGreaterThan(0L, 1L)).withMessage("Value is 0, but minimum is: 2");
+        assertThatIllegalArgumentException().isThrownBy(() -> Require.requireValueGreaterThan(0L, 1L, BAD)).withMessage(BAD + " is 0, but minimum is: 2");
     }
 
     @Test
     void testRequireValueGreaterThan_float() {
-        assertThatNoException().isThrownBy(() -> Require.requireValueGreaterThan(0.0f, 1.0f));
-        assertThatIllegalArgumentException().isThrownBy(() -> Require.requireValueGreaterThan(1.0f, 0.0f)).withMessage("Value is 0.0, but minimum is: 2.0");
-        assertThatIllegalArgumentException().isThrownBy(() -> Require.requireValueGreaterThan(1.0f, 0.0f, BAD)).withMessage(BAD + " is 0.0, but minimum is: 2.0");
+        assertThatNoException().isThrownBy(() -> Require.requireValueGreaterThan(1.0f, 0.0f));
+        assertThatIllegalArgumentException().isThrownBy(() -> Require.requireValueGreaterThan(0.0f, 1.0f)).withMessage("Value is 0.0, but minimum is: 2.0");
+        assertThatIllegalArgumentException().isThrownBy(() -> Require.requireValueGreaterThan(0.0f, 1.0f, BAD)).withMessage(BAD + " is 0.0, but minimum is: 2.0");
     }
 
     @Test
     void testRequireValueGreaterThan_double() {
-        assertThatNoException().isThrownBy(() -> Require.requireValueGreaterThan(0.0, 1.0));
-        assertThatIllegalArgumentException().isThrownBy(() -> Require.requireValueGreaterThan(1.0, 0.0)).withMessage("Value is 0.0, but minimum is: 2.0");
-        assertThatIllegalArgumentException().isThrownBy(() -> Require.requireValueGreaterThan(1.0, 0.0, BAD)).withMessage(BAD + " is 0.0, but minimum is: 2.0");
+        assertThatNoException().isThrownBy(() -> Require.requireValueGreaterThan(1.0, 0.0));
+        assertThatIllegalArgumentException().isThrownBy(() -> Require.requireValueGreaterThan(0.0, 1.0)).withMessage("Value is 0.0, but minimum is: 2.0");
+        assertThatIllegalArgumentException().isThrownBy(() -> Require.requireValueGreaterThan(0.0, 1.0, BAD)).withMessage(BAD + " is 0.0, but minimum is: 2.0");
     }
 
     @Test
     void testRequireValueGreaterOrEqualTo_int() {
         assertThatNoException().isThrownBy(() -> Require.requireValueGreaterOrEqualTo(0, 0));
-        assertThatIllegalArgumentException().isThrownBy(() -> Require.requireValueGreaterOrEqualTo(1, 0)).withMessage("Value is 0, but minimum is: 1");
-        assertThatIllegalArgumentException().isThrownBy(() -> Require.requireValueGreaterOrEqualTo(1, 0, BAD)).withMessage(BAD + " is 0, but minimum is: 1");
+        assertThatIllegalArgumentException().isThrownBy(() -> Require.requireValueGreaterOrEqualTo(0, 1)).withMessage("Value is 0, but minimum is: 1");
+        assertThatIllegalArgumentException().isThrownBy(() -> Require.requireValueGreaterOrEqualTo(0, 1, BAD)).withMessage(BAD + " is 0, but minimum is: 1");
     }
 
     @Test
     void testRequireValueGreaterOrEqualTo_long() {
         assertThatNoException().isThrownBy(() -> Require.requireValueGreaterOrEqualTo(0L, 0L));
-        assertThatIllegalArgumentException().isThrownBy(() -> Require.requireValueGreaterOrEqualTo(1L, 0L)).withMessage("Value is 0, but minimum is: 1");
-        assertThatIllegalArgumentException().isThrownBy(() -> Require.requireValueGreaterOrEqualTo(1L, 0L, BAD)).withMessage(BAD + " is 0, but minimum is: 1");
+        assertThatIllegalArgumentException().isThrownBy(() -> Require.requireValueGreaterOrEqualTo(0L, 1L)).withMessage("Value is 0, but minimum is: 1");
+        assertThatIllegalArgumentException().isThrownBy(() -> Require.requireValueGreaterOrEqualTo(0L, 1L, BAD)).withMessage(BAD + " is 0, but minimum is: 1");
     }
 
     @Test
     void testRequireValueGreaterOrEqualTo_float() {
         assertThatNoException().isThrownBy(() -> Require.requireValueGreaterOrEqualTo(0.0f, 0.0f));
-        assertThatIllegalArgumentException().isThrownBy(() -> Require.requireValueGreaterOrEqualTo(1.0f, 0.0f)).withMessage("Value is 0.0, but minimum is: 1.0");
-        assertThatIllegalArgumentException().isThrownBy(() -> Require.requireValueGreaterOrEqualTo(1.0f, 0.0f, BAD)).withMessage(BAD + " is 0.0, but minimum is: 1.0");
+        assertThatIllegalArgumentException().isThrownBy(() -> Require.requireValueGreaterOrEqualTo(0.0f, 1.0f)).withMessage("Value is 0.0, but minimum is: 1.0");
+        assertThatIllegalArgumentException().isThrownBy(() -> Require.requireValueGreaterOrEqualTo(0.0f, 1.0f, BAD)).withMessage(BAD + " is 0.0, but minimum is: 1.0");
     }
 
     @Test
     void testRequireValueGreaterOrEqualTo_double() {
         assertThatNoException().isThrownBy(() -> Require.requireValueGreaterOrEqualTo(0.0, 0.0));
-        assertThatIllegalArgumentException().isThrownBy(() -> Require.requireValueGreaterOrEqualTo(1.0, 0.0)).withMessage("Value is 0.0, but minimum is: 1.0");
-        assertThatIllegalArgumentException().isThrownBy(() -> Require.requireValueGreaterOrEqualTo(1.0, 0.0, BAD)).withMessage(BAD + " is 0.0, but minimum is: 1.0");
+        assertThatIllegalArgumentException().isThrownBy(() -> Require.requireValueGreaterOrEqualTo(0.0, 1.0)).withMessage("Value is 0.0, but minimum is: 1.0");
+        assertThatIllegalArgumentException().isThrownBy(() -> Require.requireValueGreaterOrEqualTo(0.0, 1.0, BAD)).withMessage(BAD + " is 0.0, but minimum is: 1.0");
     }
 
     @Test
     void testRequireValueLessThan_int() {
-        assertThatNoException().isThrownBy(() -> Require.requireValueLessThan(1, 0));
+        assertThatNoException().isThrownBy(() -> Require.requireValueLessThan(0, 1));
         assertThatIllegalArgumentException().isThrownBy(() -> Require.requireValueLessThan(1, 1)).withMessage("Value is 1, but maximum is: 0");
         assertThatIllegalArgumentException().isThrownBy(() -> Require.requireValueLessThan(1, 1, BAD)).withMessage(BAD + " is 1, but maximum is: 0");
     }
 
     @Test
     void testRequireValueLessThan_long() {
-        assertThatNoException().isThrownBy(() -> Require.requireValueLessThan(1L, 0L));
+        assertThatNoException().isThrownBy(() -> Require.requireValueLessThan(0L, 1L));
         assertThatIllegalArgumentException().isThrownBy(() -> Require.requireValueLessThan(1L, 1L)).withMessage("Value is 1, but maximum is: 0");
         assertThatIllegalArgumentException().isThrownBy(() -> Require.requireValueLessThan(1L, 1L, BAD)).withMessage(BAD + " is 1, but maximum is: 0");
     }
 
     @Test
     void testRequireValueLessThan_float() {
-        assertThatNoException().isThrownBy(() -> Require.requireValueLessThan(1.0f, 0.0f));
+        assertThatNoException().isThrownBy(() -> Require.requireValueLessThan(0.0f, 1.0f));
         assertThatIllegalArgumentException().isThrownBy(() -> Require.requireValueLessThan(1.0f, 1.0f)).withMessage("Value is 1.0, but maximum is: 0.0");
         assertThatIllegalArgumentException().isThrownBy(() -> Require.requireValueLessThan(1.0f, 1.0f, BAD)).withMessage(BAD + " is 1.0, but maximum is: 0.0");
     }
 
     @Test
     void testRequireValueLessThan_double() {
-        assertThatNoException().isThrownBy(() -> Require.requireValueLessThan(1.0, 0.0));
+        assertThatNoException().isThrownBy(() -> Require.requireValueLessThan(0.0, 1.0));
         assertThatIllegalArgumentException().isThrownBy(() -> Require.requireValueLessThan(1.0, 1.0)).withMessage("Value is 1.0, but maximum is: 0.0");
         assertThatIllegalArgumentException().isThrownBy(() -> Require.requireValueLessThan(1.0, 1.0, BAD)).withMessage(BAD + " is 1.0, but maximum is: 0.0");
     }
@@ -500,54 +541,83 @@ class RequireTest {
     @Test
     void testRequireValueLessOrEqualTo_int() {
         assertThatNoException().isThrownBy(() -> Require.requireValueLessOrEqualTo(1, 1));
-        assertThatIllegalArgumentException().isThrownBy(() -> Require.requireValueLessOrEqualTo(0, 1)).withMessage("Value is 1, but maximum is: 0");
-        assertThatIllegalArgumentException().isThrownBy(() -> Require.requireValueLessOrEqualTo(0, 1, BAD)).withMessage(BAD + " is 1, but maximum is: 0");
+        assertThatIllegalArgumentException().isThrownBy(() -> Require.requireValueLessOrEqualTo(1, 0)).withMessage("Value is 1, but maximum is: 0");
+        assertThatIllegalArgumentException().isThrownBy(() -> Require.requireValueLessOrEqualTo(1, 0, BAD)).withMessage(BAD + " is 1, but maximum is: 0");
     }
 
     @Test
     void testRequireValueLessOrEqualTo_long() {
         assertThatNoException().isThrownBy(() -> Require.requireValueLessOrEqualTo(1L, 1L));
-        assertThatIllegalArgumentException().isThrownBy(() -> Require.requireValueLessOrEqualTo(0L, 1L)).withMessage("Value is 1, but maximum is: 0");
-        assertThatIllegalArgumentException().isThrownBy(() -> Require.requireValueLessOrEqualTo(0L, 1L, BAD)).withMessage(BAD + " is 1, but maximum is: 0");
+        assertThatIllegalArgumentException().isThrownBy(() -> Require.requireValueLessOrEqualTo(1L, 0L)).withMessage("Value is 1, but maximum is: 0");
+        assertThatIllegalArgumentException().isThrownBy(() -> Require.requireValueLessOrEqualTo(1L, 0L, BAD)).withMessage(BAD + " is 1, but maximum is: 0");
     }
 
     @Test
     void testRequireValueLessOrEqualTo_float() {
         assertThatNoException().isThrownBy(() -> Require.requireValueLessOrEqualTo(1.0f, 1.0f));
-        assertThatIllegalArgumentException().isThrownBy(() -> Require.requireValueLessOrEqualTo(0.0f, 1.0f)).withMessage("Value is 1.0, but maximum is: 0.0");
-        assertThatIllegalArgumentException().isThrownBy(() -> Require.requireValueLessOrEqualTo(0.0f, 1.0f, BAD)).withMessage(BAD + " is 1.0, but maximum is: 0.0");
+        assertThatIllegalArgumentException().isThrownBy(() -> Require.requireValueLessOrEqualTo(1.0f, 0.0f)).withMessage("Value is 1.0, but maximum is: 0.0");
+        assertThatIllegalArgumentException().isThrownBy(() -> Require.requireValueLessOrEqualTo(1.0f, 0.0f, BAD)).withMessage(BAD + " is 1.0, but maximum is: 0.0");
     }
 
     @Test
     void testRequireValueLessOrEqualTo_double() {
         assertThatNoException().isThrownBy(() -> Require.requireValueLessOrEqualTo(1.0, 1.0));
-        assertThatIllegalArgumentException().isThrownBy(() -> Require.requireValueLessOrEqualTo(0.0, 1.0)).withMessage("Value is 1.0, but maximum is: 0.0");
-        assertThatIllegalArgumentException().isThrownBy(() -> Require.requireValueLessOrEqualTo(0.0, 1.0, BAD)).withMessage(BAD + " is 1.0, but maximum is: 0.0");
+        assertThatIllegalArgumentException().isThrownBy(() -> Require.requireValueLessOrEqualTo(1.0, 0.0)).withMessage("Value is 1.0, but maximum is: 0.0");
+        assertThatIllegalArgumentException().isThrownBy(() -> Require.requireValueLessOrEqualTo(1.0, 0.0, BAD)).withMessage(BAD + " is 1.0, but maximum is: 0.0");
     }
 
     @Test
     void testRequireDurationGreaterThan() {
-        assertThatNoException().isThrownBy(() -> Require.requireDurationGreaterThan(Duration.ofSeconds(1), Duration.ofSeconds(2)));
-        assertThatIllegalArgumentException().isThrownBy(() -> Require.requireDurationGreaterThan(Duration.ofSeconds(1), Duration.ofSeconds(1))).withMessage("Duration is 1s, but must be greater than: 1s");
-        assertThatIllegalArgumentException().isThrownBy(() -> Require.requireDurationGreaterThan(Duration.ofSeconds(1), Duration.ofSeconds(1), BAD)).withMessage(BAD + " is 1s, but must be greater than: 1s");
-        assertThatNoException().isThrownBy(() -> Require.requireDurationGreaterThanNanos(1, Duration.ofNanos(2)));
-        assertThatIllegalArgumentException().isThrownBy(() -> Require.requireDurationGreaterThanNanos(1, Duration.ofNanos(1))).withMessage("Duration is 1ns, but must be greater than: 1ns");
-        assertThatIllegalArgumentException().isThrownBy(() -> Require.requireDurationGreaterThanNanos(1, Duration.ofNanos(1), BAD)).withMessage(BAD + " is 1ns, but must be greater than: 1ns");
-        assertThatNoException().isThrownBy(() -> Require.requireDurationGreaterThanMillis(1, Duration.ofMillis(2)));
-        assertThatIllegalArgumentException().isThrownBy(() -> Require.requireDurationGreaterThanMillis(1, Duration.ofMillis(1))).withMessage("Duration is 1ms, but must be greater than: 1ms");
-        assertThatIllegalArgumentException().isThrownBy(() -> Require.requireDurationGreaterThanMillis(1, Duration.ofMillis(1), BAD)).withMessage(BAD + " is 1ms, but must be greater than: 1ms");
-        assertThatNoException().isThrownBy(() -> Require.requireDurationGreaterThanSecs(1, Duration.ofSeconds(2)));
-        assertThatIllegalArgumentException().isThrownBy(() -> Require.requireDurationGreaterThanSecs(1, Duration.ofSeconds(1))).withMessage("Duration is 1s, but must be greater than: 1s");
-        assertThatIllegalArgumentException().isThrownBy(() -> Require.requireDurationGreaterThanSecs(1, Duration.ofSeconds(1), BAD)).withMessage(BAD + " is 1s, but must be greater than: 1s");
-        assertThatNoException().isThrownBy(() -> Require.requireDurationGreaterThanMins(1, Duration.ofMinutes(2)));
-        assertThatIllegalArgumentException().isThrownBy(() -> Require.requireDurationGreaterThanMins(1, Duration.ofMinutes(1))).withMessage("Duration is 1m, but must be greater than: 1m");
-        assertThatIllegalArgumentException().isThrownBy(() -> Require.requireDurationGreaterThanMins(1, Duration.ofMinutes(1), BAD)).withMessage(BAD + " is 1m, but must be greater than: 1m");
-        assertThatNoException().isThrownBy(() -> Require.requireDurationGreaterThanHours(1, Duration.ofHours(2)));
-        assertThatIllegalArgumentException().isThrownBy(() -> Require.requireDurationGreaterThanHours(1, Duration.ofHours(1))).withMessage("Duration is 1h, but must be greater than: 1h");
-        assertThatIllegalArgumentException().isThrownBy(() -> Require.requireDurationGreaterThanHours(1, Duration.ofHours(1), BAD)).withMessage(BAD + " is 1h, but must be greater than: 1h");
-        assertThatNoException().isThrownBy(() -> Require.requireDurationGreaterThanDays(1, Duration.ofDays(2)));
-        assertThatIllegalArgumentException().isThrownBy(() -> Require.requireDurationGreaterThanDays(1, Duration.ofDays(1))).withMessage("Duration is 1d, but must be greater than: 1d");
-        assertThatIllegalArgumentException().isThrownBy(() -> Require.requireDurationGreaterThanDays(1, Duration.ofDays(1), BAD)).withMessage(BAD + " is 1d, but must be greater than: 1d");
+        assertThatNoException().isThrownBy(() -> Require.requireDurationGreaterThan(Duration.ofSeconds(2),
+            Duration.ofSeconds(1)));
+        assertThatIllegalArgumentException().isThrownBy(() -> Require.requireDurationGreaterThan(Duration.ofSeconds(1),
+            Duration.ofSeconds(1))).withMessage("Duration is 1s, but must be greater than: 1s");
+        assertThatIllegalArgumentException().isThrownBy(() -> Require.requireDurationGreaterThan(
+            Duration.ofSeconds(1),
+            Duration.ofSeconds(1),
+            BAD)).withMessage(BAD + " is 1s, but must be greater than: 1s");
+        assertThatNoException().isThrownBy(() -> Require.requireDurationGreaterThanNanos(Duration.ofNanos(2), 1));
+        assertThatIllegalArgumentException().isThrownBy(() -> Require.requireDurationGreaterThanNanos(Duration.ofNanos(1),
+            1)).withMessage("Duration is 1ns, but must be greater than: 1ns");
+        assertThatIllegalArgumentException().isThrownBy(() -> Require.requireDurationGreaterThanNanos(
+            Duration.ofNanos(1),
+            1,
+            BAD)).withMessage(BAD + " is 1ns, but must be greater than: 1ns");
+        assertThatNoException().isThrownBy(() -> Require.requireDurationGreaterThanMillis(Duration.ofMillis(2), 1));
+        assertThatIllegalArgumentException().isThrownBy(() -> Require.requireDurationGreaterThanMillis(Duration.ofMillis(1),
+            1)).withMessage("Duration is 1ms, but must be greater than: 1ms");
+        assertThatIllegalArgumentException().isThrownBy(() -> Require.requireDurationGreaterThanMillis(
+            Duration.ofMillis(1),
+            1,
+            BAD)).withMessage(BAD + " is 1ms, but must be greater than: 1ms");
+        assertThatNoException().isThrownBy(() -> Require.requireDurationGreaterThanSecs(Duration.ofSeconds(2), 1));
+        assertThatIllegalArgumentException().isThrownBy(() -> Require.requireDurationGreaterThanSecs(Duration.ofSeconds(1),
+            1)).withMessage("Duration is 1s, but must be greater than: 1s");
+        assertThatIllegalArgumentException().isThrownBy(() -> Require.requireDurationGreaterThanSecs(
+            Duration.ofSeconds(1),
+            1,
+            BAD)).withMessage(BAD + " is 1s, but must be greater than: 1s");
+        assertThatNoException().isThrownBy(() -> Require.requireDurationGreaterThanMins(Duration.ofMinutes(2), 1));
+        assertThatIllegalArgumentException().isThrownBy(() -> Require.requireDurationGreaterThanMins(Duration.ofMinutes(1),
+            1)).withMessage("Duration is 1m, but must be greater than: 1m");
+        assertThatIllegalArgumentException().isThrownBy(() -> Require.requireDurationGreaterThanMins(
+            Duration.ofMinutes(1),
+            1,
+            BAD)).withMessage(BAD + " is 1m, but must be greater than: 1m");
+        assertThatNoException().isThrownBy(() -> Require.requireDurationGreaterThanHours(Duration.ofHours(2), 1));
+        assertThatIllegalArgumentException().isThrownBy(() -> Require.requireDurationGreaterThanHours(Duration.ofHours(1),
+            1)).withMessage("Duration is 1h, but must be greater than: 1h");
+        assertThatIllegalArgumentException().isThrownBy(() -> Require.requireDurationGreaterThanHours(
+            Duration.ofHours(1),
+            1,
+            BAD)).withMessage(BAD + " is 1h, but must be greater than: 1h");
+        assertThatNoException().isThrownBy(() -> Require.requireDurationGreaterThanDays(Duration.ofDays(2), 1));
+        assertThatIllegalArgumentException().isThrownBy(() -> Require.requireDurationGreaterThanDays(Duration.ofDays(1),
+            1)).withMessage("Duration is 1d, but must be greater than: 1d");
+        assertThatIllegalArgumentException().isThrownBy(() -> Require.requireDurationGreaterThanDays(
+            Duration.ofDays(1),
+            1,
+            BAD)).withMessage(BAD + " is 1d, but must be greater than: 1d");
     }
 
     @Test

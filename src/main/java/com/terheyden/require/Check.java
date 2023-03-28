@@ -212,122 +212,122 @@ public final class Check {
         return !isBlank(str);
     }
 
-    @Contract("_, null -> false")
-    public static boolean isLength(int length, @Nullable CharSequence str) {
+    @Contract("null, _ -> false")
+    public static boolean isLength(@Nullable CharSequence str, int length) {
         return notNull(str) && str.length() == length;
     }
 
-    @Contract("_, null -> false")
-    public static boolean isLength(int length, @Nullable Object[] array) {
+    @Contract("null, _ -> false")
+    public static boolean isLength(@Nullable Object[] array, int length) {
         return notNull(array) && array.length == length;
     }
 
-    @Contract("_, null -> true")
-    public static boolean notLength(int length, @Nullable CharSequence str) {
-        return !isLength(length, str);
+    @Contract("null, _ -> true")
+    public static boolean notLength(@Nullable CharSequence str, int length) {
+        return !isLength(str, length);
     }
 
-    @Contract("_, null -> true")
-    public static boolean notLength(int length, @Nullable Object[] array) {
-        return !isLength(length, array);
+    @Contract("null, _ -> true")
+    public static boolean notLength(@Nullable Object[] array, int length) {
+        return !isLength(array, length);
     }
 
-    @Contract("_, null -> false")
-    public static boolean isLengthGreaterThan(int minLength, @Nullable CharSequence str) {
+    @Contract("null, _ -> false")
+    public static boolean isLengthGreaterThan(@Nullable CharSequence str, int minLength) {
         return notNull(str) && str.length() > minLength;
     }
 
-    public static boolean isLengthGreaterThan(int minLength, @Nullable Object[] array) {
+    public static boolean isLengthGreaterThan(@Nullable Object[] array, int minLength) {
         return notNull(array) && array.length > minLength;
     }
 
-    public static boolean isLengthGreaterOrEqualTo(int minLength, @Nullable CharSequence str) {
+    public static boolean isLengthGreaterOrEqualTo(@Nullable CharSequence str, int minLength) {
         return notNull(str) && str.length() >= minLength;
     }
 
-    public static boolean isLengthGreaterOrEqualTo(int minLength, @Nullable Object[] array) {
+    public static boolean isLengthGreaterOrEqualTo(@Nullable Object[] array, int minLength) {
         return notNull(array) && array.length >= minLength;
     }
 
-    public static boolean isLengthLessThan(int highValue, @Nullable CharSequence str) {
+    public static boolean isLengthLessThan(@Nullable CharSequence str, int highValue) {
         return notNull(str) && str.length() < highValue;
     }
 
-    public static boolean isLengthLessThan(int highValue, @Nullable Object[] array) {
+    public static boolean isLengthLessThan(@Nullable Object[] array, int highValue) {
         return notNull(array) && array.length < highValue;
     }
 
-    public static boolean isLengthLessOrEqualTo(int maxLength, @Nullable CharSequence str) {
+    public static boolean isLengthLessOrEqualTo(@Nullable CharSequence str, int maxLength) {
         return notNull(str) && str.length() <= maxLength;
     }
 
-    public static boolean isLengthLessOrEqualTo(int maxLength, @Nullable Object[] array) {
+    public static boolean isLengthLessOrEqualTo(@Nullable Object[] array, int maxLength) {
         return notNull(array) && array.length <= maxLength;
     }
 
-    public static boolean isSize(int size, @Nullable Collection<?> collection) {
+    public static boolean isSize(@Nullable Collection<?> collection, int size) {
         return notNull(collection) && collection.size() == size;
     }
 
-    public static boolean isSize(int size, @Nullable Iterable<?> iterable) {
+    public static boolean isSize(@Nullable Iterable<?> iterable, int size) {
         return notNull(iterable) && hasAtLeastSize(iterable, size)
             .map(iter -> !iter.hasNext()) // Changes "at least length" to "exact length"
             .orElse(false);
     }
 
-    public static boolean isSize(int size, @Nullable Map<?, ?> map) {
+    public static boolean isSize(@Nullable Map<?, ?> map, int size) {
         return notNull(map) && map.size() == size;
     }
 
-    public static boolean isSizeGreaterThan(int minSize, @Nullable Collection<?> collection) {
+    public static boolean isSizeGreaterThan(@Nullable Collection<?> collection, int minSize) {
         return notNull(collection) && collection.size() > minSize;
     }
 
-    public static boolean isSizeGreaterThan(int minSize, @Nullable Iterable<?> iterable) {
+    public static boolean isSizeGreaterThan(@Nullable Iterable<?> iterable, int minSize) {
         return notNull(iterable) && hasAtLeastSize(iterable, minSize + 1).isPresent();
     }
 
-    public static boolean isSizeGreaterThan(int minSize, @Nullable Map<?, ?> map) {
+    public static boolean isSizeGreaterThan(@Nullable Map<?, ?> map, int minSize) {
         return notNull(map) && map.size() > minSize;
     }
 
-    public static boolean isSizeGreaterOrEqualTo(int minSize, @Nullable Collection<?> collection) {
+    public static boolean isSizeGreaterOrEqualTo(@Nullable Collection<?> collection, int minSize) {
         return notNull(collection) && collection.size() >= minSize;
     }
 
-    public static boolean isSizeGreaterOrEqualTo(int minSize, @Nullable Iterable<?> iterable) {
+    public static boolean isSizeGreaterOrEqualTo(@Nullable Iterable<?> iterable, int minSize) {
         return notNull(iterable) && hasAtLeastSize(iterable, minSize).isPresent();
     }
 
-    public static boolean isSizeGreaterOrEqualTo(int minSize, @Nullable Map<?, ?> map) {
+    public static boolean isSizeGreaterOrEqualTo(@Nullable Map<?, ?> map, int minSize) {
         return notNull(map) && map.size() >= minSize;
     }
 
-    public static boolean isSizeLessThan(int highValue, @Nullable Collection<?> collection) {
+    public static boolean isSizeLessThan(@Nullable Collection<?> collection, int highValue) {
         return notNull(collection) && collection.size() < highValue;
     }
 
-    public static boolean isSizeLessThan(int highValue, @Nullable Iterable<?> iterable) {
+    public static boolean isSizeLessThan(@Nullable Iterable<?> iterable, int highValue) {
         return notNull(iterable) && hasAtLeastSize(iterable, highValue - 1)
             .map(iter -> !iter.hasNext())  // if the iter has next, it has too high a value
             .orElse(true);                 // if it's empty that means it's nice and short
     }
 
-    public static boolean isSizeLessThan(int highValue, @Nullable Map<?, ?> map) {
+    public static boolean isSizeLessThan(@Nullable Map<?, ?> map, int highValue) {
         return notNull(map) && map.size() < highValue;
     }
 
-    public static boolean isSizeLessOrEqualTo(int maxSize, @Nullable Collection<?> collection) {
+    public static boolean isSizeLessOrEqualTo(@Nullable Collection<?> collection, int maxSize) {
         return notNull(collection) && collection.size() <= maxSize;
     }
 
-    public static boolean isSizeLessOrEqualTo(int maxSize, @Nullable Iterable<?> iterable) {
+    public static boolean isSizeLessOrEqualTo(@Nullable Iterable<?> iterable, int maxSize) {
         return notNull(iterable) && hasAtLeastSize(iterable, maxSize)
             .map(iter -> !iter.hasNext())  // if the iter has next, it has too high a value
             .orElse(true);                // if it's empty that means it's nice and short
     }
 
-    public static boolean isSizeLessOrEqualTo(int maxSize, @Nullable Map<?, ?> map) {
+    public static boolean isSizeLessOrEqualTo(@Nullable Map<?, ?> map, int maxSize) {
         return notNull(map) && map.size() <= maxSize;
     }
 
@@ -341,198 +341,229 @@ public final class Check {
      *
      * @return true if the duration is greater than the low limit, false if either duration is null
      */
-    public static boolean isDurationGreaterThan(@Nullable Duration minDuration, @Nullable Duration durationToCheck) {
+    @Contract(value = "null, _ -> false; _, null -> false", pure = true)
+    public static boolean isDurationGreaterThan(@Nullable Duration durationToCheck, @Nullable Duration minDuration) {
         return notNull(minDuration) && notNull(durationToCheck) && minDuration.compareTo(durationToCheck) < 0;
     }
 
     /**
      * True if the duration is greater than the specified nanoseconds.
      */
-    public static boolean isDurationGreaterThanNanos(long minNanos, @Nullable Duration durationToCheck) {
+    @Contract(value = "null, _ -> false", pure = true)
+    public static boolean isDurationGreaterThanNanos(@Nullable Duration durationToCheck, long minNanos) {
         return notNull(durationToCheck) && durationToCheck.toNanos() > minNanos;
     }
 
     /**
      * True if the duration is greater than the specified milliseconds.
      */
-    public static boolean isDurationGreaterThanMillis(long minMs, @Nullable Duration durationToCheck) {
+    @Contract(value = "null, _ -> false", pure = true)
+    public static boolean isDurationGreaterThanMillis(@Nullable Duration durationToCheck, long minMs) {
         return notNull(durationToCheck) && durationToCheck.toMillis() > minMs;
     }
 
     /**
      * True if the duration is greater than the specified seconds.
      */
-    public static boolean isDurationGreaterThanSecs(long minSecs, @Nullable Duration durationToCheck) {
+    @Contract(value = "null, _ -> false", pure = true)
+    public static boolean isDurationGreaterThanSecs(@Nullable Duration durationToCheck, long minSecs) {
         return notNull(durationToCheck) && durationToCheck.getSeconds() > minSecs;
     }
 
     /**
      * True if the duration is greater than the specified minutes.
      */
-    public static boolean isDurationGreaterThanMins(long minMins, @Nullable Duration durationToCheck) {
+    @Contract(value = "null, _ -> false", pure = true)
+    public static boolean isDurationGreaterThanMins(@Nullable Duration durationToCheck, long minMins) {
         return notNull(durationToCheck) && durationToCheck.toMinutes() > minMins;
     }
 
     /**
      * True if the duration is greater than the specified hours.
      */
-    public static boolean isDurationGreaterThanHours(long minHours, @Nullable Duration durationToCheck) {
+    @Contract(value = "null, _ -> false", pure = true)
+    public static boolean isDurationGreaterThanHours(@Nullable Duration durationToCheck, long minHours) {
         return notNull(durationToCheck) && durationToCheck.toHours() > minHours;
     }
 
     /**
      * True if the duration is greater than the specified days.
      */
-    public static boolean isDurationGreaterThanDays(long minDays, @Nullable Duration durationToCheck) {
+    @Contract(value = "null, _ -> false", pure = true)
+    public static boolean isDurationGreaterThanDays(@Nullable Duration durationToCheck, long minDays) {
         return notNull(durationToCheck) && durationToCheck.toDays() > minDays;
     }
 
-    public static boolean isDurationGreaterOrEqualTo(@Nullable Duration minDuration, @Nullable Duration durationToCheck) {
+    @Contract(value = "null, _ -> false", pure = true)
+    public static boolean isDurationGreaterOrEqualTo(@Nullable Duration durationToCheck, @Nullable Duration minDuration) {
         return notNull(minDuration) && notNull(durationToCheck) && minDuration.compareTo(durationToCheck) <= 0;
     }
 
     /**
      * True if the duration is greater than the specified nanoseconds.
      */
-    public static boolean isDurationGreaterOrEqualToNanos(long minNanos, @Nullable Duration durationToCheck) {
+    @Contract(value = "null, _ -> false", pure = true)
+    public static boolean isDurationGreaterOrEqualToNanos(@Nullable Duration durationToCheck, long minNanos) {
         return notNull(durationToCheck) && durationToCheck.toNanos() >= minNanos;
     }
 
     /**
      * True if the duration is greater than the specified milliseconds.
      */
-    public static boolean isDurationGreaterOrEqualToMillis(long minMs, @Nullable Duration durationToCheck) {
+    @Contract(value = "null, _ -> false", pure = true)
+    public static boolean isDurationGreaterOrEqualToMillis(@Nullable Duration durationToCheck, long minMs) {
         return notNull(durationToCheck) && durationToCheck.toMillis() >= minMs;
     }
 
     /**
      * True if the duration is greater than the specified seconds.
      */
-    public static boolean isDurationGreaterOrEqualToSecs(long minSecs, @Nullable Duration durationToCheck) {
+    @Contract(value = "null, _ -> false", pure = true)
+    public static boolean isDurationGreaterOrEqualToSecs(@Nullable Duration durationToCheck, long minSecs) {
         return notNull(durationToCheck) && durationToCheck.getSeconds() >= minSecs;
     }
 
     /**
      * True if the duration is greater than the specified minutes.
      */
-    public static boolean isDurationGreaterOrEqualToMins(long minMins, @Nullable Duration durationToCheck) {
+    @Contract(value = "null, _ -> false", pure = true)
+    public static boolean isDurationGreaterOrEqualToMins(@Nullable Duration durationToCheck, long minMins) {
         return notNull(durationToCheck) && durationToCheck.toMinutes() >= minMins;
     }
 
     /**
      * True if the duration is greater than the specified hours.
      */
-    public static boolean isDurationGreaterOrEqualToHours(long minHours, @Nullable Duration durationToCheck) {
+    @Contract(value = "null, _ -> false", pure = true)
+    public static boolean isDurationGreaterOrEqualToHours(@Nullable Duration durationToCheck, long minHours) {
         return notNull(durationToCheck) && durationToCheck.toHours() >= minHours;
     }
 
     /**
      * True if the duration is greater than the specified days.
      */
-    public static boolean isDurationGreaterOrEqualToDays(long minDays, @Nullable Duration durationToCheck) {
+    @Contract(value = "null, _ -> false", pure = true)
+    public static boolean isDurationGreaterOrEqualToDays(@Nullable Duration durationToCheck, long minDays) {
         return notNull(durationToCheck) && durationToCheck.toDays() >= minDays;
     }
 
-    public static boolean isDurationLessThan(@Nullable Duration highDurationLimit, @Nullable Duration durationToCheck) {
+    @Contract(value = "null, _ -> false", pure = true)
+    public static boolean isDurationLessThan(@Nullable Duration durationToCheck, @Nullable Duration highDurationLimit) {
         return notNull(highDurationLimit) && notNull(durationToCheck) && highDurationLimit.compareTo(durationToCheck) > 0;
     }
 
     /**
      * True if the duration is less than the specified nanoseconds.
      */
-    public static boolean isDurationLessThanNanos(long highValueNs, @Nullable Duration durationToCheck) {
+    @Contract(value = "null, _ -> false", pure = true)
+    public static boolean isDurationLessThanNanos(@Nullable Duration durationToCheck, long highValueNs) {
         return notNull(durationToCheck) && durationToCheck.toNanos() < highValueNs;
     }
 
     /**
      * True if the duration is less than the specified milliseconds.
      */
-    public static boolean isDurationLessThanMillis(long highValueMs, @Nullable Duration durationToCheck) {
+    @Contract(value = "null, _ -> false", pure = true)
+    public static boolean isDurationLessThanMillis(@Nullable Duration durationToCheck, long highValueMs) {
         return notNull(durationToCheck) && durationToCheck.toMillis() < highValueMs;
     }
 
     /**
      * True if the duration is less than the specified seconds.
      */
-    public static boolean isDurationLessThanSecs(long highValueSecs, @Nullable Duration durationToCheck) {
+    @Contract(value = "null, _ -> false", pure = true)
+    public static boolean isDurationLessThanSecs(@Nullable Duration durationToCheck, long highValueSecs) {
         return notNull(durationToCheck) && durationToCheck.getSeconds() < highValueSecs;
     }
 
     /**
      * True if the duration is less than the specified minutes.
      */
-    public static boolean isDurationLessThanMins(long highValueMins, @Nullable Duration durationToCheck) {
+    @Contract(value = "null, _ -> false", pure = true)
+    public static boolean isDurationLessThanMins(@Nullable Duration durationToCheck, long highValueMins) {
         return notNull(durationToCheck) && durationToCheck.toMinutes() < highValueMins;
     }
 
     /**
      * True if the duration is less than the specified hours.
      */
-    public static boolean isDurationLessThanHours(long highValueHours, @Nullable Duration durationToCheck) {
+    @Contract(value = "null, _ -> false", pure = true)
+    public static boolean isDurationLessThanHours(@Nullable Duration durationToCheck, long highValueHours) {
         return notNull(durationToCheck) && durationToCheck.toHours() < highValueHours;
     }
 
     /**
      * True if the duration is less than the specified days.
      */
-    public static boolean isDurationLessThanDays(long highValueDays, @Nullable Duration durationToCheck) {
+    @Contract(value = "null, _ -> false", pure = true)
+    public static boolean isDurationLessThanDays(@Nullable Duration durationToCheck, long highValueDays) {
         return notNull(durationToCheck) && durationToCheck.toDays() < highValueDays;
     }
 
-    public static boolean isDurationLessOrEqualTo(@Nullable Duration maxDuration, @Nullable Duration durationToCheck) {
+    @Contract(value = "null, _ -> false", pure = true)
+    public static boolean isDurationLessOrEqualTo(@Nullable Duration durationToCheck, @Nullable Duration maxDuration) {
         return notNull(maxDuration) && notNull(durationToCheck) && maxDuration.compareTo(durationToCheck) >= 0;
     }
 
     /**
      * True if the duration is less than the specified nanoseconds.
      */
-    public static boolean isDurationLessOrEqualToNanos(long maxNanos, @Nullable Duration durationToCheck) {
+    @Contract(value = "null, _ -> false", pure = true)
+    public static boolean isDurationLessOrEqualToNanos(@Nullable Duration durationToCheck, long maxNanos) {
         return notNull(durationToCheck) && durationToCheck.toNanos() <= maxNanos;
     }
 
     /**
      * True if the duration is less than the specified milliseconds.
      */
-    public static boolean isDurationLessOrEqualToMillis(long maxMillis, @Nullable Duration durationToCheck) {
+    @Contract(value = "null, _ -> false", pure = true)
+    public static boolean isDurationLessOrEqualToMillis(@Nullable Duration durationToCheck, long maxMillis) {
         return notNull(durationToCheck) && durationToCheck.toMillis() <= maxMillis;
     }
 
     /**
      * True if the duration is less than the specified seconds.
      */
-    public static boolean isDurationLessOrEqualToSecs(long maxSecs, @Nullable Duration durationToCheck) {
+    @Contract(value = "null, _ -> false", pure = true)
+    public static boolean isDurationLessOrEqualToSecs(@Nullable Duration durationToCheck, long maxSecs) {
         return notNull(durationToCheck) && durationToCheck.getSeconds() <= maxSecs;
     }
 
     /**
      * True if the duration is less than the specified minutes.
      */
-    public static boolean isDurationLessOrEqualToMins(long maxMins, @Nullable Duration durationToCheck) {
+    @Contract(value = "null, _ -> false", pure = true)
+    public static boolean isDurationLessOrEqualToMins(@Nullable Duration durationToCheck, long maxMins) {
         return notNull(durationToCheck) && durationToCheck.toMinutes() <= maxMins;
     }
 
     /**
      * True if the duration is less than the specified hours.
      */
-    public static boolean isDurationLessOrEqualToHours(long maxHours, @Nullable Duration durationToCheck) {
+    @Contract(value = "null, _ -> false", pure = true)
+    public static boolean isDurationLessOrEqualToHours(@Nullable Duration durationToCheck, long maxHours) {
         return notNull(durationToCheck) && durationToCheck.toHours() <= maxHours;
     }
 
     /**
      * True if the duration is less than the specified days.
      */
-    public static boolean isDurationLessOrEqualToDays(long maxDays, @Nullable Duration durationToCheck) {
+    @Contract(value = "null, _ -> false", pure = true)
+    public static boolean isDurationLessOrEqualToDays(@Nullable Duration durationToCheck, long maxDays) {
         return notNull(durationToCheck) && durationToCheck.toDays() <= maxDays;
     }
 
+    @Contract(value = "null -> false", pure = true)
     public static boolean pathExists(@Nullable Path path) {
         return notNull(path) && Files.exists(path);
     }
 
+    @Contract(value = "null -> false", pure = true)
     public static boolean pathExists(@Nullable File path) {
         return notNull(path) && path.exists();
     }
 
+    @Contract(value = "null -> false", pure = true)
     public static boolean pathExists(@Nullable String path) {
         return RequireUtils
             .pathGetOptional(path)
@@ -544,15 +575,18 @@ public final class Check {
      * It's expected that this method will be used as a guard clause.
      * Therefore this method returns true if the path is null.
      */
+    @Contract(value = "null -> true", pure = true)
     public static boolean notExists(@Nullable Path path) {
         // Remember that !Files.exists(path) is not the same as Files.notExists(path).
         return isNull(path) || Files.notExists(path);
     }
 
+    @Contract(value = "null -> true", pure = true)
     public static boolean notExists(@Nullable File path) {
         return !pathExists(path);
     }
 
+    @Contract(value = "null -> true", pure = true)
     public static boolean notExists(@Nullable String path) {
 
         return RequireUtils
@@ -561,14 +595,17 @@ public final class Check {
             .orElse(true);
     }
 
+    @Contract(value = "null -> false", pure = true)
     public static boolean isRegularFile(@Nullable Path file) {
         return notNull(file) && Files.isRegularFile(file);
     }
 
+    @Contract(value = "null -> false", pure = true)
     public static boolean isRegularFile(@Nullable File file) {
         return notNull(file) && file.isFile();
     }
 
+    @Contract(value = "null -> false", pure = true)
     public static boolean isRegularFile(@Nullable String filePath) {
         return RequireUtils
             .pathGetOptional(filePath)
@@ -576,26 +613,32 @@ public final class Check {
             .orElse(false);
     }
 
+    @Contract(value = "null -> true", pure = true)
     public static boolean notRegularFile(@Nullable Path file) {
         return !isRegularFile(file);
     }
 
+    @Contract(value = "null -> true", pure = true)
     public static boolean notRegularFile(@Nullable File file) {
         return !isRegularFile(file);
     }
 
+    @Contract(value = "null -> true", pure = true)
     public static boolean notRegularFile(@Nullable String filePath) {
         return !isRegularFile(filePath);
     }
 
+    @Contract(value = "null -> false", pure = true)
     public static boolean isDirectory(@Nullable Path directory) {
         return notNull(directory) && Files.isDirectory(directory);
     }
 
+    @Contract(value = "null -> false", pure = true)
     public static boolean isDirectory(@Nullable File directory) {
         return notNull(directory) && directory.isDirectory();
     }
 
+    @Contract(value = "null -> false", pure = true)
     public static boolean isDirectory(@Nullable String directoryPath) {
         return RequireUtils
             .pathGetOptional(directoryPath)
@@ -603,97 +646,120 @@ public final class Check {
             .orElse(false);
     }
 
+    @Contract(value = "null -> true", pure = true)
     public static boolean notDirectory(@Nullable Path directory) {
         return !isDirectory(directory);
     }
 
+    @Contract(value = "null -> true", pure = true)
     public static boolean notDirectory(@Nullable File directory) {
         return !isDirectory(directory);
     }
 
+    @Contract(value = "null -> true", pure = true)
     public static boolean notDirectory(@Nullable String directoryPath) {
         return !isDirectory(directoryPath);
     }
 
+    @Contract(value = "null -> false", pure = true)
     public static boolean isFuture(@Nullable ZonedDateTime dateTime) {
         return notNull(dateTime) && dateTime.isAfter(ZonedDateTime.now());
     }
 
+    @Contract(value = "null -> false", pure = true)
     public static boolean isFuture(@Nullable OffsetDateTime dateTime) {
         return notNull(dateTime) && dateTime.isAfter(OffsetDateTime.now());
     }
 
+    @Contract(value = "null -> false", pure = true)
     public static boolean isFuture(@Nullable LocalDateTime dateTime) {
         return notNull(dateTime) && dateTime.isAfter(LocalDateTime.now());
     }
 
+    @Contract(value = "null -> false", pure = true)
     public static boolean isFuture(@Nullable LocalDate date) {
         return notNull(date) && date.isAfter(LocalDate.now());
     }
 
+    @Contract(value = "null -> false", pure = true)
     public static boolean isFuture(@Nullable LocalTime time) {
         return notNull(time) && time.isAfter(LocalTime.now());
     }
 
+    @Contract(value = "null -> false", pure = true)
     public static boolean isPast(@Nullable ZonedDateTime dateTime) {
         return notNull(dateTime) && dateTime.isBefore(ZonedDateTime.now());
     }
 
+    @Contract(value = "null -> false", pure = true)
     public static boolean isPast(@Nullable OffsetDateTime dateTime) {
         return notNull(dateTime) && dateTime.isBefore(OffsetDateTime.now());
     }
 
+    @Contract(value = "null -> false", pure = true)
     public static boolean isPast(@Nullable LocalDateTime dateTime) {
         return notNull(dateTime) && dateTime.isBefore(LocalDateTime.now());
     }
 
+    @Contract(value = "null -> false", pure = true)
     public static boolean isPast(@Nullable LocalDate date) {
         return notNull(date) && date.isBefore(LocalDate.now());
     }
 
+    @Contract(value = "null -> false", pure = true)
     public static boolean isPast(@Nullable LocalTime time) {
         return notNull(time) && time.isBefore(LocalTime.now());
     }
 
-    public static boolean isInstanceOf(@Nullable Class<?> classType, @Nullable Object object) {
+    @Contract(value = "null, _ -> false; _, null -> false", pure = true)
+    public static boolean isInstanceOf(@Nullable Object object, @Nullable Class<?> classType) {
         return notNull(classType) && notNull(object) && classType.isInstance(object);
     }
 
-    public static boolean notInstanceOf(@Nullable Class<?> classType, @Nullable Object object) {
-        return !isInstanceOf(classType, object);
+    @Contract(value = "null, _ -> true; _, null -> true", pure = true)
+    public static boolean notInstanceOf(@Nullable Object object, @Nullable Class<?> classType) {
+        return !isInstanceOf(object, classType);
     }
 
-    public static boolean contains(@Nullable CharSequence contains, @Nullable CharSequence stringToCheck) {
+    @Contract(value = "null, _ -> false; _, null -> false", pure = true)
+    public static boolean contains(@Nullable CharSequence stringToCheck, @Nullable CharSequence contains) {
         return notNull(contains) && notNull(stringToCheck) && stringToCheck.toString().contains(contains);
     }
 
-    public static <T> boolean contains(@Nullable T contains, @Nullable Collection<T> collectionToCheck) {
+    @Contract(value = "null, _ -> false; _, null -> false", pure = true)
+    public static <T> boolean contains(@Nullable Collection<T> collectionToCheck, @Nullable T contains) {
         return notNull(contains) && notNull(collectionToCheck) && collectionToCheck.contains(contains);
     }
 
-    public static <T> boolean contains(@Nullable T contains, @Nullable T[] arrayToCheck) {
+    @Contract(value = "null, _ -> false; _, null -> false", pure = true)
+    public static <T> boolean contains(@Nullable T[] arrayToCheck, @Nullable T contains) {
         return notNull(contains) && notNull(arrayToCheck) && Arrays.asList(arrayToCheck).contains(contains);
     }
 
-    public static <T> boolean contains(@Nullable T contains, @Nullable Iterable<T> iterableToCheck) {
+    @Contract(value = "null, _ -> false; _, null -> false", pure = true)
+    public static <T> boolean contains(@Nullable Iterable<T> iterableToCheck, @Nullable T contains) {
         return notNull(contains) && notNull(iterableToCheck) && StreamSupport
             .stream(iterableToCheck.spliterator(), false).anyMatch(contains::equals);
     }
 
-    public static boolean notContains(@Nullable CharSequence contains, @Nullable CharSequence stringToCheck) {
-        return !contains(contains, stringToCheck);
+    @Contract(value = "null, _ -> true; _, null -> true", pure = true)
+    public static boolean notContains(@Nullable CharSequence stringToCheck, @Nullable CharSequence contains) {
+        return !contains(stringToCheck, contains);
     }
 
-    public static <T> boolean notContains(@Nullable T contains, @Nullable Collection<T> collectionToCheck) {
-        return !contains(contains, collectionToCheck);
+    @Contract(value = "null, _ -> true; _, null -> true", pure = true)
+    public static <T> boolean notContains(@Nullable Collection<T> collectionToCheck, @Nullable T contains) {
+        return !contains(collectionToCheck, contains);
     }
 
-    public static <T> boolean notContains(@Nullable T contains, @Nullable T[] arrayToCheck) {
-        return !contains(contains, arrayToCheck);
+    @Contract(value = "null, _ -> true; _, null -> true", pure = true)
+    public static <T> boolean notContains(@Nullable T[] arrayToCheck, @Nullable T contains) {
+        return !contains(arrayToCheck, contains);
     }
 
-    public static <T> boolean notContains(@Nullable T contains, @Nullable Iterable<T> iterableToCheck) {
-        return !contains(contains, iterableToCheck);
+    @Contract(value = "null, _ -> true; _, null -> true", pure = true)
+    public static <T> boolean notContains(@Nullable Iterable<T> iterableToCheck, @Nullable T contains) {
+        return !contains(iterableToCheck, contains);
     }
 
     /**
@@ -712,7 +778,7 @@ public final class Check {
         return notNull(predicate) && notNull(collectionToCheck) && collectionToCheck.stream().anyMatch(predicate);
     }
 
-    public static <T> boolean containsElement(@Nullable Predicate<? super T> predicate, @Nullable T[] arrayToCheck) {
+    public static <T> boolean containsElement(@Nullable T[] arrayToCheck, @Nullable Predicate<? super T> predicate) {
         return notNull(predicate) && notNull(arrayToCheck) && Arrays.stream(arrayToCheck).anyMatch(predicate);
     }
 
@@ -732,8 +798,8 @@ public final class Check {
         return !containsElement(predicate, collectionToCheck);
     }
 
-    public static <T> boolean notContainsElement(@Nullable Predicate<? super T> predicate, @Nullable T[] arrayToCheck) {
-        return !containsElement(predicate, arrayToCheck);
+    public static <T> boolean notContainsElement(@Nullable T[] arrayToCheck, @Nullable Predicate<? super T> predicate) {
+        return !containsElement(arrayToCheck, predicate);
     }
 
     public static <T> boolean notContainsElement(
@@ -743,27 +809,27 @@ public final class Check {
         return !containsElement(predicate, iterableToCheck);
     }
 
-    public static boolean containsRegex(@Nullable Pattern regex, @Nullable CharSequence stringToCheck) {
+    public static boolean containsRegex(@Nullable CharSequence stringToCheck, @Nullable Pattern regex) {
         return notNull(regex) && notNull(stringToCheck) && regex.matcher(stringToCheck).find();
     }
 
-    public static boolean containsRegex(@Nullable String regex, @Nullable CharSequence stringToCheck) {
-        return notNull(regex) && containsRegex(Pattern.compile(regex), stringToCheck);
+    public static boolean containsRegex(@Nullable CharSequence stringToCheck, @Nullable String regex) {
+        return notNull(regex) && containsRegex(stringToCheck, Pattern.compile(regex));
     }
 
-    public static boolean matchesRegex(@Nullable Pattern regex, @Nullable CharSequence stringToCheck) {
+    public static boolean matchesRegex(@Nullable CharSequence stringToCheck, @Nullable Pattern regex) {
         return notNull(regex) && notNull(stringToCheck) && regex.matcher(stringToCheck).matches();
     }
 
-    public static boolean matchesRegex(@Nullable String regex, @Nullable CharSequence stringToCheck) {
-        return notNull(regex) && matchesRegex(Pattern.compile(regex), stringToCheck);
+    public static boolean matchesRegex(@Nullable CharSequence stringToCheck, @Nullable String regex) {
+        return notNull(regex) && matchesRegex(stringToCheck, Pattern.compile(regex));
     }
 
-    public static boolean containsKey(@Nullable Object key, @Nullable Map<?, ?> mapToCheck) {
+    public static boolean containsKey(@Nullable Map<?, ?> mapToCheck, @Nullable Object key) {
         return notNull(key) && notNull(mapToCheck) && mapToCheck.containsKey(key);
     }
 
-    public static boolean containsValue(@Nullable Object value, @Nullable Map<?, ?> mapToCheck) {
+    public static boolean containsValue(@Nullable Map<?, ?> mapToCheck, @Nullable Object value) {
         return notNull(value) && notNull(mapToCheck) && mapToCheck.containsValue(value);
     }
 
