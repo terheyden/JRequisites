@@ -838,6 +838,18 @@ public final class Check {
             && collectionToCheck.size() == new HashSet<>(collectionToCheck).size();
     }
 
+    /**
+     * True if the collection is not null, but it contains at least one null element.
+     * Examples:
+     * <pre>
+     * {@code
+     * containsNull(Arrays.asList("a", "b"));       // false
+     * containsNull(Arrays.asList("a", "b", null)); // true
+     * containsNull(Arrays.asList());               // false
+     * containsNull(null);                          // false
+     * }
+     * </pre>
+     */
     public static boolean containsNull(@Nullable Collection<?> collectionToCheck) {
 
         if (isNull(collectionToCheck)) {
@@ -858,6 +870,18 @@ public final class Check {
         }
     }
 
+    /**
+     * True if the iterable is not null, but it contains at least one null element.
+     * Examples:
+     * <pre>
+     * {@code
+     * containsNull(Arrays.asList("a", "b"));       // false
+     * containsNull(Arrays.asList("a", "b", null)); // true
+     * containsNull(Arrays.asList());               // false
+     * containsNull(null);                          // false
+     * }
+     * </pre>
+     */
     public static boolean containsNull(@Nullable Iterable<?> iterableToCheck) {
 
         if (isNull(iterableToCheck)) {
@@ -889,13 +913,22 @@ public final class Check {
 
     /**
      * True if the collection is not null, and does not contain any null elements.
+     * Examples:
+     * <pre>
+     * {@code
+     * notContainsNull(Arrays.asList("a", "b"));       // true
+     * notContainsNull(Arrays.asList("a", "b", null)); // false
+     * notContainsNull(Arrays.asList());               // true
+     * notContainsNull(null);                          // false
+     * }
+     * </pre>
      */
     public static boolean notContainsNull(@Nullable Collection<?> collectionToCheck) {
-        return !containsNull(collectionToCheck);
+        return notNull(collectionToCheck) && !containsNull(collectionToCheck);
     }
 
     public static boolean notContainsNull(@Nullable Iterable<?> iterableToCheck) {
-        return !containsNull(iterableToCheck);
+        return notNull(iterableToCheck) && !containsNull(iterableToCheck);
     }
 
     /**
@@ -903,24 +936,23 @@ public final class Check {
      * @throws IllegalStateException if the map does not support null keys or values
      */
     public static boolean notContainsNull(@Nullable Map<?, ?> mapToCheck) {
-        return isNull(mapToCheck) || notContainsNull(mapToCheck.keySet()) && notContainsNull(mapToCheck.values());
+        return notNull(mapToCheck) && !containsNull(mapToCheck);
     }
 
     public static boolean notContainsNull(@Nullable Object[] arrayToCheck) {
-        return !containsNull(arrayToCheck);
+        return notNull(arrayToCheck) && !containsNull(arrayToCheck);
     }
 
     /**
-     * True if the string contains only numeric digits. Examples:
+     * True if the string is not blank, and contains only numeric digits. Examples:
      * <pre>
      * {@code
-     *    numbersOnly(null); // false
-     *    numbersOnly("");   // false
-     *    numbersOnly("  123"); // false
-     *    numbersOnly("hi123"); // false
      *    numbersOnly("123"); // true
      *    numbersOnly("123.0"); // false
-     *    numbersOnly("123,0"); // false
+     *    numbersOnly("  123"); // false
+     *    numbersOnly("");   // false
+     *    numbersOnly("hi123"); // false
+     *    numbersOnly(null); // false
      * }
      * </pre>
      */

@@ -6,11 +6,11 @@ _Java argument checking and validation._
 
 JRequisites is a fast, tiny library for validating method arguments (parameters).
 
-There are 3 primary use cases:
+There are 3 primary uses:
 
 - Validate method arguments, or throw an `IllegalArgumentException`
-- Validate method arguments, or return `Optional<>` for more nuanced handling (e.g. default values)
-- Validate method arguments, or return `false` (for use in streams or predicates)
+- Validate method arguments, or return `Optional` for more nuanced handling (e.g. default values)
+- Validate method arguments, or return `false` (for use in streams or conditionals)
 
 Let's take a look at some simple examples!
 
@@ -18,10 +18,10 @@ Let's take a look at some simple examples!
 // The 'Require' class contains validations that can throw an IllegalArgumentException:
 this.name = Require.requireNotNull(name);
 
-// The validations in the 'CheckIf' class return an Optional<>, so we can handle nulls more gracefully:
+// The validations in the 'CheckIf' class return an Optional, for flexibility:
 this.name = CheckIf.ifNotNull(name).orElse("(no name)");
 
-// Validations in the 'Check' class return a boolean, so we can use it in streams or predicates:
+// Validations in the 'Check' class return a boolean, so we can use it in streams or conditionals:
 users.stream()
     .filter(Check::notNull)
     .collect(Collectors.toList());
@@ -32,7 +32,8 @@ users.stream()
 ### Unique Features
 
 - A wider range of validations than other libraries
-- Checks can return `Optional<>` or `boolean` for more a wider variety of use cases
+- Includes validations for a wider range of variable types
+- Support for returning `Optional` or `boolean` for a wider variety of use cases
 
 ### Tiny
 
@@ -63,6 +64,9 @@ checkNotNull(name, "Name is null");
 requireNotNull(name, "Name"); // Outputs: "Name is null"
 ```
 
+### Compiled with Java 1.8
+Compatible with Java 1.8 and above.
+
 ### Lots of Useful Checks
 
 
@@ -77,78 +81,16 @@ requireNotNull(name, "Name"); // Outputs: "Name is null"
 | `requireFuture()`      | --             | --                  |
 | `requirePast()`        | --             | --                  |
 
-### `Optional<>` Support
+### `Optional` Support
 
 Want something more nuanced than throwing an exception?
-Use the `Check` class:
+Use the `CheckIf` class:
 
 ```java
-String name = checkNotNull(userId, "User ID")
+String name = ifNotNull(userId, "User ID")
     .map(UserService::findById)
     .map(User::getName)
     .orElse("(no name)");
-```
-
-## How `null` is Handled
-
-Our opinionated philosophy is that _nulls are a code smell_.
-Nulls always throw or return false.
-
-Consider:
-
-```java
-return notExists(filePath);
-```
-
-When `filePath` is null, do we return `true` or `false`?
-It's true that a null path does not exist, but returning true
-would be misleading; it implies that the check was successful
-when it was not. Nulls are always false.
-
-## Naming
-
-### Parameter Order
-
-Every effort has been made to make method usage as easy to read as possible.
-This is why constant values / limits come first. Compare:
-
-```java
-// Bad: reading is disjointed: "Is length SSN 9? Oh I see, is the length of the ssn var equal to 9."
-isLength(ssn, 9);
-// Better: reading is consistent: "Is length 9? Of ssn?"
-isLength(9, ssn);
-```
-
-### Consistent Naming
-
-- most throwing checks begin with `require`
-- most boolean checks begin with `is`
-- most Optional checks begin with `check`
-
-Even if it might make more sense (in English) to have e.g. `hasLength()`,
-we chose `isLength()` for consistency.
-
-### Inclusive and Exclusive Ranges
-
-For simplicity, JRequisites uses _closed_ ranges, meaning that both the beginning and end are inclusive.
-For example:
-
-```java
-isLengthBetween(3, 8, "cat"); // is length between 3-8 (inclusive)? Yes.
-```
-
-### Stricter Definitions
-
-JRequisites uses more precise definitions than you may be used to from other libraries.
-Compare:
-
-```java
-// JRequisites:
-isEmpty(null);     // false — a null value is not empty, it is invalid
-nullOrEmpty(null); // true
-
-// Apache Commons Validation:
-isEmpty(null); // true
 ```
 
 ## Comparison to Other Libraries

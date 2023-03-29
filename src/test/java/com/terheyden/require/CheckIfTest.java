@@ -1,5 +1,8 @@
 package com.terheyden.require;
 
+import java.io.File;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.Duration;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -9,12 +12,17 @@ import java.util.Map;
 import org.junit.jupiter.api.Test;
 
 import static java.util.Collections.emptyList;
+import static org.assertj.core.api.Assertions.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * CheckIfTest unit tests.
  */
 public class CheckIfTest {
+
+    private static final String GOOD_DIR_STR = "src/test/resources";
+    private static final String GOOD_FILE_STR = "src/test/resources/empty.txt";
+    private static final String BAD = "bad";
 
     private final String goodStr = "good";
     private final String emptyStr = "";
@@ -35,6 +43,16 @@ public class CheckIfTest {
     private final String[] goodArray = { "a", "b", "c" };
     private final String[] emptyArray = {};
     private final String[] nullArray = null;
+    private final Path goodPathDir = Paths.get(GOOD_DIR_STR);
+    private final Path goodPathFile = Paths.get(GOOD_FILE_STR);
+    private final Path badPathDir = Paths.get(BAD);
+    private final Path badPathFile = badPathDir;
+    private final Path nullPath = null;
+    private final File goodFileDir = goodPathDir.toFile();
+    private final File goodFileFile = goodPathFile.toFile();
+    private final File badFileDir = badPathDir.toFile();
+    private final File badFileFile = badPathFile.toFile();
+    private final File nullFile = null;
 
     @Test
     void testIfNotNull() {
@@ -480,5 +498,77 @@ public class CheckIfTest {
         assertThat(CheckIf.ifDurationLessOrEqualToDays(Duration.ofDays(1), 2)).isNotEmpty();
         assertThat(CheckIf.ifDurationLessOrEqualToDays(Duration.ofDays(2), 1)).isEmpty();
         assertThat(CheckIf.ifDurationLessOrEqualToDays(Duration.ofDays(1), 1)).isNotEmpty();
+    }
+
+    @Test
+    void testIfPathExists_path() {
+        assertThat(CheckIf.ifPathExists(goodPathFile)).isNotEmpty();
+        assertThat(CheckIf.ifPathExists(goodPathDir)).isNotEmpty();
+        assertThat(CheckIf.ifPathExists(badPathDir)).isEmpty();
+        assertThat(CheckIf.ifPathExists(nullPath)).isEmpty();
+    }
+
+    @Test
+    void testIfPathExists_file() {
+        assertThat(CheckIf.ifPathExists(goodFileFile)).isNotEmpty();
+        assertThat(CheckIf.ifPathExists(goodFileDir)).isNotEmpty();
+        assertThat(CheckIf.ifPathExists(badFileFile)).isEmpty();
+        assertThat(CheckIf.ifPathExists(nullFile)).isEmpty();
+    }
+
+    @Test
+    void testIfPathExists_string() {
+        assertThat(CheckIf.ifPathExists(GOOD_FILE_STR)).isNotEmpty();
+        assertThat(CheckIf.ifPathExists(GOOD_DIR_STR)).isNotEmpty();
+        assertThat(CheckIf.ifPathExists(BAD)).isEmpty();
+        assertThat(CheckIf.ifPathExists(nullStr)).isEmpty();
+    }
+
+    @Test
+    void testIfRegularFile_path() {
+        assertThat(CheckIf.ifRegularFile(goodPathFile)).isNotEmpty();
+        assertThat(CheckIf.ifRegularFile(goodPathDir)).isEmpty();
+        assertThat(CheckIf.ifRegularFile(badPathDir)).isEmpty();
+        assertThat(CheckIf.ifRegularFile(nullPath)).isEmpty();
+    }
+
+    @Test
+    void testIfRegularFile_file() {
+        assertThat(CheckIf.ifRegularFile(goodFileFile)).isNotEmpty();
+        assertThat(CheckIf.ifRegularFile(goodFileDir)).isEmpty();
+        assertThat(CheckIf.ifRegularFile(badFileFile)).isEmpty();
+        assertThat(CheckIf.ifRegularFile(nullFile)).isEmpty();
+    }
+
+    @Test
+    void testIfRegularFile_string() {
+        assertThat(CheckIf.ifRegularFile(GOOD_FILE_STR)).isNotEmpty();
+        assertThat(CheckIf.ifRegularFile(GOOD_DIR_STR)).isEmpty();
+        assertThat(CheckIf.ifRegularFile(BAD)).isEmpty();
+        assertThat(CheckIf.ifRegularFile(nullStr)).isEmpty();
+    }
+
+    @Test
+    void testIfDirectory_path() {
+        assertThat(CheckIf.ifDirectory(goodPathFile)).isEmpty();
+        assertThat(CheckIf.ifDirectory(goodPathDir)).isNotEmpty();
+        assertThat(CheckIf.ifDirectory(badPathDir)).isEmpty();
+        assertThat(CheckIf.ifDirectory(nullPath)).isEmpty();
+    }
+
+    @Test
+    void testIfDirectory_file() {
+        assertThat(CheckIf.ifDirectory(goodFileFile)).isEmpty();
+        assertThat(CheckIf.ifDirectory(goodFileDir)).isNotEmpty();
+        assertThat(CheckIf.ifDirectory(badFileFile)).isEmpty();
+        assertThat(CheckIf.ifDirectory(nullFile)).isEmpty();
+    }
+
+    @Test
+    void testIfDirectory_string() {
+        assertThat(CheckIf.ifDirectory(GOOD_FILE_STR)).isEmpty();
+        assertThat(CheckIf.ifDirectory(GOOD_DIR_STR)).isNotEmpty();
+        assertThat(CheckIf.ifDirectory(BAD)).isEmpty();
+        assertThat(CheckIf.ifDirectory(nullStr)).isEmpty();
     }
 }
