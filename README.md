@@ -1,62 +1,57 @@
-# JRequisites Library
+# JRequisites
 
 _Java argument checking and validation._
 
 ## What Is It?
 
-JRequisites is a fast, tiny library for validating method arguments.
-It offers two classes:
+JRequisites is a fast, tiny library for validating method arguments (parameters).
 
-### 'Require' Class
-Brings in `requireXYZ()` methods, which throw `IllegalArgumentException` (mostly):
+There are 3 primary use cases:
+
+- Validate method arguments, or throw an `IllegalArgumentException`
+- Validate method arguments, or return `Optional<>` for more nuanced handling (e.g. default values)
+- Validate method arguments, or return `false` (for use in streams or predicates)
+
+Let's take a look at some simple examples!
+
 ```java
-String name = "Cora";
-int age = 19;
+// The 'Require' class contains validations that can throw an IllegalArgumentException:
+this.name = Require.requireNotNull(name);
 
-return new User(
-    requireNotBlank(name, "Name"),
-    requireMinimum(age, 21, "Age")); // Throws: "Age must be at least 21"
-```
+// The validations in the 'CheckIf' class return an Optional<>, so we can handle nulls more gracefully:
+this.name = CheckIf.ifNotNull(name).orElse("(no name)");
 
-### 'Check' Class
-Brings in `checkXYZ()` methods, which return `Optional<>`:
-```java
-UUID userId; // assume this is valid ...
-
-String userName = checkNotNull(userId, "User ID")
-    .map(UserService::findById)
-    .map(User::getName)
-    .orElse("(no name)");
+// Validations in the 'Check' class return a boolean, so we can use it in streams or predicates:
+users.stream()
+    .filter(Check::notNull)
+    .collect(Collectors.toList());
 ```
 
 ## Why Use It?
 
+### Unique Features
+
+- A wider range of validations than other libraries
+- Checks can return `Optional<>` or `boolean` for more a wider variety of use cases
+
 ### Tiny
+
 Much smaller than Apache Commons or Guava Preconditions:
+
 - JRequisites: 16 kb
 - Apache Commons: 573 kb
 - Google Guava: 3 MB
 
 ### Extremely Fast
-  - no object allocation
-  - no varargs
-  - no String formatting
-  - no reflection
-  - no external dependencies
 
-### Clear Naming Convention
-```java
-// Apache Commons:
-notNull(name); // are you asking me or telling me?
-
-// Guava Preconditions:
-checkNotNull(name); // checking what, exactly?
-
-// JRequisites:
-requireNotNull(name); // Perfectly clear.
-```
+- No object allocation
+- No varargs
+- No String formatting
+- No reflection
+- No external dependencies
 
 ### Awesome Error Messages
+
 ```java
 // Apache Commons:
 notNull(name, "Name is null");
@@ -70,8 +65,9 @@ requireNotNull(name, "Name"); // Outputs: "Name is null"
 
 ### Lots of Useful Checks
 
+
 | JRequisites            | Apache Commons | Guava Preconditions |
-|------------------------|----------------|---------------------|
+| ---------------------- | -------------- | ------------------- |
 | `requireNotNull()`     | `notNull()`    | `checkNotNull()`    |
 | `requireNotEmpty()`    | `notEmpty()`   | --                  |
 | `requireNotBlank()`    | `notBlank()`   | --                  |
@@ -82,8 +78,10 @@ requireNotNull(name, "Name"); // Outputs: "Name is null"
 | `requirePast()`        | --             | --                  |
 
 ### `Optional<>` Support
+
 Want something more nuanced than throwing an exception?
 Use the `Check` class:
+
 ```java
 String name = checkNotNull(userId, "User ID")
     .map(UserService::findById)
@@ -97,9 +95,11 @@ Our opinionated philosophy is that _nulls are a code smell_.
 Nulls always throw or return false.
 
 Consider:
+
 ```java
 return notExists(filePath);
 ```
+
 When `filePath` is null, do we return `true` or `false`?
 It's true that a null path does not exist, but returning true
 would be misleading; it implies that the check was successful
@@ -108,8 +108,10 @@ when it was not. Nulls are always false.
 ## Naming
 
 ### Parameter Order
+
 Every effort has been made to make method usage as easy to read as possible.
 This is why constant values / limits come first. Compare:
+
 ```java
 // Bad: reading is disjointed: "Is length SSN 9? Oh I see, is the length of the ssn var equal to 9."
 isLength(ssn, 9);
@@ -118,6 +120,7 @@ isLength(9, ssn);
 ```
 
 ### Consistent Naming
+
 - most throwing checks begin with `require`
 - most boolean checks begin with `is`
 - most Optional checks begin with `check`
@@ -129,13 +132,16 @@ we chose `isLength()` for consistency.
 
 For simplicity, JRequisites uses _closed_ ranges, meaning that both the beginning and end are inclusive.
 For example:
+
 ```java
 isLengthBetween(3, 8, "cat"); // is length between 3-8 (inclusive)? Yes.
 ```
 
 ### Stricter Definitions
+
 JRequisites uses more precise definitions than you may be used to from other libraries.
 Compare:
+
 ```java
 // JRequisites:
 isEmpty(null);     // false — a null value is not empty, it is invalid
@@ -151,8 +157,9 @@ isEmpty(null); // true
 - [Google Guava Preconditions]()
 - [Apache Commons Validation](https://commons.apache.org/proper/commons-validator/)
 
+
 | Jakarta + Hibernate | JRequisites                           |
-|---------------------|---------------------------------------|
+| ------------------- | ------------------------------------- |
 | `@AssertFalse`      | `isFalse()`                           |
 | `@AssertTrue`       | `isTrue()`                            |
 | `@DecimalMax`       | `isLessThan()`                        |
@@ -193,21 +200,24 @@ isEmpty(null); // true
 | `@URL`              | `isURL()`                             |
 | `@UUID`             | `isUUID()`                            |
 
-
 ## Contents
 
 ### Validating State (Boolean Expression)
+
 ```java
 require(age >= 21, "Age must be at least 21");
 ```
 
 ### Null Check
+
 ```java
 requireNotNull(name, "Name is null");
 ```
 
 ### Empty Check
+
 Works for:
+
 - `String`
 - `CharSequence`
 - `Collection`
@@ -224,7 +234,9 @@ requireEmpty(messages, "There are ", messages.size(), " messages remaining");
 ```
 
 ### Blank (Only Whitespace) Check
+
 Works for:
+
 - `String`
 - `CharSequence`
 
@@ -233,7 +245,9 @@ requireNotBlank(username, "Username is required");
 ```
 
 ### Length Check
+
 Works for:
+
 - `String`
 - `CharSequence`
 - `Collection`
@@ -282,12 +296,14 @@ return ifNotEmpty(users)
 ### All Checks
 
 #### Removing the primitive array checks
+
 - autocomplete for methods shouldn't be overwhelming, it's too confusing
 - I think I need to trim back the APIs in general
 
 ### Just for Check
 
 #### Negative usage vs. positive usage
+
 - the boolean checks should have different behavior depending on if they're being used to qualify or disqualify
 - this seems to only be tricksy for the `not` methods
 
@@ -299,6 +315,7 @@ if (notLengthGreaterThan(3, password)) { return FAIL; }
 ```
 
 #### Except for `isNull`, `isEmpty`, and `isBlank`, "positive" checks, e.g. `isLength`, require non-null
+
 - `isLength` = false if null
 - `notLength` = true if null
 - by and large, the `not` version is always `!isVersion`

@@ -2,18 +2,15 @@ package com.terheyden.require;
 
 import java.nio.file.Path;
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
 import static com.terheyden.require.Require.requireFuture;
-import static com.terheyden.require.Require.requireNotBlank;
-import static com.terheyden.require.Require.requireNotEmpty;
-import static com.terheyden.require.Require.requireNotNull;
 import static com.terheyden.require.Require.requireRegularFile;
 import static com.terheyden.require.Require.requireState;
-import static java.util.Collections.emptyList;
 import static java.util.Collections.emptyMap;
 
 /**
@@ -23,19 +20,38 @@ class Tutorial {
 
     void tutorial() {
 
+        // Just some variables to use in the tutorial.
         UUID id = null;
         String name = "Cora";
+        String nullName = null;
         int age = 29;
         Map<String, String> data = emptyMap();
-        List<String> logMessages = emptyList();
+        List<String> users = Arrays.asList("Mika", "Tashi", "Cora");
 
-        // 'Require' checks will throw an IllegalArgumentException if the check fails.
-        // You can perform a check and assign the value to a variable in one line.
-        UUID verifiedId = requireNotNull(id, "ID");
-        String goodName = requireNotBlank(name, "Name");
+        // There are 3 types of checks provided by JRequisites:
 
-        // Empty checks work on collections, maps, and strings.
-        requireNotEmpty(data, "Data");
+        // 1. 'Require' methods will throw an IllegalArgumentException if the check fails.
+        //    Just like Objects.requireNonNull(), you can use these checks while assigning values:
+        String goodName = Require.requireNotBlank(name);
+
+        // 2. 'Check' methods return a boolean instead of throwing.
+        //    Useful for 'if' statements or as stream filters:
+        users.stream()
+            .filter(Check::notBlank)
+            .forEach(System.out::println);
+
+        // 3. 'CheckIf' methods return an Optional, for when you want to provide a default, etc.:
+        String greeting = CheckIf.ifNotBlank(name)
+            .map(n -> "Hello, " + n)
+            .orElse("(no name)");
+
+        // You don't need to specify an error message, just the variable name / object label.
+        // No more having to type out: requireNonNull(name, "Name is null");
+
+        // Throws NullPointerException: "Name is null"
+        Require.requireNotNull(nullName, "Name");
+        // Throws IllegalArgumentException: "Number list has size 2, but required size is: 3 — contains: [one, two]"
+        Require.requireSize(users, 3, "Number list");
 
         // You can perform custom checks:
         Require.requireTrue(age >= 18, "You must be 18 or older to use this app."); // Throws IllegalArgumentException
@@ -44,14 +60,14 @@ class Tutorial {
         // Checks build on each other, for example, checkNotBlank() includes checkNotNull() and checkNotEmpty().
 
         // Plain Java:
-        if (logMessages == null || logMessages.isEmpty()) {
-            throw new IllegalArgumentException("You have no log messages!");
+        if (users == null || users.isEmpty()) {
+            throw new IllegalArgumentException("List of users is null or empty!");
         }
 
-        logMessages.sort(Comparator.naturalOrder());
+        users.sort(Comparator.naturalOrder());
 
         // With Java Requirements:
-        Require.requireSizeGreaterThan(logMessages, 3).sort(Comparator.naturalOrder());
+        Require.requireNotEmpty(users, "List of users").sort(Comparator.naturalOrder());
 
         // There are also checks for files and dirs, and even conversion from String:
         Path settingsFile = requireRegularFile("/some/path/settings.txt");

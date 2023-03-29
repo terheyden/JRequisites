@@ -397,6 +397,26 @@ public final class Require {
         return requireLengthLessOrEqualTo(maxLength, array, null);
     }
 
+    public static <T extends Collection<?>> T requireSize(@Nullable T collection, int requiredSize, @Nullable String label) {
+        requireNotNull(collection, getName(label, "Collection"));
+        if (collection.size() != requiredSize) throwIAE(label, "Collection", " has size " + collection.size() + ", but expected size is: " + requiredSize + " — contains: " + collection);
+        return collection;
+    }
+
+    public static <T extends Collection<?>> T requireSize(@Nullable T collection, int requiredSize) {
+        return requireSize(collection, requiredSize, null);
+    }
+
+    public static <T extends Map<?, ?>> T requireSize(@Nullable T map, int requiredSize, @Nullable String label) {
+        requireNotNull(map, getName(label, "Map"));
+        if (map.size() != requiredSize) throwIAE(label, "Map", " has size " + map.size() + ", but expected size is: " + requiredSize + " — contains: " + map);
+        return map;
+    }
+
+    public static <T extends Map<?, ?>> T requireSize(@Nullable T map, int requiredSize) {
+        return requireSize(map, requiredSize, null);
+    }
+
     public static <T extends Collection<?>> T requireSizeGreaterThan(
         @Nullable T collection,
         int minSize,

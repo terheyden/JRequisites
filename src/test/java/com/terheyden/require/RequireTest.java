@@ -338,13 +338,8 @@ class RequireTest {
         assertThatNoException().isThrownBy(() -> Require.requireLengthLessOrEqualTo(goodStr, goodStr.length()));
         assertThatNullPointerException().isThrownBy(() -> Require.requireLengthLessOrEqualTo(nullStr, 1)).withMessage("String is null");
         assertThatNullPointerException().isThrownBy(() -> Require.requireLengthLessOrEqualTo(nullStr, 1, BAD)).withMessage(BAD + " is null");
-        assertThatIllegalArgumentException().isThrownBy(() -> Require.requireLengthLessOrEqualTo(
-            goodStr,
-            goodStr.length() - 1)).withMessage("String has length 4, but maximum is: 3 — contains: good");
-        assertThatIllegalArgumentException().isThrownBy(() -> Require.requireLengthLessOrEqualTo(
-            goodStr,
-            goodStr.length() - 1,
-            BAD)).withMessage(BAD + " has length 4, but maximum is: 3 — contains: good");
+        assertThatIllegalArgumentException().isThrownBy(() -> Require.requireLengthLessOrEqualTo(goodStr, goodStr.length() - 1)).withMessage("String has length 4, but maximum is: 3 — contains: good");
+        assertThatIllegalArgumentException().isThrownBy(() -> Require.requireLengthLessOrEqualTo(goodStr, goodStr.length() - 1, BAD)).withMessage(BAD + " has length 4, but maximum is: 3 — contains: good");
     }
 
     @Test
@@ -357,7 +352,25 @@ class RequireTest {
     }
 
     @Test
-    void requireSizeGreaterThan_collection() {
+    void testRequireSize_collection() {
+        assertThatNoException().isThrownBy(() -> Require.requireSize(goodList, goodList.size()));
+        assertThatNullPointerException().isThrownBy(() -> Require.requireSize(nullList, 1)).withMessage("Collection is null");
+        assertThatNullPointerException().isThrownBy(() -> Require.requireSize(nullList, 1, BAD)).withMessage(BAD + " is null");
+        assertThatIllegalArgumentException().isThrownBy(() -> Require.requireSize(goodList, goodList.size() + 1)).withMessage("Collection has size 3, but expected size is: 4 — contains: [a, b, c]");
+        assertThatIllegalArgumentException().isThrownBy(() -> Require.requireSize(goodList, goodList.size() + 1, BAD)).withMessage(BAD + " has size 3, but expected size is: 4 — contains: [a, b, c]");
+    }
+
+    @Test
+    void testRequireSize_map() {
+        assertThatNoException().isThrownBy(() -> Require.requireSize(goodMap, goodMap.size()));
+        assertThatNullPointerException().isThrownBy(() -> Require.requireSize(nullMap, 1)).withMessage("Map is null");
+        assertThatNullPointerException().isThrownBy(() -> Require.requireSize(nullMap, 1, BAD)).withMessage(BAD + " is null");
+        assertThatIllegalArgumentException().isThrownBy(() -> Require.requireSize(goodMap, goodMap.size() + 1)).withMessage("Map has size 2, but expected size is: 3 — contains: {a=1, b=2}");
+        assertThatIllegalArgumentException().isThrownBy(() -> Require.requireSize(goodMap, goodMap.size() + 1, BAD)).withMessage(BAD + " has size 2, but expected size is: 3 — contains: {a=1, b=2}");
+    }
+
+    @Test
+    void testRequireSizeGreaterThan_collection() {
         assertThatNoException().isThrownBy(() -> Require.requireSizeGreaterThan(goodList, goodList.size() - 1));
         assertThatNullPointerException().isThrownBy(() -> Require.requireSizeGreaterThan(nullList, 1)).withMessage("Collection is null");
         assertThatNullPointerException().isThrownBy(() -> Require.requireSizeGreaterThan(nullList, 1, BAD)).withMessage(BAD + " is null");
