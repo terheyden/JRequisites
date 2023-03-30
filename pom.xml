@@ -5,7 +5,7 @@
     <groupId>com.terheyden</groupId>
     <artifactId>jrequisites</artifactId>
     <name>jrequisites</name>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.0.1</version>
     <description>Java Argument Checking and Validation</description>
     <url>http://github.com/terheyden/jrequisites</url>
 
